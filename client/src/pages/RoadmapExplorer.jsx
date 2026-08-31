@@ -362,7 +362,7 @@ const RoadmapExplorer = ({ token, user, onUpdateUser, setCurrentPage, onLoadTemp
                   className="btn-primary"
                   style={styles.practiceBtn}
                 >
-                  Practice in Sandbox
+                  Practice in IDE
                   <Play size={14} style={{ marginLeft: '6px' }} />
                 </button>
               </div>

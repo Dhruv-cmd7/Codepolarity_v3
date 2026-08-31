@@ -4,8 +4,10 @@ import LandingPage from './pages/LandingPage';
 import Assessment from './pages/Assessment';
 import RoadmapExplorer from './pages/RoadmapExplorer';
 import CodeEditor from './pages/CodeEditor';
-import ProfileDashboard from './pages/ProfileDashboard';
+import Typlab from './pages/Typlab';
+import About from './pages/About';
 import { ShieldAlert, X, Sparkles } from 'lucide-react';
+import { FullScreenSignup } from './components/ui/full-screen-signup';
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token') || '');
@@ -80,7 +82,7 @@ function App() {
         setUsername('');
         setEmail('');
         setPassword('');
-        setCurrentPage('profile'); // redirect to dashboard on successful login
+        setCurrentPage('roadmaps'); // redirect to roadmaps on successful login
       } else {
         setAuthError(data.msg || 'Authentication failed');
       }
@@ -119,13 +121,14 @@ function App() {
             onClearTemplate={() => setEditorTemplateId(null)}
           />
         );
-      case 'profile':
+      case 'typlab':
         return (
-          <ProfileDashboard
-            token={token}
-            user={user}
+          <Typlab />
+        );
+      case 'about':
+        return (
+          <About
             setCurrentPage={setCurrentPage}
-            onLoadTemplate={setEditorTemplateId}
           />
         );
       default:
@@ -141,6 +144,11 @@ function App() {
         );
     }
   };
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
+  }, []);
 
   return (
     <div className="app-container">
@@ -163,95 +171,23 @@ function App() {
 
       {/* Glassmorphism Authentication Popup Modal */}
       {showAuthModal && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modalContent}>
-            <button 
-              onClick={() => {
-                setShowAuthModal(false);
-                setAuthError('');
-              }} 
-              style={styles.closeBtn}
-            >
-              <X size={18} />
-            </button>
-
-            <div style={styles.modalHeader}>
-              <Sparkles size={20} style={{ color: 'var(--accent-cyan)' }} />
-              <h2 style={styles.modalTitle}>
-                {authMode === 'login' ? 'Access Control' : 'Developer Signup'}
-              </h2>
-            </div>
-
-            <form onSubmit={handleAuthSubmit} style={styles.form}>
-              {authError && (
-                <div style={styles.errorBanner}>
-                  <ShieldAlert size={14} style={{ marginRight: '6px' }} />
-                  <span>{authError}</span>
-                </div>
-              )}
-
-              {authMode === 'register' && (
-                <div style={styles.formGroup}>
-                  <label style={styles.label}>Username</label>
-                  <input
-                    type="text"
-                    required
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className="form-input"
-                    placeholder="Enter username"
-                  />
-                </div>
-              )}
-
-              <div style={styles.formGroup}>
-                <label style={styles.label}>Email Address</label>
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="form-input"
-                  placeholder="name@domain.com"
-                />
-              </div>
-
-              <div style={styles.formGroup}>
-                <label style={styles.label}>Password</label>
-                <input
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="form-input"
-                  placeholder="••••••••"
-                />
-              </div>
-
-              <button type="submit" className="btn-primary" style={styles.submitBtn}>
-                {authMode === 'login' ? 'Sign In' : 'Create Account'}
-              </button>
-            </form>
-
-            <div style={styles.modalFooter}>
-              {authMode === 'login' ? (
-                <p>
-                  New to Codepolarity?{' '}
-                  <button onClick={() => { setAuthMode('register'); setAuthError(''); }} style={styles.toggleBtn}>
-                    Register now
-                  </button>
-                </p>
-              ) : (
-                <p>
-                  Already registered?{' '}
-                  <button onClick={() => { setAuthMode('login'); setAuthError(''); }} style={styles.toggleBtn}>
-                    Login here
-                  </button>
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
+        <FullScreenSignup
+          authMode={authMode}
+          setAuthMode={setAuthMode}
+          username={username}
+          setUsername={setUsername}
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          authError={authError}
+          setAuthError={setAuthError}
+          onSubmit={handleAuthSubmit}
+          onClose={() => {
+            setShowAuthModal(false);
+            setAuthError('');
+          }}
+        />
       )}
     </div>
   );

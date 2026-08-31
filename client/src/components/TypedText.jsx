@@ -32,7 +32,7 @@ const TypedText = ({ words, speed = 80, pause = 1800 }) => {
   }, [charIdx, deleting, wordIdx, words, speed, pause]);
 
   return (
-    <span style={{ display: 'inline' }}>
+    <span style={{ display: 'inline', whiteSpace: 'nowrap' }}>
       <span>{displayText}</span>
       <span style={styles.cursor} aria-hidden="true" />
     </span>

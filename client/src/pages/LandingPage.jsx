@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import ParticleBackground from '../components/ParticleBackground';
+
 import TypedText from '../components/TypedText';
 import dsLogo from '../assets/ds_logo.svg';
+import codeEditorIllustration from '../assets/code_editor_illustration.jpg';
 
 /* ─────────────────────────────────────────────────────
    PopSlide – spring pop-slide animation on scroll
@@ -38,6 +39,102 @@ const PopSlide = ({ children, delay = 0, style = {} }) => {
       }}
     >
       {children}
+    </div>
+  );
+};
+
+const ContainerScroll = ({ titleComponent, children }) => {
+  const [rotation, setRotation] = useState(20);
+  const [scale, setScale] = useState(1.05);
+  const [translateY, setTranslateY] = useState(0);
+
+  useEffect(() => {
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrolled = window.scrollY;
+          // Animate over 500px of scrolling
+          const maxScroll = 500;
+          const progress = Math.max(0, Math.min(1, scrolled / maxScroll));
+          
+          setRotation(20 - (progress * 20));
+          setScale(1.05 - (progress * 0.05));
+          setTranslateY(-progress * 40);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <div
+      style={{
+        minHeight: '30vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        padding: '0 24px',
+        overflow: 'hidden',
+        background: 'transparent',
+        width: '100%',
+        zIndex: 2,
+        marginTop: '180px',
+      }}
+    >
+      <div
+        style={{
+          width: '100%',
+          maxWidth: '1200px',
+          position: 'relative',
+          perspective: '1000px',
+        }}
+      >
+        {/* Header */}
+        {titleComponent && (
+          <div
+            style={{
+              transform: `translateY(${translateY}px)`,
+              transition: 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
+              textAlign: 'center',
+              marginBottom: '40px',
+            }}
+          >
+            {titleComponent}
+          </div>
+        )}
+        
+        {/* Card Screen Mockup */}
+        <div
+          style={{
+            transform: `rotateX(${rotation}deg) scale(${scale})`,
+            transition: 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
+            transformOrigin: 'top center',
+            boxShadow: '0 30px 60px -10px rgba(0, 0, 0, 0.35), 0 18px 36px -18px rgba(0, 0, 0, 0.25)',
+            borderRadius: '24px',
+            border: 'none',
+            background: 'transparent',
+            padding: 0,
+          }}
+        >
+          <div
+            style={{
+              overflow: 'hidden',
+              borderRadius: '24px',
+              background: 'transparent',
+            }}
+          >
+            {children}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
@@ -214,10 +311,10 @@ const features = [
   },
   {
     idx: 2,
-    label: 'Online Code Editor',
+    label: 'Online IDE',
     title: 'Practice without leaving your browser.',
-    desc: 'Write JavaScript algorithms, build HTML layouts, and run code in the sandbox. Save your scripts to your profile with one click — no setup required.',
-    cta: 'Open editor →',
+    desc: 'Write JavaScript algorithms, build HTML layouts, and run code in the web editor. Save your scripts with one click — no setup required.',
+    cta: 'Open IDE →',
     page: 'editor',
     visual: (
       <div style={fs.editorWrap} className="card">
@@ -250,6 +347,96 @@ console.log(fibonacci(8));`}</pre>
       </div>
     ),
   },
+  {
+    idx: 3,
+    label: 'Keystroke Calibration',
+    title: 'Typlab keyboard speed training.',
+    desc: 'Calibrate your typing speed on production syntax blocks. Practice formatting, bracket closures, and special characters in JavaScript, Python, CSS, and SQL with real-time feedback loops.',
+    cta: 'Try Typlab →',
+    page: 'typlab',
+    visual: (
+      <div style={fs.card} className="card">
+        <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:12 }}>
+          <div style={{ width:8, height:8, borderRadius:'50%', background:'#10b981', boxShadow:'0 0 8px rgba(16, 185, 129, 0.5)' }} />
+          <span style={{ fontSize:'0.75rem', fontWeight:600, color:'#10b981', letterSpacing:'0.04em', textTransform: 'uppercase' }}>Keystroke Telemetry Active</span>
+        </div>
+        <div style={{ fontFamily:'var(--font-mono)', fontSize:'0.8rem', padding:'12px', background:'#f8fafc', borderRadius:'8px', border:'1px solid #e2e8f0', color:'#475569', lineHeight:'1.6' }}>
+          <span style={{ color:'#2563eb', background:'rgba(37, 99, 235, 0.08)' }}>const </span>
+          <span style={{ color:'#0f172a', background:'rgba(37, 99, 235, 0.08)' }}>[state, </span>
+          <span style={{ color:'#dc2626', background:'rgba(220, 38, 38, 0.1)', textDecoration:'underline' }}>sr</span>
+          <span style={{ color:'#94a3b8' }}>ate] = useState(0);</span>
+        </div>
+        <div style={{ display:'flex', justifyContent:'space-between', marginTop:16 }}>
+          <div style={{ display:'flex', flexDirection:'column' }}>
+            <span style={{ fontSize:'0.65rem', color:'#94a3b8', textTransform:'uppercase', fontWeight:600 }}>Speed</span>
+            <span style={{ fontSize:'1.125rem', fontWeight:600, color:'#0f172a' }}>68 WPM</span>
+          </div>
+          <div style={{ display:'flex', flexDirection:'column' }}>
+            <span style={{ fontSize:'0.65rem', color:'#94a3b8', textTransform:'uppercase', fontWeight:600 }}>Accuracy</span>
+            <span style={{ fontSize:'1.125rem', fontWeight:600, color:'#10b981' }}>96%</span>
+          </div>
+          <div style={{ display:'flex', flexDirection:'column' }}>
+            <span style={{ fontSize:'0.65rem', color:'#94a3b8', textTransform:'uppercase', fontWeight:600 }}>Award</span>
+            <span style={{ fontSize:'1.125rem', fontWeight:600, color:'#8b5cf6' }}>Code Ninja 🥷</span>
+          </div>
+        </div>
+      </div>
+    ),
+  },
+];
+
+/* ─────────────────────────────────────────────────────
+   Marquee logo items with custom glow properties
+───────────────────────────────────────────────────── */
+const marqueeItems = [
+  {
+    name: 'JavaScript',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg'
+  },
+  {
+    name: 'TypeScript',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg'
+  },
+  {
+    name: 'Python',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg'
+  },
+  {
+    name: 'Go',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg'
+  },
+  {
+    name: 'Rust',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg'
+  },
+  {
+    name: 'C++',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg'
+  },
+  {
+    name: 'Java',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg'
+  },
+  {
+    name: 'React',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg'
+  },
+  {
+    name: 'HTML5',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg'
+  },
+  {
+    name: 'CSS3',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg'
+  },
+  {
+    name: 'Ruby',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ruby/ruby-original.svg'
+  },
+  {
+    name: 'Swift',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg'
+  }
 ];
 
 /* ─────────────────────────────────────────────────────
@@ -268,21 +455,41 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
 
       {/* ─────────────────── HERO ─────────────────── */}
       <section style={s.hero}>
-        <ParticleBackground style={{ opacity: 0.15 }} />
+        <img
+          src="https://pub-940ccf6255b54fa799a9b01050e6c227.r2.dev/ruixen_hero_gradient.jpg"
+          alt=""
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: 1.0,
+            pointerEvents: 'none',
+            zIndex: 0,
+          }}
+        />
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'linear-gradient(to bottom, rgba(11, 15, 25, 0) 0%, rgba(11, 15, 25, 0.4) 50%, var(--bg-primary) 98%)',
+          pointerEvents: 'none',
+          zIndex: 1,
+        }} />
         <div style={s.heroGlow} />
 
         <div style={s.heroInner}>
           <PopSlide>
             <div style={s.chip} className="chip">
               <span style={s.chipDot} />
-              Zero-gravity code learning
+              Launch your developer journey
             </div>
           </PopSlide>
 
           <PopSlide delay={80}>
             <h1 style={s.h1} className="display-xl">
               Learning is{' '}
-              <span className="text-gradient-cyan text-gradient-glow" style={{ fontWeight: '600' }}>
+              <span style={{ fontWeight: '600', whiteSpace: 'nowrap', color: '#114b66' }}>
                 <TypedText
                   words={['lifting off.', 'taking flight.', 'in orbit.', 'weightless.']}
                   speed={75}
@@ -293,7 +500,7 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
           </PopSlide>
 
           <PopSlide delay={160}>
-            <p style={s.heroDesc} className="body-lg">
+            <p style={{ ...s.heroDesc, color: '#cbd5e1' }} className="body-lg">
               Codepolarity evaluates your programming level, generates
               interactive career pathways, curates the best internet resources,
               and lets you practice code — all synced to your developer profile.
@@ -316,7 +523,7 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
                     Get started — it's free
                   </button>
                   <button onClick={() => setCurrentPage('editor')} className="btn-secondary" style={s.secCtaBtn}>
-                    Try the editor
+                    Try the IDE
                   </button>
                 </>
               )}
@@ -324,7 +531,68 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
           </PopSlide>
         </div>
 
-        <div style={s.scrollLine} />
+        {/* Render ContainerScroll inside the hero fold so it peeks at the bottom! */}
+        {/* <ContainerScroll titleComponent={null}>
+          <img
+            src={codeEditorIllustration}
+            alt="Interactive Code Editor"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block',
+            }}
+          />
+        </ContainerScroll> */}
+
+      </section>
+
+      {/* ─────────────────── TILTED LANGUAGE MARQUEE ─────────────────── */}
+      <section style={s.marqueeSection}>
+        {/* Glow orbs behind the marquee */}
+        <div className="glow-orb glow-orb-purple" style={{ top: '10%', left: '30%', width: '400px', height: '400px', opacity: 0.3 }} />
+        <div className="glow-orb glow-orb-cyan" style={{ bottom: '10%', right: '30%', width: '400px', height: '400px', opacity: 0.3 }} />
+
+
+        <div className="tilted-marquee-wrapper">
+          <div className="tilted-marquee-inner">
+            {/* Track 1: Moving Left */}
+            <div className="marquee-container">
+              <div className="marquee-track marquee-track-left">
+                {marqueeItems.map((item, idx) => (
+                  <div key={`left-1-${idx}`} className="marquee-card">
+                    <img src={item.iconUrl} alt={item.name} width="28" height="28" style={{ display: 'block', objectFit: 'contain' }} />
+                    <span>{item.name}</span>
+                  </div>
+                ))}
+                {marqueeItems.map((item, idx) => (
+                  <div key={`left-2-${idx}`} className="marquee-card">
+                    <img src={item.iconUrl} alt={item.name} width="28" height="28" style={{ display: 'block', objectFit: 'contain' }} />
+                    <span>{item.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Track 2: Moving Right (shifted list) */}
+            <div className="marquee-container">
+              <div className="marquee-track marquee-track-right">
+                {[...marqueeItems.slice(6), ...marqueeItems.slice(0, 6)].map((item, idx) => (
+                  <div key={`right-1-${idx}`} className="marquee-card">
+                    <img src={item.iconUrl} alt={item.name} width="28" height="28" style={{ display: 'block', objectFit: 'contain' }} />
+                    <span>{item.name}</span>
+                  </div>
+                ))}
+                {[...marqueeItems.slice(6), ...marqueeItems.slice(0, 6)].map((item, idx) => (
+                  <div key={`right-2-${idx}`} className="marquee-card">
+                    <img src={item.iconUrl} alt={item.name} width="28" height="28" style={{ display: 'block', objectFit: 'contain' }} />
+                    <span>{item.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* ─────────────── MANAGER SURFACE ────────────── */}
@@ -454,12 +722,54 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
         </div>
       </section>
 
+      {/* ─────────────────── ABOUT SECTION ─────────────────── */}
+      <section style={{ padding: '80px 0 60px', background: 'var(--bg-secondary)', borderTop: '1px solid var(--border-light)' }}>
+        <div className="grid-container">
+          <PopSlide>
+            <p style={s.tag}>About the Platform</p>
+            <h2 style={s.h2} className="display-md">Zero-gravity learning telemetry.</h2>
+            <div style={{ maxWidth: '800px', marginTop: '20px' }}>
+              <p style={{ color: 'var(--text-muted)', lineHeight: '1.8', fontSize: '1.02rem' }}>
+                Codepolarity was engineered by software students who wanted to escape the drag of linear tutorial tracks. By combining diagnostic calibrations with automated learning roadmaps, an integrated sandboxed coding environment, and the Typlab speed keyboard calibrator, Codepolarity removes learning friction. All of your achievements, assessments, and code files are compiled directly in your workspace.
+              </p>
+              <button 
+                onClick={() => setCurrentPage('about')}
+                className="btn-secondary" 
+                style={{ marginTop: '24px' }}
+              >
+                Read our philosophy & Tech Stack →
+              </button>
+            </div>
+          </PopSlide>
+        </div>
+      </section>
+
       {/* ─────────────── CTA BANNER ────────────── */}
       <section style={{ padding:'80px 0 120px' }}>
         <div className="grid-container">
           <PopSlide>
             <div style={s.banner}>
-              <ParticleBackground style={{ opacity: 0.12 }} />
+              <img
+                src="https://pub-940ccf6255b54fa799a9b01050e6c227.r2.dev/ruixen_hero_gradient.jpg"
+                alt=""
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  opacity: 1.0,
+                  pointerEvents: 'none',
+                  zIndex: 0,
+                }}
+              />
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(to bottom, rgba(11, 15, 25, 0) 0%, rgba(11, 15, 25, 0.5) 50%, var(--bg-secondary) 100%)',
+                pointerEvents: 'none',
+                zIndex: 1,
+              }} />
               <div style={s.bannerContent}>
                 <h2 style={s.bannerTitle} className="display-lg">
                   Your development<br />is lifting off.
@@ -470,8 +780,8 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
                 </p>
                 <div style={{ display:'flex', gap:12, flexWrap:'wrap' }}>
                   {user ? (
-                    <button onClick={() => setCurrentPage('profile')} style={s.bannerBtn}>
-                      View dashboard →
+                    <button onClick={() => setCurrentPage('roadmaps')} style={s.bannerBtn}>
+                      Continue Learning →
                     </button>
                   ) : (
                     <>
@@ -479,7 +789,7 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
                         Get started — it's free
                       </button>
                       <button onClick={() => setCurrentPage('editor')} style={s.bannerBtnOutline}>
-                        Try the sandbox
+                        Try the IDE
                       </button>
                     </>
                   )}
@@ -504,11 +814,11 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
             {[
               {
                 title: 'Platform',
-                links: ['Assessment','Roadmaps','Code Editor','Dashboard','Resources'],
+                links: ['Assessment','Roadmaps','Online IDE','Typlab','About'],
               },
               {
                 title: 'Paths',
-                links: ['AI Developer','Frontend Web','Backend Web','Beginner','Advanced'],
+                links: ['AI Developer','Frontend','Backend','Beginner','Advanced'],
               },
               {
                 title: 'Company',
@@ -517,9 +827,25 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
             ].map((col) => (
               <div key={col.title} style={s.footerCol}>
                 <p style={s.footerColTitle}>{col.title}</p>
-                {col.links.map((l) => (
-                  <span key={l} style={s.footerLink}>{l}</span>
-                ))}
+                {col.links.map((l) => {
+                  const clickMap = {
+                    'Assessment': 'assessment',
+                    'Roadmaps': 'roadmaps',
+                    'Online IDE': 'editor',
+                    'Typlab': 'typlab',
+                    'About': 'about',
+                  };
+                  const targetPage = clickMap[l];
+                  return (
+                    <span 
+                      key={l} 
+                      onClick={() => targetPage && setCurrentPage(targetPage)} 
+                      style={{ ...s.footerLink, cursor: targetPage ? 'pointer' : 'default' }}
+                    >
+                      {l}
+                    </span>
+                  );
+                })}
               </div>
             ))}
           </div>
@@ -553,8 +879,8 @@ const s = {
   hero: {
     position:'relative', minHeight:'100vh',
     display:'flex', flexDirection:'column',
-    alignItems:'center', justifyContent:'center',
-    overflow:'hidden', paddingTop:120, paddingBottom:80,
+    alignItems:'center', justifyContent:'flex-start',
+    overflow:'hidden', paddingTop:180, paddingBottom:0,
   },
   heroGlow: {
     position:'absolute', inset:0,
@@ -563,7 +889,7 @@ const s = {
   },
   heroInner: {
     position:'relative', zIndex:2,
-    maxWidth:820, margin:'0 auto',
+    maxWidth:1000, margin:'0 auto',
     padding:'0 32px', textAlign:'center',
     display:'flex', flexDirection:'column',
     alignItems:'center', gap:28,
@@ -571,14 +897,14 @@ const s = {
   chip: {
     display:'inline-flex', alignItems:'center', gap:8,
     padding:'6px 16px', borderRadius:999,
-    border:'1px solid #e2e8f0', fontSize:'0.8rem',
-    color:'#2563eb', fontWeight:500, letterSpacing:'0.02em',
-    background:'#ffffff',
+    border:'1px solid var(--border-light)', fontSize:'0.8rem',
+    color:'#ffffff', fontWeight:500, letterSpacing:'0.02em',
+    background:'var(--bg-secondary)',
     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
   },
   chipDot: {
     display:'inline-block', width:6, height:6,
-    borderRadius:'50%', background:'#2563eb',
+    borderRadius:'50%', background:'var(--accent-blue)',
     boxShadow:'0 0 8px rgba(37, 99, 235, 0.5)',
   },
   h1: {
@@ -586,42 +912,37 @@ const s = {
     lineHeight:1.1,
     letterSpacing:'-0.04em',
     color:'var(--text-main)',
+    fontSize: 'clamp(2.5rem, 5.5vw, 4.2rem)',
   },
   heroDesc: {
     maxWidth:560,
     margin: '0 auto',
-    color: '#64748b',
+    color: 'var(--text-muted)',
   },
   heroCtas: {
     display:'flex', gap:14, flexWrap:'wrap',
     justifyContent:'center', marginTop:12,
   },
   mainCtaBtn: {
-    background: '#0f172a',
-    color: '#ffffff',
-    boxShadow: '0 4px 14px rgba(15, 23, 42, 0.15)',
+    background: 'var(--btn-primary-bg)',
+    color: 'var(--btn-primary-text)',
+    boxShadow: 'var(--btn-primary-shadow)',
     padding: '12px 28px',
     fontSize: '0.95rem',
   },
   secCtaBtn: {
     padding: '12px 28px',
     fontSize: '0.95rem',
-    background: '#ffffff',
-    borderColor: '#e2e8f0',
+    background: 'var(--btn-secondary-bg)',
+    borderColor: 'var(--btn-secondary-border)',
   },
-  scrollLine: {
-    position:'absolute', bottom:40, left:'50%',
-    transform:'translateX(-50%)',
-    width:1, height:48,
-    background:'linear-gradient(to bottom, transparent, rgba(37, 99, 235, 0.4))',
-    zIndex:2,
-  },
+
 
   /* MANAGER SURFACE */
   surface: { padding:'120px 0 60px', background:'transparent', position: 'relative', zIndex: 1 },
   tag: {
     fontSize:'0.75rem', fontWeight:600,
-    color:'#2563eb', textTransform:'uppercase',
+    color:'var(--accent-blue)', textTransform:'uppercase',
     letterSpacing:'0.08em', marginBottom:12,
   },
   h2: {
@@ -630,26 +951,26 @@ const s = {
     marginBottom:48, maxWidth:580,
   },
   window: {
-    background:'#ffffff', border:'1px solid #e2e8f0',
+    background:'var(--bg-secondary)', border:'1px solid var(--border-light)',
     borderRadius:24, overflow:'hidden',
-    boxShadow: '0 10px 30px -5px rgba(0, 0, 0, 0.04)',
+    boxShadow: 'var(--shadow-box)',
     transition: 'border-color 0.4s, box-shadow 0.4s',
   },
   windowBar: {
     display:'flex', alignItems:'center', gap:12,
-    padding:'14px 24px', background:'#ffffff',
-    borderBottom:'1px solid #e2e8f0',
+    padding:'14px 24px', background:'var(--bg-secondary)',
+    borderBottom:'1px solid var(--border-light)',
   },
   windowTitle: {
-    fontSize:'0.75rem', color:'#64748b',
+    fontSize:'0.75rem', color:'var(--text-muted)',
     fontFamily:'var(--font-mono)', marginLeft:8,
   },
   windowPill: {
     display: 'flex',
     alignItems: 'center',
     fontSize:'0.65rem', padding:'3px 10px',
-    borderRadius:99, background:'#f1f5f9',
-    color:'#475569', border:'1px solid #e2e8f0', fontFamily:'var(--font-mono)',
+    borderRadius:99, background:'var(--theme-tonal)',
+    color:'var(--text-muted)', border:'1px solid var(--border-light)', fontFamily:'var(--font-mono)',
   },
   windowBody: {
     display:'grid',
@@ -657,29 +978,29 @@ const s = {
     minHeight:290,
   },
   sidebar: {
-    borderRight:'1px solid #e2e8f0',
+    borderRight:'1px solid var(--border-light)',
     padding:'24px 20px',
-    background:'#f8fafc',
+    background:'var(--bg-primary)',
   },
   sidebarLabel: {
-    fontSize:'0.65rem', fontWeight:600, color:'#94a3b8',
+    fontSize:'0.65rem', fontWeight:600, color:'var(--text-dim)',
     textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:20,
   },
   console: {
     padding:'24px 20px', fontFamily:'var(--font-mono)',
-    borderRight:'1px solid #e2e8f0', overflowX:'auto',
-    background:'#0f172a',
+    borderRight:'1px solid var(--border-light)', overflowX:'auto',
+    background:'#0d1117',
   },
   stats: {
     padding:'16px', display:'flex',
     flexDirection:'column', justifyContent:'center',
-    background:'#ffffff',
+    background:'var(--bg-secondary)',
   },
 
   /* FEATURES */
   featSection: {
     padding:'80px 0 120px',
-    borderTop:'1px solid #e2e8f0',
+    borderTop:'1px solid var(--border-light)',
     background:'transparent',
     position: 'relative',
     zIndex: 1,
@@ -696,16 +1017,16 @@ const s = {
   },
   featDesc: {
     maxWidth:460,
-    color: '#64748b',
+    color: 'var(--text-muted)',
   },
   featMedia: { flex:1, minWidth:0 },
 
   /* BANNER */
   banner: {
-    position:'relative', background:'#ffffff',
-    border: '1px solid #e2e8f0',
+    position:'relative', background:'var(--bg-secondary)',
+    border: '1px solid var(--border-light)',
     borderRadius:28, padding:'80px 72px', overflow:'hidden',
-    boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.05)',
+    boxShadow: 'var(--shadow-box)',
   },
   bannerContent: {
     position:'relative', zIndex:2,
@@ -714,34 +1035,34 @@ const s = {
   },
   bannerTitle: {
     fontWeight:400, lineHeight:1.1,
-    letterSpacing:'-0.03em', color:'#0f172a',
+    letterSpacing:'-0.03em', color:'var(--text-main)',
   },
   bannerDesc: {
-    color:'#64748b', maxWidth:440,
+    color:'var(--text-muted)', maxWidth:440,
   },
   bannerBtn: {
     display:'inline-flex', alignItems:'center', gap:8,
     padding:'12px 28px', borderRadius:999,
-    background:'#0f172a', color:'#ffffff',
+    background:'var(--btn-primary-bg)', color:'var(--btn-primary-text)',
     fontFamily:'var(--font-sans)', fontWeight:500,
     fontSize:'0.9375rem', border:'none', cursor:'pointer',
     transition: 'var(--transition-spring)',
-    boxShadow: '0 4px 14px rgba(15, 23, 42, 0.15)',
+    boxShadow: 'var(--btn-primary-shadow)',
   },
   bannerBtnOutline: {
     display:'inline-flex', alignItems:'center', gap:8,
     padding:'12px 28px', borderRadius:999,
-    background:'#ffffff', color:'#0f172a',
+    background:'var(--btn-secondary-bg)', color:'var(--text-main)',
     fontFamily:'var(--font-sans)', fontWeight:500,
-    fontSize:'0.9375rem', border:'1px solid #e2e8f0', cursor:'pointer',
+    fontSize:'0.9375rem', border:'1px solid var(--btn-secondary-border)', cursor:'pointer',
     transition: 'var(--transition-spring)',
     boxShadow: 'var(--shadow-sm)',
   },
 
   /* FOOTER */
   footer: {
-    background: '#f8fafc',
-    borderTop: '1px solid #e2e8f0',
+    background: 'var(--bg-primary)',
+    borderTop: '1px solid var(--border-light)',
     overflow: 'hidden',
   },
   footerTop: {
@@ -749,7 +1070,7 @@ const s = {
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     padding: '64px 64px 48px',
-    borderBottom: '1px solid #e2e8f0',
+    borderBottom: '1px solid var(--border-light)',
   },
   footerTaglineWrap: {
     display: 'flex',
@@ -760,13 +1081,13 @@ const s = {
     height: 32,
     width: 'auto',
     display: 'block',
-    filter: 'brightness(0.15)',
+    filter: 'var(--logo-filter)',
     opacity: 0.9,
   },
   footerTagline: {
     fontSize: '0.95rem',
     fontWeight: 400,
-    color: '#64748b',
+    color: 'var(--text-muted)',
     letterSpacing: '-0.01em',
     margin: 0,
     maxWidth: 200,
@@ -785,7 +1106,7 @@ const s = {
   footerColTitle: {
     fontSize: '0.75rem',
     fontWeight: 600,
-    color: '#94a3b8',
+    color: 'var(--text-dim)',
     marginBottom: 4,
     margin: '0 0 8px 0',
     textTransform: 'uppercase',
@@ -793,7 +1114,7 @@ const s = {
   },
   footerLink: {
     fontSize: '0.875rem',
-    color: '#475569',
+    color: 'var(--text-muted)',
     cursor: 'pointer',
     lineHeight: 1.5,
     transition: 'color 0.2s',
@@ -809,32 +1130,43 @@ const s = {
     fontSize: 'clamp(4.5rem, 15.5vw, 16rem)',
     fontWeight: 900,
     letterSpacing: '-0.055em',
-    color: '#f1f5f9',
+    color: 'var(--theme-tonal)',
     lineHeight: 0.86,
     paddingLeft: '0.35%',
     fontFamily: 'var(--font-sans)',
-    WebkitTextStroke: '1px #cbd5e1',
+    WebkitTextStroke: '1px var(--border-light)',
   },
   footerBottom: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '24px 64px',
-    borderTop: '1px solid #e2e8f0',
+    borderTop: '1px solid var(--border-light)',
     flexWrap: 'wrap',
     gap: 12,
   },
   footerCopyright: {
     fontSize: '0.8rem',
-    color: '#94a3b8',
+    color: 'var(--text-dim)',
     letterSpacing: '-0.01em',
   },
   footerLegal: {
     fontSize: '0.8rem',
-    color: '#94a3b8',
+    color: 'var(--text-dim)',
     cursor: 'pointer',
     transition: 'color 0.2s',
     letterSpacing: '-0.01em',
+  },
+  marqueeSection: {
+    position: 'relative',
+    padding: '120px 0 160px',
+    marginTop: '-260px',
+    background: 'transparent',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 40,
+    zIndex: 3,
   },
 };
 
