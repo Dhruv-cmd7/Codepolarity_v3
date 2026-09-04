@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import TypedText from '../components/TypedText';
+import Footer from '../components/Footer';
 import dsLogo from '../assets/ds_logo.svg';
 import codeEditorIllustration from '../assets/code_editor_illustration.jpg';
 
@@ -140,645 +141,285 @@ const ContainerScroll = ({ titleComponent, children }) => {
 };
 
 /* ─────────────────────────────────────────────────────
-   featureStyles – defined BEFORE features to avoid
-   "Cannot access before initialization" error
+   Meet the Agents Data (Autonomous Developer Telemetry)
 ───────────────────────────────────────────────────── */
-const fs = {
-  card: {
-    background: '#ffffff',
-    border: '1px solid #e2e8f0',
-    borderRadius: 24,
-    padding: '32px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 16,
-    boxShadow: '0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 4px 12px -2px rgba(0, 0, 0, 0.02)',
-    transition: 'var(--transition-spring)',
-  },
-  sectionTag: {
-    fontSize: '0.75rem',
-    fontWeight: 600,
-    color: '#7c3aed',
-    textTransform: 'uppercase',
-    letterSpacing: '0.08em',
-    marginBottom: 8,
-  },
-  barRow: { display: 'flex', flexDirection: 'column', gap: 6 },
-  barLabel: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    fontSize: '0.8125rem',
-    color: '#475569',
-    fontWeight: 500,
-  },
-  barBg: { height: 6, background: '#f1f5f9', borderRadius: 99, overflow: 'hidden' },
-  barFill: { height: '100%', borderRadius: 99, transition: 'width 1s cubic-bezier(0.16, 1, 0.3, 1)' },
-  resultBadge: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderTop: '1px solid #f1f5f9',
-    paddingTop: 16,
-    marginTop: 8,
-  },
-  node: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    gap: 14,
-    position: 'relative',
-    paddingBottom: 8,
-  },
-  nodeDot: {
-    width: 22, height: 22, borderRadius: '50%',
-    flexShrink: 0, display: 'flex', alignItems: 'center',
-    justifyContent: 'center', marginTop: 2, zIndex: 1,
-    transition: 'var(--transition-smooth)',
-  },
-  nodeLine: {
-    position: 'absolute', left: 10, top: 24,
-    width: 2, height: '100%', background: '#e2e8f0',
-  },
-  nodeText: { display: 'flex', flexDirection: 'column', gap: 2, paddingBottom: 12 },
-  editorWrap: {
-    background: '#ffffff', border: '1px solid #e2e8f0',
-    borderRadius: 24, overflow: 'hidden',
-    boxShadow: '0 10px 30px -5px rgba(0, 0, 0, 0.04)',
-    transition: 'var(--transition-spring)',
-  },
-  editorBar: {
-    display: 'flex', alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: '12px 20px',
-    borderBottom: '1px solid #e2e8f0', background: '#f8fafc',
-  },
-  editorPill: {
-    fontSize: '0.7rem', padding: '4px 10px',
-    borderRadius: 99, background: '#f1f5f9',
-    color: '#475569', fontFamily: 'var(--font-mono)',
-    cursor: 'pointer',
-    border: '1px solid #e2e8f0',
-    transition: 'var(--transition-smooth)',
-  },
-  code: {
-    fontFamily: 'var(--font-mono)',
-    fontSize: '0.82rem', lineHeight: 1.7,
-    color: '#1e293b', whiteSpace: 'pre', margin: 0,
-    padding: '20px',
-    background: '#ffffff',
-  },
-  console: {
-    display: 'flex', alignItems: 'center', gap: 10,
-    padding: '12px 20px',
-    borderTop: '1px solid #e2e8f0', background: '#0f172a',
-  },
-};
-
-/* ─────────────────────────────────────────────────────
-   features array – uses fs (featureStyles) safely
-───────────────────────────────────────────────────── */
-const features = [
+const agentsData = [
   {
-    idx: 0,
-    label: 'Level Diagnostics',
-    title: 'Know exactly where you stand.',
-    desc: 'A 10-question calibration assessment evaluates your programming logic, web fundamentals, data structures, and AI concepts — then assigns you a precise study tier.',
-    cta: 'Take assessment →',
+    id: 'detection',
+    name: 'Detection agent',
+    titleColor: '#FF7A59',
+    subtitle: 'Continuous calibration & discovery',
+    desc: 'Continuously scans your code syntax, algorithmic complexity, and data structures for anti-patterns, edge cases, and knowledge gaps, surfacing the insights that actually matter to your progression.',
+    quote: 'That binary search logic missed an edge case on duplicate keys. Recalibrated tier to Advanced Intermediate. Worth a look.',
+    mascot: '/agents/agent_detection.jpg',
     page: 'assessment',
-    visual: (
-      <div style={fs.card} className="card">
-        <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:4 }}>
-          <div style={{ width:8, height:8, borderRadius:'50%', background:'#2563eb', boxShadow:'0 0 8px rgba(37, 99, 235, 0.5)' }} />
-          <span style={{ fontSize:'0.75rem', fontWeight:600, color:'#2563eb', letterSpacing:'0.04em', textTransform: 'uppercase' }}>Calibration Active</span>
-        </div>
-        {[
-          { label: 'Programming Logic', val: 90, color: '#2563eb' },
-          { label: 'Web Fundamentals',  val: 72, color: '#059669' },
-          { label: 'Data Structures',   val: 55, color: '#d97706' },
-          { label: 'AI / ML Concepts',  val: 38, color: '#dc2626' },
-        ].map((item) => (
-          <div key={item.label} style={fs.barRow}>
-            <div style={fs.barLabel}>
-              <span>{item.label}</span>
-              <span style={{ color: item.color, fontWeight: '600' }}>{item.val}%</span>
-            </div>
-            <div style={fs.barBg}>
-              <div style={{ ...fs.barFill, width:`${item.val}%`, background:item.color }} />
-            </div>
-          </div>
-        ))}
-        <div style={fs.resultBadge}>
-          <span style={{ fontSize:'0.75rem', color:'#94a3b8', fontWeight:600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Calibrated Level</span>
-          <span style={{ fontSize:'1rem', color:'#2563eb', fontWeight:600 }}>Intermediate</span>
-        </div>
-      </div>
-    ),
+    mascotAlign: 'left',
   },
   {
-    idx: 1,
-    label: 'Career Roadmaps',
-    title: 'A map for every destination.',
-    desc: 'Choose your profession — AI Developer, Frontend, or Backend — and follow a structured node-based learning pathway. Each node links to hand-picked resources.',
-    cta: 'Explore roadmaps →',
+    id: 'investigation',
+    name: 'Investigation agent',
+    titleColor: '#A78BFA',
+    subtitle: 'Autonomous pathway routing',
+    desc: 'Builds the full trajectory behind every milestone, prerequisite node, and project dependency. Synthesizes curated resources and interactive challenges to turn months of aimless tutorials into structured mastery.',
+    quote: 'Detected latency vulnerability in distributed systems caching. Auto-generated Redis & Kafka cluster architecture drill into your roadmap.',
+    mascot: '/agents/agent_investigation.jpg',
     page: 'roadmaps',
-    visual: (
-      <div style={{ ...fs.card, gap: 4 }} className="card">
-        <div style={fs.sectionTag}>AI Developer Path</div>
-        {[
-          { done: true,  label: 'Python & Data Libraries',       sub: 'NumPy, Pandas, file handling' },
-          { done: true,  label: 'ML Math Foundations',           sub: 'Linear algebra, calculus, probability' },
-          { done: false, label: 'Classical Machine Learning',    sub: 'Scikit-Learn, regressions, trees' },
-          { done: false, label: 'Deep Learning & Neural Nets',   sub: 'PyTorch, backprop, CNNs' },
-          { done: false, label: 'NLP, Transformers & LLMs',     sub: 'Hugging Face, RAG, prompting' },
-        ].map((node, i, arr) => (
-          <div key={i} style={fs.node}>
-            <div style={{ 
-              ...fs.nodeDot, 
-              background: node.done ? '#2563eb' : '#f1f5f9', 
-              border: node.done ? 'none' : '1px solid #cbd5e1',
-              boxShadow: node.done ? '0 0 10px rgba(37, 99, 235, 0.3)' : 'none'
-            }}>
-              {node.done && <span style={{ color:'#fff', fontSize:'10px', fontWeight:700 }}>✓</span>}
-            </div>
-            {i < arr.length - 1 && <div style={fs.nodeLine} />}
-            <div style={fs.nodeText}>
-              <span style={{ color: node.done ? '#0f172a' : '#64748b', fontWeight: 500, fontSize:'0.875rem' }}>{node.label}</span>
-              <span style={{ color:'#94a3b8', fontSize:'0.75rem' }}>{node.sub}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-    ),
+    mascotAlign: 'right',
   },
   {
-    idx: 2,
-    label: 'Online IDE',
-    title: 'Practice without leaving your browser.',
-    desc: 'Write JavaScript algorithms, build HTML layouts, and run code in the web editor. Save your scripts with one click — no setup required.',
-    cta: 'Open IDE →',
+    id: 'orchestration',
+    name: 'Orchestration agent',
+    titleColor: '#38BDF8',
+    subtitle: 'Closed-loop sandboxed execution',
+    desc: 'Bridges the gap between theory and code, spinning up sandboxed IDE runtimes, algorithm test runners, and Typlab typing telemetry drills with real-time verification and zero local environment setup.',
+    quote: 'Sandboxed runtime ready. Verified 8 test cases in fibonacci.js. Keystroke telemetry logging 96% accuracy with zero syntax friction.',
+    mascot: '/agents/agent_orchestration.jpg',
     page: 'editor',
-    visual: (
-      <div style={fs.editorWrap} className="card">
-        <div style={fs.editorBar}>
-          <div style={{ display:'flex', gap:6 }}>
-            {['#ff5f56','#ffbd2e','#27c93f'].map((c,i) => (
-              <div key={i} style={{ width:10, height:10, borderRadius:'50%', background:c }} />
-            ))}
-          </div>
-          <span style={{ fontSize:'0.75rem', color:'#64748b', fontFamily:'var(--font-mono)' }}>fibonacci.js</span>
-          <div style={{ display:'flex', gap:8 }}>
-            <div style={fs.editorPill}>Run ▶</div>
-            <div style={fs.editorPill}>Save ⬆</div>
-          </div>
-        </div>
-        <pre style={fs.code}>{`function fibonacci(n) {
-  const seq = [0, 1];
-  while (seq.length < n) {
-    const len = seq.length;
-    seq.push(seq[len-1] + seq[len-2]);
-  }
-  return seq;
-}
-
-console.log(fibonacci(8));`}</pre>
-        <div style={fs.console}>
-          <span style={{ color:'#2563eb' }}>▶</span>
-          <span style={{ color:'#10b981', fontFamily:'var(--font-mono)', fontSize:'0.8rem', fontWeight: '500' }}>[0, 1, 1, 2, 3, 5, 8, 13]</span>
-        </div>
-      </div>
-    ),
-  },
-  {
-    idx: 3,
-    label: 'Keystroke Calibration',
-    title: 'Typlab keyboard speed training.',
-    desc: 'Calibrate your typing speed on production syntax blocks. Practice formatting, bracket closures, and special characters in JavaScript, Python, CSS, and SQL with real-time feedback loops.',
-    cta: 'Try Typlab →',
-    page: 'typlab',
-    visual: (
-      <div style={fs.card} className="card">
-        <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:12 }}>
-          <div style={{ width:8, height:8, borderRadius:'50%', background:'#10b981', boxShadow:'0 0 8px rgba(16, 185, 129, 0.5)' }} />
-          <span style={{ fontSize:'0.75rem', fontWeight:600, color:'#10b981', letterSpacing:'0.04em', textTransform: 'uppercase' }}>Keystroke Telemetry Active</span>
-        </div>
-        <div style={{ fontFamily:'var(--font-mono)', fontSize:'0.8rem', padding:'12px', background:'#f8fafc', borderRadius:'8px', border:'1px solid #e2e8f0', color:'#475569', lineHeight:'1.6' }}>
-          <span style={{ color:'#2563eb', background:'rgba(37, 99, 235, 0.08)' }}>const </span>
-          <span style={{ color:'#0f172a', background:'rgba(37, 99, 235, 0.08)' }}>[state, </span>
-          <span style={{ color:'#dc2626', background:'rgba(220, 38, 38, 0.1)', textDecoration:'underline' }}>sr</span>
-          <span style={{ color:'#94a3b8' }}>ate] = useState(0);</span>
-        </div>
-        <div style={{ display:'flex', justifyContent:'space-between', marginTop:16 }}>
-          <div style={{ display:'flex', flexDirection:'column' }}>
-            <span style={{ fontSize:'0.65rem', color:'#94a3b8', textTransform:'uppercase', fontWeight:600 }}>Speed</span>
-            <span style={{ fontSize:'1.125rem', fontWeight:600, color:'#0f172a' }}>68 WPM</span>
-          </div>
-          <div style={{ display:'flex', flexDirection:'column' }}>
-            <span style={{ fontSize:'0.65rem', color:'#94a3b8', textTransform:'uppercase', fontWeight:600 }}>Accuracy</span>
-            <span style={{ fontSize:'1.125rem', fontWeight:600, color:'#10b981' }}>96%</span>
-          </div>
-          <div style={{ display:'flex', flexDirection:'column' }}>
-            <span style={{ fontSize:'0.65rem', color:'#94a3b8', textTransform:'uppercase', fontWeight:600 }}>Award</span>
-            <span style={{ fontSize:'1.125rem', fontWeight:600, color:'#8b5cf6' }}>Code Ninja 🥷</span>
-          </div>
-        </div>
-      </div>
-    ),
+    mascotAlign: 'left',
   },
 ];
 
+
+
 /* ─────────────────────────────────────────────────────
-   Marquee logo items with custom glow properties
+   Horizontal Brick Marquee Brands & Tech Stack
 ───────────────────────────────────────────────────── */
-const marqueeItems = [
-  {
-    name: 'JavaScript',
-    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg'
-  },
-  {
-    name: 'TypeScript',
-    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg'
-  },
-  {
-    name: 'Python',
-    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg'
-  },
-  {
-    name: 'Go',
-    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg'
-  },
-  {
-    name: 'Rust',
-    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg'
-  },
-  {
-    name: 'C++',
-    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg'
-  },
-  {
-    name: 'Java',
-    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg'
-  },
-  {
-    name: 'React',
-    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg'
-  },
-  {
-    name: 'HTML5',
-    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg'
-  },
-  {
-    name: 'CSS3',
-    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg'
-  },
-  {
-    name: 'Ruby',
-    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ruby/ruby-original.svg'
-  },
-  {
-    name: 'Swift',
-    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg'
-  }
+const marqueeRow1 = [
+  { name: 'Google', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg' },
+  { name: 'GitHub', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg', inverted: true },
+  { name: 'Python', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
+  { name: 'TypeScript', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg' },
+  { name: 'Amazon AWS', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg' },
+  { name: 'JavaScript', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg' },
+  { name: 'Go', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg' },
+  { name: 'React', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg' },
+];
+
+const marqueeRow2 = [
+  { name: 'CockroachDB', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/cockroachlabs.svg', inverted: true },
+  { name: 'Elastic', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/elasticsearch/elasticsearch-original.svg' },
+  { name: 'Docker', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg' },
+  { name: 'Kubernetes', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg' },
+  { name: 'Cloudflare', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cloudflare/cloudflare-original.svg' },
+  { name: 'Rust', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/rust.svg', inverted: true },
+  { name: 'Figma', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg' },
+  { name: 'PostgreSQL', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg' },
+];
+
+const marqueeRow3 = [
+  { name: 'Supabase', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg' },
+  { name: 'Redis', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg' },
+  { name: 'MongoDB', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg' },
+  { name: 'Postman', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg' },
+  { name: 'Terraform', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg' },
+  { name: 'GraphQL', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg' },
+  { name: 'C++', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg' },
+  { name: 'Java', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
 ];
 
 /* ─────────────────────────────────────────────────────
    LANDING PAGE COMPONENT
 ───────────────────────────────────────────────────── */
 const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
-  const [managerHovered, setManagerHovered] = useState(false);
-
   return (
     <div style={{ overflowX: 'hidden', background: 'var(--bg-primary)', color: 'var(--text-main)', minHeight: '100vh' }}>
       
-      {/* ─────────────────── Ambient Orbs ─────────────────── */}
-      <div className="glow-orb glow-orb-cyan" style={{ top: '8%', left: '15%', width: '550px', height: '550px' }} />
-      <div className="glow-orb glow-orb-purple" style={{ top: '35%', right: '10%', width: '600px', height: '600px' }} />
-      <div className="glow-orb glow-orb-cyan" style={{ bottom: '20%', left: '5%', width: '500px', height: '500px' }} />
-
-      {/* ─────────────────── HERO ─────────────────── */}
-      <section style={s.hero}>
-        <img
-          src="https://pub-940ccf6255b54fa799a9b01050e6c227.r2.dev/ruixen_hero_gradient.jpg"
-          alt=""
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            opacity: 1.0,
-            pointerEvents: 'none',
-            zIndex: 0,
-          }}
-        />
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'linear-gradient(to bottom, rgba(11, 15, 25, 0) 0%, rgba(11, 15, 25, 0.4) 50%, var(--bg-primary) 98%)',
-          pointerEvents: 'none',
-          zIndex: 1,
-        }} />
-        <div style={s.heroGlow} />
-
-        <div style={s.heroInner}>
+      {/* ─────────────────── MINIMALIST ENTERPRISE HERO ─────────────────── */}
+      <section className="hero-enterprise-section">
+        <div className="hero-enterprise-container">
           <PopSlide>
-            <div style={s.chip} className="chip">
-              <span style={s.chipDot} />
-              Launch your developer journey
-            </div>
-          </PopSlide>
-
-          <PopSlide delay={80}>
-            <h1 style={s.h1} className="display-xl">
-              Learning is{' '}
-              <span style={{ fontWeight: '600', whiteSpace: 'nowrap', color: '#114b66' }}>
-                <TypedText
-                  words={['lifting off.', 'taking flight.', 'in orbit.', 'weightless.']}
-                  speed={75}
-                  pause={2200}
-                />
-              </span>
+            <h1 className="hero-enterprise-title">
+              The developer career engine built for <span className="hero-title-accent">high-velocity</span> engineering.
             </h1>
           </PopSlide>
 
-          <PopSlide delay={160}>
-            <p style={{ ...s.heroDesc, color: '#cbd5e1' }} className="body-lg">
-              Codepolarity evaluates your programming level, generates
-              interactive career pathways, curates the best internet resources,
-              and lets you practice code — all synced to your developer profile.
+          <PopSlide delay={80}>
+            <p className="hero-enterprise-subtitle">
+              Codepolarity benchmarks programming capabilities, calibrates technical skill tiers with autonomous agents, and orchestrates interactive career pathways tailored for modern software developers.
             </p>
           </PopSlide>
 
-          <PopSlide delay={240}>
-            <div style={s.heroCtas}>
+          <PopSlide delay={160}>
+            <div className="hero-cta-group">
               {user ? (
                 <button
                   onClick={() => setCurrentPage(user.completedQuiz ? 'roadmaps' : 'assessment')}
-                  className="btn-primary"
-                  style={s.mainCtaBtn}
+                  className="hero-btn-primary"
                 >
-                  {user.completedQuiz ? 'Continue learning →' : 'Start assessment →'}
+                  {user.completedQuiz ? 'Continue Learning →' : 'Start Assessment →'}
                 </button>
               ) : (
                 <>
-                  <button onClick={onOpenAuth} className="btn-primary" style={s.mainCtaBtn}>
-                    Get started — it's free
+                  <button onClick={onOpenAuth} className="hero-btn-primary">
+                    Start Skill Assessment →
                   </button>
-                  <button onClick={() => setCurrentPage('editor')} className="btn-secondary" style={s.secCtaBtn}>
-                    Try the IDE
+                  <button onClick={() => setCurrentPage('editor')} className="hero-btn-secondary">
+                    Launch Playground IDE
                   </button>
                 </>
               )}
             </div>
           </PopSlide>
         </div>
-
-        {/* Render ContainerScroll inside the hero fold so it peeks at the bottom! */}
-        {/* <ContainerScroll titleComponent={null}>
-          <img
-            src={codeEditorIllustration}
-            alt="Interactive Code Editor"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              display: 'block',
-            }}
-          />
-        </ContainerScroll> */}
-
       </section>
 
-      {/* ─────────────────── TILTED LANGUAGE MARQUEE ─────────────────── */}
-      <section style={s.marqueeSection}>
-        {/* Glow orbs behind the marquee */}
-        <div className="glow-orb glow-orb-purple" style={{ top: '10%', left: '30%', width: '400px', height: '400px', opacity: 0.3 }} />
-        <div className="glow-orb glow-orb-cyan" style={{ bottom: '10%', right: '30%', width: '400px', height: '400px', opacity: 0.3 }} />
-
-
-        <div className="tilted-marquee-wrapper">
-          <div className="tilted-marquee-inner">
-            {/* Track 1: Moving Left */}
-            <div className="marquee-container">
-              <div className="marquee-track marquee-track-left">
-                {marqueeItems.map((item, idx) => (
-                  <div key={`left-1-${idx}`} className="marquee-card">
-                    <img src={item.iconUrl} alt={item.name} width="28" height="28" style={{ display: 'block', objectFit: 'contain' }} />
-                    <span>{item.name}</span>
-                  </div>
-                ))}
-                {marqueeItems.map((item, idx) => (
-                  <div key={`left-2-${idx}`} className="marquee-card">
-                    <img src={item.iconUrl} alt={item.name} width="28" height="28" style={{ display: 'block', objectFit: 'contain' }} />
-                    <span>{item.name}</span>
-                  </div>
-                ))}
-              </div>
+      {/* ─────────────────── HORIZONTAL BRICK MARQUEE (FINOUT STYLE) ─────────────────── */}
+      <section className="brick-marquee-section">
+        <div className="brick-marquee-container">
+          {/* Row 1: Scrolling Left */}
+          <div className="brick-marquee-row">
+            <div className="brick-marquee-track brick-marquee-track-left">
+              {[...marqueeRow1, ...marqueeRow1].map((item, idx) => (
+                <div key={`r1-${idx}`} className="brick-marquee-cell">
+                  <img src={item.iconUrl} alt={item.name} className={`brick-marquee-icon ${item.inverted ? 'brick-marquee-icon-inverted' : ''}`} />
+                  <span className="brick-marquee-name">{item.name}</span>
+                </div>
+              ))}
             </div>
+          </div>
 
-            {/* Track 2: Moving Right (shifted list) */}
-            <div className="marquee-container">
-              <div className="marquee-track marquee-track-right">
-                {[...marqueeItems.slice(6), ...marqueeItems.slice(0, 6)].map((item, idx) => (
-                  <div key={`right-1-${idx}`} className="marquee-card">
-                    <img src={item.iconUrl} alt={item.name} width="28" height="28" style={{ display: 'block', objectFit: 'contain' }} />
-                    <span>{item.name}</span>
-                  </div>
-                ))}
-                {[...marqueeItems.slice(6), ...marqueeItems.slice(0, 6)].map((item, idx) => (
-                  <div key={`right-2-${idx}`} className="marquee-card">
-                    <img src={item.iconUrl} alt={item.name} width="28" height="28" style={{ display: 'block', objectFit: 'contain' }} />
-                    <span>{item.name}</span>
-                  </div>
-                ))}
-              </div>
+          {/* Row 2: Scrolling Right */}
+          <div className="brick-marquee-row">
+            <div className="brick-marquee-track brick-marquee-track-right">
+              {[...marqueeRow2, ...marqueeRow2].map((item, idx) => (
+                <div key={`r2-${idx}`} className="brick-marquee-cell">
+                  <img src={item.iconUrl} alt={item.name} className={`brick-marquee-icon ${item.inverted ? 'brick-marquee-icon-inverted' : ''}`} />
+                  <span className="brick-marquee-name">{item.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Row 3: Scrolling Left (offset speed) */}
+          <div className="brick-marquee-row">
+            <div className="brick-marquee-track brick-marquee-track-left" style={{ animationDuration: '52s' }}>
+              {[...marqueeRow3, ...marqueeRow3].map((item, idx) => (
+                <div key={`r3-${idx}`} className="brick-marquee-cell">
+                  <img src={item.iconUrl} alt={item.name} className={`brick-marquee-icon ${item.inverted ? 'brick-marquee-icon-inverted' : ''}`} />
+                  <span className="brick-marquee-name">{item.name}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* ─────────────── MANAGER SURFACE ────────────── */}
-      <section style={s.surface}>
+      {/* ─────────────── MEET THE AGENTS SECTION ────────────── */}
+      <section className="agents-section">
         <div className="grid-container">
           <PopSlide>
-            <p style={s.tag}>Platform Overview</p>
-            <h2 style={s.h2} className="display-md">The next-gen learning command center.</h2>
-          </PopSlide>
-
-          <PopSlide delay={100}>
-            <div 
-              style={{
-                ...s.window,
-                borderColor: managerHovered ? '#cbd5e1' : '#e2e8f0',
-                boxShadow: managerHovered 
-                  ? '0 20px 40px -10px rgba(0, 0, 0, 0.08), 0 8px 16px -4px rgba(0, 0, 0, 0.04)' 
-                  : '0 10px 30px -5px rgba(0, 0, 0, 0.04)',
-              }}
-              onMouseEnter={() => setManagerHovered(true)}
-              onMouseLeave={() => setManagerHovered(false)}
-            >
-              {/* Window chrome */}
-              <div style={s.windowBar}>
-                <div style={{ display:'flex', gap:6 }}>
-                  {['#ff5f56','#ffbd2e','#27c93f'].map((c,i) => (
-                    <div key={i} style={{ width:10, height:10, borderRadius:'50%', background:c }} />
-                  ))}
-                </div>
-                <span style={s.windowTitle}>Codepolarity — Manager Surface</span>
-                <div style={{ marginLeft:'auto', display:'flex', gap:8 }}>
-                  <div style={s.windowPill}>
-                    <span style={{ display:'inline-block', width:6, height:6, borderRadius:'50%', background:'#10b981', marginRight:5 }} />
-                    Live System
-                  </div>
-                  <div style={s.windowPill}>v1.0.0</div>
-                </div>
-              </div>
-
-              {/* 3-column body */}
-              <div style={s.windowBody}>
-                {/* Sidebar */}
-                <div style={s.sidebar}>
-                  <div style={s.sidebarLabel}>Active Agents</div>
-                  {[
-                    { name:'assessment_calibrator', status:'running', col:'#2563eb' },
-                    { name:'roadmap_parser',        status:'running', col:'#2563eb' },
-                    { name:'sandbox_runtime',       status:'idle',    col:'#94a3b8' },
-                    { name:'mongodb_seeder',        status:'done',    col:'#10b981' },
-                  ].map((a) => (
-                    <div key={a.name} style={{ display:'flex', alignItems:'center', gap:10, marginBottom:16 }}>
-                      <div style={{ width:6, height:6, borderRadius:'50%', background:a.col, flexShrink:0 }} />
-                      <div style={{ display:'flex', flexDirection:'column', gap:2 }}>
-                        <span style={{ fontSize:'0.75rem', color:'#475569', fontFamily:'var(--font-mono)' }}>{a.name}</span>
-                        <span style={{ fontSize:'0.65rem', fontWeight:700, letterSpacing:'0.05em', color:a.col, textTransform:'uppercase' }}>{a.status}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Console log */}
-                <div style={s.console}>
-                  {[
-                    { t:'11:50:01', tag:'SYSTEM',   col:'#3b82f6', msg:'Codepolarity initialized on port 3000.' },
-                    { t:'11:50:02', tag:'DATABASE', col:'#10b981', msg:'Connected to MongoDB: 127.0.0.1:27017/codepolarity.' },
-                    { t:'11:50:03', tag:'PARSER',   col:'#f59e0b', msg:'Career roadmaps loaded: AI Developer, Frontend, Backend.' },
-                    { t:'11:50:05', tag:'AGENT',    col:'#a855f7', msg:'Assessment calibrator waiting for student input…' },
-                    { t:'11:50:07', tag:'SANDBOX',  col:'#6b7280', msg:'Code editor templates pre-loaded: 4 exercises available.' },
-                    { t:'11:50:09', tag:'READY',    col:'#00f5d4', msg:'All systems nominal. Platform accepting connections.' },
-                  ].map((line, i) => (
-                    <div key={i} style={{ display:'flex', gap:10, fontSize:'0.78rem', whiteSpace:'nowrap', marginBottom:10 }}>
-                      <span style={{ color:'#64748b', flexShrink:0, fontFamily:'var(--font-mono)' }}>{line.t}</span>
-                      <span style={{ color:line.col, fontWeight:600, flexShrink:0, fontFamily:'var(--font-mono)' }}>[{line.tag}]</span>
-                      <span style={{ color:'#e2e8f0', overflow:'hidden', textOverflow:'ellipsis', fontFamily:'var(--font-mono)' }}>{line.msg}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Stats */}
-                <div style={s.stats}>
-                  {[
-                    { val:'3',    label:'Roadmaps',  col:'#0f172a' },
-                    { val:'10',   label:'Quiz Qs',   col:'#0f172a' },
-                    { val:'4',    label:'Templates', col:'#0f172a' },
-                    { val:'Live', label:'MongoDB',   col:'#10b981' },
-                  ].map((stat, i) => (
-                    <React.Fragment key={i}>
-                      {i > 0 && <div style={{ height:1, background:'#e2e8f0', margin:'0 12px' }} />}
-                      <div style={{ display:'flex', flexDirection:'column', alignItems:'center', padding:'16px 0' }}>
-                        <span style={{ fontSize:'1.375rem', fontWeight:600, color:stat.col, lineHeight:1, letterSpacing:'-0.02em' }}>{stat.val}</span>
-                        <span style={{ fontSize:'0.65rem', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.06em', marginTop:6, fontWeight:600 }}>{stat.label}</span>
-                      </div>
-                    </React.Fragment>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </PopSlide>
-        </div>
-      </section>
-
-      {/* ─────────────── FEATURE ROWS ────────────── */}
-      <section style={s.featSection}>
-        <div className="grid-container">
-          {features.map((feat, i) => (
-            <PopSlide key={i} delay={60 * i}>
-              <div style={{ ...s.featRow, flexDirection: i % 2 === 0 ? 'row' : 'row-reverse' }}>
-                <div style={s.featCopy}>
-                  <p style={s.tag}>{feat.label}</p>
-                  <h2 style={s.featTitle} className="display-md">{feat.title}</h2>
-                  <p style={s.featDesc} className="body-md">{feat.desc}</p>
-                  <button
-                    onClick={() => setCurrentPage(feat.page)}
-                    className="btn-secondary"
-                    style={{ marginTop:32, alignSelf:'flex-start' }}
-                  >
-                    {feat.cta}
-                  </button>
-                </div>
-                <div style={s.featMedia}>{feat.visual}</div>
-              </div>
-              {i < features.length - 1 && (
-                <div style={{ height:1, background:'#e2e8f0', margin:'80px 0' }} />
-              )}
-            </PopSlide>
-          ))}
-        </div>
-      </section>
-
-      {/* ─────────────────── ABOUT SECTION ─────────────────── */}
-      <section style={{ padding: '80px 0 60px', background: 'var(--bg-secondary)', borderTop: '1px solid var(--border-light)' }}>
-        <div className="grid-container">
-          <PopSlide>
-            <p style={s.tag}>About the Platform</p>
-            <h2 style={s.h2} className="display-md">Zero-gravity learning telemetry.</h2>
-            <div style={{ maxWidth: '800px', marginTop: '20px' }}>
-              <p style={{ color: 'var(--text-muted)', lineHeight: '1.8', fontSize: '1.02rem' }}>
-                Codepolarity was engineered by software students who wanted to escape the drag of linear tutorial tracks. By combining diagnostic calibrations with automated learning roadmaps, an integrated sandboxed coding environment, and the Typlab speed keyboard calibrator, Codepolarity removes learning friction. All of your achievements, assessments, and code files are compiled directly in your workspace.
+            {/* Header */}
+            <div className="agents-header">
+              <h2 className="agents-title">
+                Meet the <span className="agents-title-highlight">agents</span>
+              </h2>
+              <p className="agents-subtitle">
+                Your engineering journey just got 10x faster. Specialized autonomous agents that work together to calibrate skill tiers, architect roadmaps, and accelerate every phase of your developer career.
               </p>
-              <button 
-                onClick={() => setCurrentPage('about')}
-                className="btn-secondary" 
-                style={{ marginTop: '24px' }}
+            </div>
+
+            {/* Winding Agent Timeline */}
+            <div className="agents-timeline-wrapper">
+              {/* Dynamic Connecting Umbilical Tether Cable SVG */}
+              <svg 
+                className="agents-tether-svg" 
+                viewBox="0 0 1040 1200" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
               >
-                Read our philosophy & Tech Stack →
-              </button>
+                <defs>
+                  <linearGradient id="agentTetherGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#FF7A59" stopOpacity="0.9" />
+                    <stop offset="30%" stopColor="#10B981" stopOpacity="0.85" />
+                    <stop offset="65%" stopColor="#A78BFA" stopOpacity="0.9" />
+                    <stop offset="100%" stopColor="#38BDF8" stopOpacity="0.9" />
+                  </linearGradient>
+                  <linearGradient id="agentTetherGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#FF7A59" stopOpacity="0.25" />
+                    <stop offset="50%" stopColor="#10B981" stopOpacity="0.2" />
+                    <stop offset="100%" stopColor="#38BDF8" stopOpacity="0.25" />
+                  </linearGradient>
+                </defs>
+                {/* Glow outline */}
+                <path
+                  d="M 330 180 C 440 210, 480 340, 430 400 C 370 470, 520 480, 640 430 C 720 390, 770 460, 730 540 M 710 650 C 640 760, 520 750, 480 820 C 440 900, 320 900, 270 940 C 230 980, 270 1050, 330 1030"
+                  stroke="url(#agentTetherGlow)"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                />
+                {/* Sharp cable line */}
+                <path
+                  d="M 330 180 C 440 210, 480 340, 430 400 C 370 470, 520 480, 640 430 C 720 390, 770 460, 730 540 M 710 650 C 640 760, 520 750, 480 820 C 440 900, 320 900, 270 940 C 230 980, 270 1050, 330 1030"
+                  stroke="url(#agentTetherGrad)"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                />
+              </svg>
+
+              {/* Agents Rows */}
+              {agentsData.map((agent, i) => (
+                <div 
+                  key={agent.id} 
+                  className={`agent-row ${agent.mascotAlign === 'right' ? 'reverse' : ''}`}
+                >
+                  {/* Astronaut Mascot */}
+                  <div className="agent-mascot-wrap">
+                    <div className={`agent-mascot-card mascot-${i + 1}`}>
+                      <img 
+                        src={agent.mascot} 
+                        alt={agent.name} 
+                        className="agent-mascot-img"
+                        loading="lazy"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Agent Info & Interactive Quote */}
+                  <div className="agent-content">
+                    <h3 className="agent-name" style={{ color: agent.titleColor }}>
+                      {agent.name}
+                    </h3>
+                    <p className="agent-subtitle-tag">
+                      {agent.subtitle}
+                    </p>
+                    <p className="agent-desc">
+                      {agent.desc}
+                    </p>
+
+                    {/* Speech Quote Card with emerald quote mark */}
+                    <div 
+                      className="agent-quote-card"
+                      onClick={() => setCurrentPage(agent.page)}
+                      title={`Open ${agent.name}`}
+                    >
+                      <span className="agent-quote-icon">“</span>
+                      <p className="agent-quote-text">
+                        {agent.quote}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </PopSlide>
         </div>
       </section>
+
 
       {/* ─────────────── CTA BANNER ────────────── */}
-      <section style={{ padding:'80px 0 120px' }}>
+      <section style={{ padding:'90px 0 120px', background: 'var(--bg-primary)', borderTop: '1px solid var(--border-light)' }}>
         <div className="grid-container">
           <PopSlide>
             <div style={s.banner}>
-              <img
-                src="https://pub-940ccf6255b54fa799a9b01050e6c227.r2.dev/ruixen_hero_gradient.jpg"
-                alt=""
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  opacity: 1.0,
-                  pointerEvents: 'none',
-                  zIndex: 0,
-                }}
-              />
-              <div style={{
-                position: 'absolute',
-                inset: 0,
-                background: 'linear-gradient(to bottom, rgba(11, 15, 25, 0) 0%, rgba(11, 15, 25, 0.5) 50%, var(--bg-secondary) 100%)',
-                pointerEvents: 'none',
-                zIndex: 1,
-              }} />
               <div style={s.bannerContent}>
-                <h2 style={s.bannerTitle} className="display-lg">
+                <h2 style={s.bannerTitle}>
                   Your development<br />is lifting off.
                 </h2>
-                <p style={s.bannerDesc} className="body-md">
+                <p style={s.bannerDesc}>
                   Join Codepolarity today. Get your personalized roadmap,
                   practice in the browser, and track your journey to expertise.
                 </p>
-                <div style={{ display:'flex', gap:12, flexWrap:'wrap' }}>
+                <div style={{ display:'flex', gap:14, flexWrap:'wrap', marginTop: 8 }}>
                   {user ? (
                     <button onClick={() => setCurrentPage('roadmaps')} style={s.bannerBtn}>
                       Continue Learning →
@@ -801,72 +442,7 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
       </section>
 
       {/* ─────────────────── FOOTER ──────────────── */}
-      <footer style={s.footer}>
-
-        {/* ── Top nav row: tagline left, link columns right ── */}
-        <div style={s.footerTop}>
-          <div style={s.footerTaglineWrap}>
-            <img src={dsLogo} alt="Codepolarity" style={s.footerTopLogo} />
-            <p style={s.footerTagline}>Build without gravity.</p>
-          </div>
-
-          <div style={s.footerCols}>
-            {[
-              {
-                title: 'Platform',
-                links: ['Assessment','Roadmaps','Online IDE','Typlab','About'],
-              },
-              {
-                title: 'Paths',
-                links: ['AI Developer','Frontend','Backend','Beginner','Advanced'],
-              },
-              {
-                title: 'Company',
-                links: ['About','Blog','Changelog','Privacy','Terms'],
-              },
-            ].map((col) => (
-              <div key={col.title} style={s.footerCol}>
-                <p style={s.footerColTitle}>{col.title}</p>
-                {col.links.map((l) => {
-                  const clickMap = {
-                    'Assessment': 'assessment',
-                    'Roadmaps': 'roadmaps',
-                    'Online IDE': 'editor',
-                    'Typlab': 'typlab',
-                    'About': 'about',
-                  };
-                  const targetPage = clickMap[l];
-                  return (
-                    <span 
-                      key={l} 
-                      onClick={() => targetPage && setCurrentPage(targetPage)} 
-                      style={{ ...s.footerLink, cursor: targetPage ? 'pointer' : 'default' }}
-                    >
-                      {l}
-                    </span>
-                  );
-                })}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ── Giant brand name ── */}
-        <div style={s.footerBrand}>
-          <span style={s.footerBrandText}>Codepolarity</span>
-        </div>
-
-        {/* ── Bottom legal bar ── */}
-        <div style={s.footerBottom}>
-          <span style={s.footerCopyright}>© {new Date().getFullYear()} Codepolarity. All rights reserved.</span>
-          <div style={{ display:'flex', gap:28 }}>
-            {['Privacy Policy','Terms of Service','Contact'].map((l) => (
-              <span key={l} style={s.footerLegal}>{l}</span>
-            ))}
-          </div>
-        </div>
-
-      </footer>
+      <Footer setCurrentPage={setCurrentPage} onOpenAuth={onOpenAuth} />
     </div>
   );
 };
@@ -875,188 +451,107 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
    Page-level styles
 ───────────────────────────────────────────────────── */
 const s = {
-  /* HERO */
-  hero: {
-    position:'relative', minHeight:'100vh',
-    display:'flex', flexDirection:'column',
-    alignItems:'center', justifyContent:'flex-start',
-    overflow:'hidden', paddingTop:180, paddingBottom:0,
-  },
-  heroGlow: {
-    position:'absolute', inset:0,
-    background:'radial-gradient(ellipse 80% 55% at 50% 40%, rgba(37, 99, 235, 0.05) 0%, transparent 65%)',
-    pointerEvents:'none', zIndex:1,
-  },
-  heroInner: {
-    position:'relative', zIndex:2,
-    maxWidth:1000, margin:'0 auto',
-    padding:'0 32px', textAlign:'center',
-    display:'flex', flexDirection:'column',
-    alignItems:'center', gap:28,
-  },
-  chip: {
-    display:'inline-flex', alignItems:'center', gap:8,
-    padding:'6px 16px', borderRadius:999,
-    border:'1px solid var(--border-light)', fontSize:'0.8rem',
-    color:'#ffffff', fontWeight:500, letterSpacing:'0.02em',
-    background:'var(--bg-secondary)',
-    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
-  },
-  chipDot: {
-    display:'inline-block', width:6, height:6,
-    borderRadius:'50%', background:'var(--accent-blue)',
-    boxShadow:'0 0 8px rgba(37, 99, 235, 0.5)',
-  },
-  h1: {
-    fontWeight:400,
-    lineHeight:1.1,
-    letterSpacing:'-0.04em',
-    color:'var(--text-main)',
-    fontSize: 'clamp(2.5rem, 5.5vw, 4.2rem)',
-  },
-  heroDesc: {
-    maxWidth:560,
-    margin: '0 auto',
-    color: 'var(--text-muted)',
-  },
-  heroCtas: {
-    display:'flex', gap:14, flexWrap:'wrap',
-    justifyContent:'center', marginTop:12,
-  },
-  mainCtaBtn: {
-    background: 'var(--btn-primary-bg)',
-    color: 'var(--btn-primary-text)',
-    boxShadow: 'var(--btn-primary-shadow)',
-    padding: '12px 28px',
-    fontSize: '0.95rem',
-  },
-  secCtaBtn: {
-    padding: '12px 28px',
-    fontSize: '0.95rem',
-    background: 'var(--btn-secondary-bg)',
-    borderColor: 'var(--btn-secondary-border)',
-  },
-
-
-  /* MANAGER SURFACE */
-  surface: { padding:'120px 0 60px', background:'transparent', position: 'relative', zIndex: 1 },
-  tag: {
-    fontSize:'0.75rem', fontWeight:600,
-    color:'var(--accent-blue)', textTransform:'uppercase',
-    letterSpacing:'0.08em', marginBottom:12,
-  },
-  h2: {
-    fontWeight:400, lineHeight:1.15,
-    letterSpacing:'-0.025em', color:'var(--text-main)',
-    marginBottom:48, maxWidth:580,
-  },
-  window: {
-    background:'var(--bg-secondary)', border:'1px solid var(--border-light)',
-    borderRadius:24, overflow:'hidden',
-    boxShadow: 'var(--shadow-box)',
-    transition: 'border-color 0.4s, box-shadow 0.4s',
-  },
-  windowBar: {
-    display:'flex', alignItems:'center', gap:12,
-    padding:'14px 24px', background:'var(--bg-secondary)',
-    borderBottom:'1px solid var(--border-light)',
-  },
-  windowTitle: {
-    fontSize:'0.75rem', color:'var(--text-muted)',
-    fontFamily:'var(--font-mono)', marginLeft:8,
-  },
-  windowPill: {
-    display: 'flex',
-    alignItems: 'center',
-    fontSize:'0.65rem', padding:'3px 10px',
-    borderRadius:99, background:'var(--theme-tonal)',
-    color:'var(--text-muted)', border:'1px solid var(--border-light)', fontFamily:'var(--font-mono)',
-  },
-  windowBody: {
-    display:'grid',
-    gridTemplateColumns:'210px 1fr 160px',
-    minHeight:290,
-  },
-  sidebar: {
-    borderRight:'1px solid var(--border-light)',
-    padding:'24px 20px',
-    background:'var(--bg-primary)',
-  },
-  sidebarLabel: {
-    fontSize:'0.65rem', fontWeight:600, color:'var(--text-dim)',
-    textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:20,
-  },
-  console: {
-    padding:'24px 20px', fontFamily:'var(--font-mono)',
-    borderRight:'1px solid var(--border-light)', overflowX:'auto',
-    background:'#0d1117',
-  },
-  stats: {
-    padding:'16px', display:'flex',
-    flexDirection:'column', justifyContent:'center',
-    background:'var(--bg-secondary)',
-  },
-
   /* FEATURES */
   featSection: {
-    padding:'80px 0 120px',
-    borderTop:'1px solid var(--border-light)',
-    background:'transparent',
+    padding: '100px 0 120px',
+    background: '#0A0D14',
     position: 'relative',
     zIndex: 1,
   },
   featRow: {
-    display:'flex', gap:80, alignItems:'center',
+    display: 'flex',
+    gap: 72,
+    alignItems: 'center',
   },
   featCopy: {
-    flex:1, display:'flex', flexDirection:'column',
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
   },
   featTitle: {
-    fontWeight:400, lineHeight:1.2,
-    letterSpacing:'-0.02em', color:'var(--text-main)', marginBottom:20,
+    fontFamily: "'Platform-Medium-Web', sans-serif",
+    fontWeight: 500,
+    lineHeight: 1.15,
+    letterSpacing: '-0.025em',
+    color: '#F3F4F6',
+    fontSize: 'clamp(2rem, 3.5vw, 2.8rem)',
+    marginBottom: 18,
   },
   featDesc: {
-    maxWidth:460,
-    color: 'var(--text-muted)',
+    fontFamily: "'MaisonNeue-Book', sans-serif",
+    maxWidth: 480,
+    color: '#9CA3AF',
+    fontSize: '1.02rem',
+    lineHeight: 1.65,
   },
-  featMedia: { flex:1, minWidth:0 },
+  featMedia: { flex: 1, minWidth: 0 },
 
   /* BANNER */
   banner: {
-    position:'relative', background:'var(--bg-secondary)',
+    position: 'relative',
+    background: 'var(--theme-surface)',
     border: '1px solid var(--border-light)',
-    borderRadius:28, padding:'80px 72px', overflow:'hidden',
-    boxShadow: 'var(--shadow-box)',
+    borderRadius: 8,
+    padding: '72px 64px',
+    overflow: 'hidden',
+    boxShadow: 'none',
   },
   bannerContent: {
-    position:'relative', zIndex:2,
-    display:'flex', flexDirection:'column',
-    gap:24, maxWidth:550,
+    position: 'relative',
+    zIndex: 2,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 20,
+    maxWidth: 600,
   },
   bannerTitle: {
-    fontWeight:400, lineHeight:1.1,
-    letterSpacing:'-0.03em', color:'var(--text-main)',
+    fontFamily: "'Platform-Medium-Web', sans-serif",
+    fontWeight: 500,
+    lineHeight: 1.08,
+    letterSpacing: '-0.025em',
+    color: 'var(--text-main)',
+    fontSize: 'clamp(2.4rem, 4.5vw, 4rem)',
   },
   bannerDesc: {
-    color:'var(--text-muted)', maxWidth:440,
+    fontFamily: "'MaisonNeue-Book', sans-serif",
+    color: 'var(--text-muted)',
+    maxWidth: 480,
+    fontSize: '1.05rem',
+    lineHeight: 1.65,
   },
   bannerBtn: {
-    display:'inline-flex', alignItems:'center', gap:8,
-    padding:'12px 28px', borderRadius:999,
-    background:'var(--btn-primary-bg)', color:'var(--btn-primary-text)',
-    fontFamily:'var(--font-sans)', fontWeight:500,
-    fontSize:'0.9375rem', border:'none', cursor:'pointer',
-    transition: 'var(--transition-spring)',
-    boxShadow: 'var(--btn-primary-shadow)',
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 8,
+    padding: '12px 28px',
+    borderRadius: 4,
+    background: 'var(--btn-primary-bg)',
+    color: 'var(--btn-primary-text)',
+    fontFamily: "'MaisonNeue-Demi', sans-serif",
+    fontWeight: 600,
+    fontSize: '0.9rem',
+    border: 'none',
+    cursor: 'pointer',
+    letterSpacing: '-0.01em',
+    boxShadow: 'none',
+    transition: 'opacity 0.2s',
   },
   bannerBtnOutline: {
-    display:'inline-flex', alignItems:'center', gap:8,
-    padding:'12px 28px', borderRadius:999,
-    background:'var(--btn-secondary-bg)', color:'var(--text-main)',
-    fontFamily:'var(--font-sans)', fontWeight:500,
-    fontSize:'0.9375rem', border:'1px solid var(--btn-secondary-border)', cursor:'pointer',
-    transition: 'var(--transition-spring)',
-    boxShadow: 'var(--shadow-sm)',
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 8,
+    padding: '12px 28px',
+    borderRadius: 4,
+    background: 'var(--theme-surface-container)',
+    color: 'var(--text-main)',
+    fontFamily: "'MaisonNeue-Demi', sans-serif",
+    fontWeight: 600,
+    fontSize: '0.9rem',
+    border: '1px solid var(--border-light)',
+    cursor: 'pointer',
+    letterSpacing: '-0.01em',
+    boxShadow: 'none',
+    transition: 'background-color 0.2s, border-color 0.2s',
   },
 
   /* FOOTER */
@@ -1156,17 +651,6 @@ const s = {
     cursor: 'pointer',
     transition: 'color 0.2s',
     letterSpacing: '-0.01em',
-  },
-  marqueeSection: {
-    position: 'relative',
-    padding: '120px 0 160px',
-    marginTop: '-260px',
-    background: 'transparent',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: 40,
-    zIndex: 3,
   },
 };
 

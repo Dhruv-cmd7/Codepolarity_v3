@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import dsLogo from '../assets/ds_logo.svg';
-import { ChevronDown, Award, Map, Terminal, ArrowRight, BookOpen, Users, Code, Shield, HelpCircle, Sparkles } from 'lucide-react';
+import { ChevronDown, Award, Map, Terminal, ArrowRight, BookOpen, Users, Code, Shield, HelpCircle, Sparkles, Sun, Moon } from 'lucide-react';
 
-const Navbar = ({ user, onLogout, onOpenAuth, currentPage, setCurrentPage }) => {
+const Navbar = ({ user, onLogout, onOpenAuth, currentPage, setCurrentPage, theme = 'dark', onToggleTheme }) => {
   const [scrolled, setScrolled] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
   const [toolsOpen, setToolsOpen] = useState(false);
@@ -59,9 +59,9 @@ const Navbar = ({ user, onLogout, onOpenAuth, currentPage, setCurrentPage }) => 
       <div 
         style={{
           ...styles.inner,
-          maxWidth: scrolled ? '980px' : '1240px',
-          height: scrolled ? '50px' : '58px',
-          padding: scrolled ? '0 18px' : '0 24px',
+          maxWidth: scrolled ? '1020px' : '1240px',
+          height: scrolled ? '48px' : '52px',
+          padding: scrolled ? '0 6px 0 14px' : '0 7px 0 16px',
           background: scrolled 
             ? 'var(--nav-bg-scrolled)' 
             : 'var(--nav-bg)',
@@ -84,10 +84,12 @@ const Navbar = ({ user, onLogout, onOpenAuth, currentPage, setCurrentPage }) => 
             src={dsLogo} 
             alt="Codepolarity" 
             style={{ 
-              height: 24, 
+              height: scrolled ? 18 : 20, 
               width: 'auto', 
+              display: 'block',
+              flexShrink: 0,
               filter: 'var(--logo-filter)',
-              transition: 'filter 0.3s ease',
+              transition: 'filter 0.3s ease, height 0.3s ease',
             }} 
           />
           <span style={{
@@ -273,6 +275,23 @@ const Navbar = ({ user, onLogout, onOpenAuth, currentPage, setCurrentPage }) => 
 
         {/* Right CTAs */}
         <div style={styles.actions}>
+          {/* Light/Dark Theme Toggle */}
+          <button
+            onClick={onToggleTheme}
+            style={{
+              ...styles.themeToggleBtn,
+              height: scrolled ? '36px' : '38px',
+              width: scrolled ? '36px' : '38px',
+            }}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+          >
+            {theme === 'dark' ? (
+              <Sun size={17} style={{ color: 'var(--text-main)', transition: 'transform 0.3s ease' }} />
+            ) : (
+              <Moon size={17} style={{ color: 'var(--text-main)', transition: 'transform 0.3s ease' }} />
+            )}
+          </button>
 
 
           {user ? (
@@ -304,6 +323,8 @@ const Navbar = ({ user, onLogout, onOpenAuth, currentPage, setCurrentPage }) => 
               className="btn-primary"
               style={{
                 ...styles.downloadBtn,
+                height: scrolled ? '36px' : '38px',
+                padding: scrolled ? '0 16px' : '0 18px',
                 background: 'var(--btn-primary-bg)',
                 color: 'var(--btn-primary-text)',
                 boxShadow: 'var(--btn-primary-shadow)',
@@ -338,27 +359,30 @@ const styles = {
     maxWidth: '1240px',
     border: '1px solid',
     borderRadius: '999px',
-    padding: '0 24px',
-    height: '58px',
+    padding: '0 7px 0 16px',
+    height: '52px',
     backdropFilter: 'blur(16px)',
     WebkitBackdropFilter: 'blur(16px)',
-    transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+    transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
     position: 'relative',
   },
   logoLink: {
-    display: 'flex',
+    display: 'inline-flex',
     alignItems: 'center',
-    gap: '10px',
+    gap: '9px',
     textDecoration: 'none',
     color: 'var(--text-main)',
     flex: '1 0 0%',
+    userSelect: 'none',
+    transition: 'opacity 0.2s ease',
   },
   logoText: {
-    fontSize: '0.95rem',
-    fontWeight: '700',
-    letterSpacing: '-0.03em',
+    fontSize: '0.9rem',
+    fontWeight: '600',
+    letterSpacing: '-0.025em',
+    lineHeight: '1',
     transition: 'color 0.3s',
-    fontFamily: 'var(--font-sans)',
+    fontFamily: "'MaisonNeue-Demi', sans-serif",
   },
   nav: {
     display: 'flex',
@@ -385,7 +409,7 @@ const styles = {
   navLink: {
     border: '1px solid transparent',
     background: 'transparent',
-    fontFamily: 'var(--font-sans)',
+    fontFamily: "'MaisonNeue-Demi', sans-serif",
     fontSize: '0.85rem',
     cursor: 'pointer',
     padding: '0 16px',
@@ -489,10 +513,11 @@ const styles = {
     alignItems: 'center',
     gap: '6px',
     fontSize: '0.8rem',
-    padding: '6px 14px',
-    borderRadius: '99px',
+    padding: '0 12px',
+    height: '34px',
+    borderRadius: '999px',
     border: '1px solid',
-    fontFamily: 'var(--font-sans)',
+    fontFamily: "'MaisonNeue-Demi', sans-serif",
     fontWeight: '500',
   },
   onlineDot: {
@@ -500,23 +525,51 @@ const styles = {
     height: 6,
     borderRadius: '50%',
     background: '#10b981',
-    boxShadow: '0 0 6px rgba(16, 185, 129, 0.5)',
+    boxShadow: 'none',
   },
 
   signOutBtn: {
     border: '1px solid',
-    fontFamily: 'var(--font-sans)',
+    fontFamily: "'MaisonNeue-Demi', sans-serif",
     fontSize: '0.8125rem',
     fontWeight: '500',
     cursor: 'pointer',
-    padding: '6px 14px',
+    padding: '0 14px',
+    height: '36px',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: '999px',
     transition: 'all 0.25s ease',
   },
   downloadBtn: {
-    padding: '6px 18px',
-    fontSize: '0.85rem',
+    height: '38px',
+    padding: '0 18px',
+    fontSize: '0.84rem',
+    fontWeight: '600',
+    letterSpacing: '-0.01em',
     borderRadius: '999px',
+    border: 'none',
+    cursor: 'pointer',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontFamily: "'MaisonNeue-Demi', sans-serif",
+    transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+    whiteSpace: 'nowrap',
+    userSelect: 'none',
+  },
+  themeToggleBtn: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '999px',
+    background: 'var(--nav-link-hover-bg)',
+    border: '1px solid var(--border-light)',
+    cursor: 'pointer',
+    padding: 0,
+    transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+    flexShrink: 0,
   },
 };
 
