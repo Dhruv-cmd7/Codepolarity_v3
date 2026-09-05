@@ -137,7 +137,7 @@ export const FullScreenSignup: React.FC<FullScreenSignupProps> = ({
           z-index: 2000;
           padding: 20px;
           animation: fsFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-          font-family: 'Google Sans Flex', 'Inter', -apple-system, sans-serif;
+          font-family: 'Google Sans Flex', 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
 
         @keyframes fsFadeIn {
@@ -172,13 +172,16 @@ export const FullScreenSignup: React.FC<FullScreenSignupProps> = ({
           }
         }
 
-        /* Left Side: Uses same background image as landing page hero section. Shuffled layout to space-between. */
+        /* Left Side: Technical Developer Grid Background */
         .fs-left-panel {
           width: 50%;
           position: relative;
-          background-image: url("https://pub-940ccf6255b54fa799a9b01050e6c227.r2.dev/ruixen_hero_gradient.jpg");
-          background-size: cover;
-          background-position: center;
+          background-color: #0a0d14;
+          background-image:
+            linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+          background-size: 28px 28px;
+          border-right: 1px solid rgba(255, 255, 255, 0.08);
           padding: 48px;
           display: flex;
           flex-direction: column;
@@ -193,15 +196,15 @@ export const FullScreenSignup: React.FC<FullScreenSignupProps> = ({
             width: 100%;
             min-height: 280px;
             padding: 32px;
+            border-right: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
           }
         }
 
-        /* Gradient overlay mirroring landing page hero design */
+        /* Ambient overlay */
         .fs-left-overlay {
           position: absolute;
           inset: 0;
-          background: linear-gradient(180deg, rgba(10, 13, 20, 0.15) 0%, rgba(10, 13, 20, 0.75) 100%);
-          z-index: 1;
           pointer-events: none;
         }
 

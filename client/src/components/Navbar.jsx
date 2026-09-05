@@ -382,7 +382,7 @@ const styles = {
     letterSpacing: '-0.025em',
     lineHeight: '1',
     transition: 'color 0.3s',
-    fontFamily: "'MaisonNeue-Demi', sans-serif",
+    fontFamily: "var(--font-sans)",
   },
   nav: {
     display: 'flex',
@@ -409,7 +409,7 @@ const styles = {
   navLink: {
     border: '1px solid transparent',
     background: 'transparent',
-    fontFamily: "'MaisonNeue-Demi', sans-serif",
+    fontFamily: "var(--font-sans)",
     fontSize: '0.85rem',
     cursor: 'pointer',
     padding: '0 16px',
@@ -517,7 +517,7 @@ const styles = {
     height: '34px',
     borderRadius: '999px',
     border: '1px solid',
-    fontFamily: "'MaisonNeue-Demi', sans-serif",
+    fontFamily: "var(--font-sans)",
     fontWeight: '500',
   },
   onlineDot: {
@@ -530,7 +530,7 @@ const styles = {
 
   signOutBtn: {
     border: '1px solid',
-    fontFamily: "'MaisonNeue-Demi', sans-serif",
+    fontFamily: "var(--font-sans)",
     fontSize: '0.8125rem',
     fontWeight: '500',
     cursor: 'pointer',
@@ -554,7 +554,7 @@ const styles = {
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontFamily: "'MaisonNeue-Demi', sans-serif",
+    fontFamily: "var(--font-sans)",
     transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
     whiteSpace: 'nowrap',
     userSelect: 'none',

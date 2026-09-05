@@ -4,7 +4,7 @@ import React, { useState } from 'react';
  * Editorial Footer styled in Codepolarity's dark website theme:
  * - Canvas Background: var(--bg-primary, #0A0D14)
  * - Text & Accents: var(--text-main, #F3F4F6) & var(--text-muted, #9CA3AF) with Cyan highlights
- * - Fonts: Platform-Medium-Web (Brand), MaisonNeue-Book (Body), MaisonNeue-Demi (Headings)
+ * - Fonts: Google Sans (Brand, Headings, Body)
  * - Structure: Exact F-Suite 4-column asymmetric grid, divider, and 1440x235 aspect ratio
  */
 const Footer = ({ setCurrentPage, onOpenAuth }) => {
@@ -147,14 +147,14 @@ const Footer = ({ setCurrentPage, onOpenAuth }) => {
               y="196"
               textAnchor="middle"
               fill={PALETTE.textMain}
-              fontFamily="'Platform-Medium-Web', sans-serif"
+              fontFamily="'Google Sans Flex', 'Google Sans', sans-serif"
               fontSize="254"
-              fontWeight="500"
+              fontWeight="700"
               letterSpacing="-3"
               style={{
-                fontFamily: "'Platform-Medium-Web', sans-serif",
+                fontFamily: "'Google Sans Flex', 'Google Sans', sans-serif",
                 fontSize: '254px',
-                fontWeight: 500,
+                fontWeight: 700,
                 letterSpacing: '-3px',
               }}
             >
@@ -266,7 +266,7 @@ const styles = {
     width: '100%',
     overflow: 'hidden',
     boxSizing: 'border-box',
-    fontFamily: "'MaisonNeue-Book', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    fontFamily: "var(--font-sans)",
     paddingTop: '56px',
     borderTop: `1px solid ${PALETTE.border}`,
     margin: 0,
@@ -289,7 +289,7 @@ const styles = {
     flexDirection: 'column',
   },
   columnTitle: {
-    fontFamily: "'MaisonNeue-Demi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    fontFamily: "var(--font-sans)",
     fontSize: 'clamp(12px, 0.95vw, 14px)',
     fontWeight: 600,
     color: PALETTE.textMain,
@@ -317,7 +317,7 @@ const styles = {
     letterSpacing: '-0.01em',
     lineHeight: 1.35,
     cursor: 'pointer',
-    fontFamily: "'MaisonNeue-Book', sans-serif",
+    fontFamily: "var(--font-sans)",
   },
   linkButton: {
     background: 'none',
@@ -330,7 +330,7 @@ const styles = {
     lineHeight: 1.35,
     textAlign: 'left',
     cursor: 'pointer',
-    fontFamily: "'MaisonNeue-Book', sans-serif",
+    fontFamily: "var(--font-sans)",
   },
   negativeSpace: {
     minHeight: 'clamp(90px, 14vw, 190px)',
@@ -349,7 +349,7 @@ const styles = {
     fontWeight: 400,
     letterSpacing: '-0.01em',
     color: PALETTE.textDim,
-    fontFamily: "'MaisonNeue-Book', sans-serif",
+    fontFamily: "var(--font-sans)",
     lineHeight: 1,
   },
   legalLink: {
@@ -361,7 +361,7 @@ const styles = {
     fontWeight: 400,
     letterSpacing: '-0.01em',
     cursor: 'pointer',
-    fontFamily: "'MaisonNeue-Book', sans-serif",
+    fontFamily: "var(--font-sans)",
     textAlign: 'left',
     lineHeight: 1,
   },
@@ -405,7 +405,7 @@ const styles = {
     borderRadius: '0px',
     cursor: 'pointer',
     textTransform: 'uppercase',
-    fontFamily: "'MaisonNeue-Demi', sans-serif",
+    fontFamily: "var(--font-sans)",
     boxShadow: 'none',
   },
   cookieModal: {
@@ -422,7 +422,7 @@ const styles = {
     borderRadius: '12px',
     padding: '22px',
     color: '#F3F4F6',
-    fontFamily: "'MaisonNeue-Book', sans-serif",
+    fontFamily: "var(--font-sans)",
   },
   cookieModalHeader: {
     display: 'flex',
