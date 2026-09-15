@@ -91,6 +91,39 @@ function App() {
     }
   };
 
+  const handleGoogleSuccess = async (credential) => {
+    setAuthError('');
+    try {
+      const res = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ credential })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setToken(data.token);
+        if (data.user) {
+          setUser(data.user);
+        }
+        setShowAuthModal(false);
+        setUsername('');
+        setEmail('');
+        setPassword('');
+        setCurrentPage('roadmaps');
+      } else {
+        setAuthError(data.msg || 'Google authentication failed');
+      }
+    } catch (err) {
+      setAuthError('Connection error. Server might be offline.');
+    }
+  };
+
+  const handleGoogleError = (errMsg) => {
+    setAuthError(errMsg || 'Google authentication encountered an error');
+  };
+
   const renderPage = () => {
     switch (currentPage) {
       case 'assessment':
@@ -151,6 +184,7 @@ function App() {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.classList.toggle('dark', theme === 'dark');
     localStorage.setItem('theme', theme);
   }, [theme]);
 
@@ -193,6 +227,8 @@ function App() {
           authError={authError}
           setAuthError={setAuthError}
           onSubmit={handleAuthSubmit}
+          onGoogleSuccess={handleGoogleSuccess}
+          onGoogleError={handleGoogleError}
           onClose={() => {
             setShowAuthModal(false);
             setAuthError('');

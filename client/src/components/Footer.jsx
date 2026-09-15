@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 /**
  * Editorial Footer styled in Codepolarity's dark website theme:
@@ -8,7 +8,6 @@ import React, { useState } from 'react';
  * - Structure: Exact F-Suite 4-column asymmetric grid, divider, and 1440x235 aspect ratio
  */
 const Footer = ({ setCurrentPage, onOpenAuth }) => {
-  const [cookieNoticeOpen, setCookieNoticeOpen] = useState(false);
 
   const columns = [
     {
@@ -164,48 +163,7 @@ const Footer = ({ setCurrentPage, onOpenAuth }) => {
         </div>
       </div>
 
-      {/* Bottom-Right "COOKIES" Pill Badge */}
-      <div style={styles.cookiesBadgeWrap}>
-        <button
-          type="button"
-          onClick={() => setCookieNoticeOpen(!cookieNoticeOpen)}
-          style={styles.cookiesBadge}
-          className="cp-cookie-badge"
-          title="Cookie Preferences"
-        >
-          COOKIES
-        </button>
-      </div>
 
-      {/* Cookie Preferences Modal */}
-      {cookieNoticeOpen && (
-        <div style={styles.cookieModal}>
-          <div style={styles.cookieModalCard}>
-            <div style={styles.cookieModalHeader}>
-              <span style={styles.cookieModalTitle}>Cookie Preferences</span>
-              <button
-                type="button"
-                onClick={() => setCookieNoticeOpen(false)}
-                style={styles.cookieCloseBtn}
-              >
-                ✕
-              </button>
-            </div>
-            <p style={styles.cookieModalBody}>
-              Codepolarity uses essential telemetry cookies to authenticate your session and measure keystroke performance.
-            </p>
-            <div style={styles.cookieModalActions}>
-              <button
-                type="button"
-                onClick={() => setCookieNoticeOpen(false)}
-                style={styles.cookieAcceptBtn}
-              >
-                Accept All
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Embedded micro styles for hover states & link transitions */}
       <style>{`
@@ -220,14 +178,6 @@ const Footer = ({ setCurrentPage, onOpenAuth }) => {
           color: #38bdf8 !important;
           text-decoration: underline;
           text-underline-offset: 4px;
-        }
-        .cp-cookie-badge {
-          transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-        }
-        .cp-cookie-badge:hover {
-          background-color: #1e293b !important;
-          color: #ffffff !important;
-          border-color: rgba(255, 255, 255, 0.2) !important;
         }
         @media (max-width: 900px) {
           .editorial-footer-cols {
@@ -386,83 +336,7 @@ const styles = {
     display: 'block',
     overflow: 'hidden',
   },
-  cookiesBadgeWrap: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    zIndex: 20,
-  },
-  cookiesBadge: {
-    background: '#151b26',
-    color: '#94a3af',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRight: 'none',
-    borderBottom: 'none',
-    fontSize: '10px',
-    fontWeight: 700,
-    letterSpacing: '0.08em',
-    padding: '4px 9px',
-    borderRadius: '0px',
-    cursor: 'pointer',
-    textTransform: 'uppercase',
-    fontFamily: "var(--font-sans)",
-    boxShadow: 'none',
-  },
-  cookieModal: {
-    position: 'fixed',
-    bottom: 24,
-    right: 24,
-    zIndex: 9999,
-    maxWidth: 360,
-    boxShadow: 'none',
-  },
-  cookieModalCard: {
-    background: '#151b26',
-    border: '1px solid rgba(255, 255, 255, 0.12)',
-    borderRadius: '12px',
-    padding: '22px',
-    color: '#F3F4F6',
-    fontFamily: "var(--font-sans)",
-  },
-  cookieModalHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '10px',
-  },
-  cookieModalTitle: {
-    fontWeight: 600,
-    fontSize: '0.95rem',
-    color: '#F3F4F6',
-  },
-  cookieCloseBtn: {
-    background: 'none',
-    border: 'none',
-    color: '#9ca3af',
-    cursor: 'pointer',
-    fontSize: '14px',
-  },
-  cookieModalBody: {
-    fontSize: '0.85rem',
-    color: '#9ca3af',
-    lineHeight: 1.5,
-    margin: '0 0 18px 0',
-  },
-  cookieModalActions: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
-  cookieAcceptBtn: {
-    background: '#38bdf8',
-    color: '#0a0d14',
-    border: 'none',
-    borderRadius: '6px',
-    padding: '7px 16px',
-    fontSize: '0.85rem',
-    fontWeight: 600,
-    cursor: 'pointer',
-    transition: 'opacity 0.2s',
-  },
+
 };
 
 export default Footer;

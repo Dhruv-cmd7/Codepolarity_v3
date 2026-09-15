@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Zap, Route, Terminal, Activity } from 'lucide-react';
 
 import TypedText from '../components/TypedText';
 import Footer from '../components/Footer';
-import dsLogo from '../assets/ds_logo.svg';
-import codeEditorIllustration from '../assets/code_editor_illustration.jpg';
+import FaqAccordion from '../components/ui/faq-accordion';
+import { PerspectiveGrid } from '../components/ui/perspective-grid';
+import logoMark from '../assets/logo.svg';
+import logoCircle from '../assets/logo_circle.svg';
 
 /* ─────────────────────────────────────────────────────
    PopSlide – spring pop-slide animation on scroll
@@ -31,6 +34,10 @@ const PopSlide = ({ children, delay = 0, style = {} }) => {
     <div
       ref={ref}
       style={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         opacity: visible ? 1 : 0,
         transform: visible 
           ? 'translateY(0) scale(1)' 
@@ -140,45 +147,6 @@ const ContainerScroll = ({ titleComponent, children }) => {
   );
 };
 
-/* ─────────────────────────────────────────────────────
-   Meet the Agents Data (Autonomous Developer Telemetry)
-───────────────────────────────────────────────────── */
-const agentsData = [
-  {
-    id: 'detection',
-    name: 'Detection agent',
-    titleColor: '#FF7A59',
-    subtitle: 'Continuous calibration & discovery',
-    desc: 'Continuously scans your code syntax, algorithmic complexity, and data structures for anti-patterns, edge cases, and knowledge gaps, surfacing the insights that actually matter to your progression.',
-    quote: 'That binary search logic missed an edge case on duplicate keys. Recalibrated tier to Advanced Intermediate. Worth a look.',
-    mascot: '/agents/agent_detection.jpg',
-    page: 'assessment',
-    mascotAlign: 'left',
-  },
-  {
-    id: 'investigation',
-    name: 'Investigation agent',
-    titleColor: '#A78BFA',
-    subtitle: 'Autonomous pathway routing',
-    desc: 'Builds the full trajectory behind every milestone, prerequisite node, and project dependency. Synthesizes curated resources and interactive challenges to turn months of aimless tutorials into structured mastery.',
-    quote: 'Detected latency vulnerability in distributed systems caching. Auto-generated Redis & Kafka cluster architecture drill into your roadmap.',
-    mascot: '/agents/agent_investigation.jpg',
-    page: 'roadmaps',
-    mascotAlign: 'right',
-  },
-  {
-    id: 'orchestration',
-    name: 'Orchestration agent',
-    titleColor: '#38BDF8',
-    subtitle: 'Closed-loop sandboxed execution',
-    desc: 'Bridges the gap between theory and code, spinning up sandboxed IDE runtimes, algorithm test runners, and Typlab typing telemetry drills with real-time verification and zero local environment setup.',
-    quote: 'Sandboxed runtime ready. Verified 8 test cases in fibonacci.js. Keystroke telemetry logging 96% accuracy with zero syntax friction.',
-    mascot: '/agents/agent_orchestration.jpg',
-    page: 'editor',
-    mascotAlign: 'left',
-  },
-];
-
 
 
 /* ─────────────────────────────────────────────────────
@@ -218,6 +186,32 @@ const marqueeRow3 = [
 ];
 
 /* ─────────────────────────────────────────────────────
+   Codepolarity FAQ Data
+───────────────────────────────────────────────────── */
+const codepolarityFaqs = [
+  {
+    question: "What is Codepolarity?",
+    answer: "Codepolarity is an autonomous developer career engine that benchmarks programming capabilities, calibrates technical skill tiers with AI agents, and orchestrates interactive career pathways."
+  },
+  {
+    question: "How do the autonomous agents assist my learning?",
+    answer: "Our specialized Detection, Investigation, and Orchestration agents continuously scan your code, build personalized roadmap trajectories, and verify your solutions in sandboxed runtimes."
+  },
+  {
+    question: "Is Codepolarity suitable for all experience levels?",
+    answer: "Yes! Whether you are building core programming foundations or mastering distributed system architecture, Codepolarity dynamically adapts to your current tier."
+  },
+  {
+    question: "Can I run and test code directly in the browser?",
+    answer: "Absolutely. Codepolarity includes a full-featured browser sandbox IDE with algorithm test runners and keystroke telemetry drills—no local setup required."
+  },
+  {
+    question: "How do I get started with a skill assessment?",
+    answer: "Simply click 'Start Skill Assessment' on the homepage to launch your initial calibration drill and generate your customized developer roadmap."
+  }
+];
+
+/* ─────────────────────────────────────────────────────
    LANDING PAGE COMPONENT
 ───────────────────────────────────────────────────── */
 const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
@@ -226,6 +220,7 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
       
       {/* ─────────────────── MINIMALIST ENTERPRISE HERO ─────────────────── */}
       <section className="hero-enterprise-section">
+        <PerspectiveGrid rows={20} cols={20} className="hero-perspective-grid" />
         <div className="hero-enterprise-container">
           <PopSlide>
             <h1 className="hero-enterprise-title">
@@ -304,136 +299,155 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
         </div>
       </section>
 
-      {/* ─────────────── MEET THE AGENTS SECTION ────────────── */}
-      <section className="agents-section">
+      {/* ─────────────── FEATURE BENTO GRID SECTION ────────────── */}
+      <section className="bento-section">
         <div className="grid-container">
           <PopSlide>
-            {/* Header */}
-            <div className="agents-header">
-              <h2 className="agents-title">
-                Meet the <span className="agents-title-highlight">agents</span>
+            <div className="bento-header">
+              <h2 className="bento-title">
+                Engineered for <span className="bento-title-accent">high-velocity</span> learning.
               </h2>
-              <p className="agents-subtitle">
-                Your engineering journey just got 10x faster. Specialized autonomous agents that work together to calibrate skill tiers, architect roadmaps, and accelerate every phase of your developer career.
+              <p className="bento-subtitle">
+                Everything you need to benchmark your technical capabilities, master complex software engineering concepts, and track your career progression.
               </p>
             </div>
 
-            {/* Winding Agent Timeline */}
-            <div className="agents-timeline-wrapper">
-              {/* Dynamic Connecting Umbilical Tether Cable SVG */}
-              <svg 
-                className="agents-tether-svg" 
-                viewBox="0 0 1040 1200" 
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <defs>
-                  <linearGradient id="agentTetherGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#FF7A59" stopOpacity="0.9" />
-                    <stop offset="30%" stopColor="#10B981" stopOpacity="0.85" />
-                    <stop offset="65%" stopColor="#A78BFA" stopOpacity="0.9" />
-                    <stop offset="100%" stopColor="#38BDF8" stopOpacity="0.9" />
-                  </linearGradient>
-                  <linearGradient id="agentTetherGlow" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#FF7A59" stopOpacity="0.25" />
-                    <stop offset="50%" stopColor="#10B981" stopOpacity="0.2" />
-                    <stop offset="100%" stopColor="#38BDF8" stopOpacity="0.25" />
-                  </linearGradient>
-                </defs>
-                {/* Glow outline */}
-                <path
-                  d="M 330 180 C 440 210, 480 340, 430 400 C 370 470, 520 480, 640 430 C 720 390, 770 460, 730 540 M 710 650 C 640 760, 520 750, 480 820 C 440 900, 320 900, 270 940 C 230 980, 270 1050, 330 1030"
-                  stroke="url(#agentTetherGlow)"
-                  strokeWidth="8"
-                  strokeLinecap="round"
-                />
-                {/* Sharp cable line */}
-                <path
-                  d="M 330 180 C 440 210, 480 340, 430 400 C 370 470, 520 480, 640 430 C 720 390, 770 460, 730 540 M 710 650 C 640 760, 520 750, 480 820 C 440 900, 320 900, 270 940 C 230 980, 270 1050, 330 1030"
-                  stroke="url(#agentTetherGrad)"
-                  strokeWidth="3.5"
-                  strokeLinecap="round"
-                />
-              </svg>
-
-              {/* Agents Rows */}
-              {agentsData.map((agent, i) => (
-                <div 
-                  key={agent.id} 
-                  className={`agent-row ${agent.mascotAlign === 'right' ? 'reverse' : ''}`}
-                >
-                  {/* Astronaut Mascot */}
-                  <div className="agent-mascot-wrap">
-                    <div className={`agent-mascot-card mascot-${i + 1}`}>
-                      <img 
-                        src={agent.mascot} 
-                        alt={agent.name} 
-                        className="agent-mascot-img"
-                        loading="lazy"
-                      />
-                    </div>
+            <div className="bento-grid">
+              {/* Card 1: Wide Bento Card */}
+              <div className="bento-card bento-card-wide" onClick={() => setCurrentPage('assessment')}>
+                <div className="bento-card-copy">
+                  <div className="bento-card-icon">
+                    <Zap size={22} className="bento-icon-svg" />
                   </div>
-
-                  {/* Agent Info & Interactive Quote */}
-                  <div className="agent-content">
-                    <h3 className="agent-name" style={{ color: agent.titleColor }}>
-                      {agent.name}
-                    </h3>
-                    <p className="agent-subtitle-tag">
-                      {agent.subtitle}
-                    </p>
-                    <p className="agent-desc">
-                      {agent.desc}
-                    </p>
-
-                    {/* Speech Quote Card with emerald quote mark */}
-                    <div 
-                      className="agent-quote-card"
-                      onClick={() => setCurrentPage(agent.page)}
-                      title={`Open ${agent.name}`}
-                    >
-                      <span className="agent-quote-icon">“</span>
-                      <p className="agent-quote-text">
-                        {agent.quote}
-                      </p>
-                    </div>
+                  <h3 className="bento-card-title">Autonomous Skill Benchmarking</h3>
+                  <p className="bento-card-desc">
+                    Scans algorithmic complexity, syntax efficiency, and edge case handling in real-time to surface exact knowledge gaps.
+                  </p>
+                </div>
+                <div className="bento-card-visual bento-visual-benchmarking">
+                  <div className="bento-widget-pill">
+                    <span className="bento-widget-dot" />
+                    <span>Tier Calibration Active</span>
+                  </div>
+                  <div className="bento-widget-metric">
+                    <span className="bento-metric-val">99.4%</span>
+                    <span className="bento-metric-lbl">Accuracy Score</span>
                   </div>
                 </div>
-              ))}
+              </div>
+
+              {/* Card 2: Square Bento Card */}
+              <div className="bento-card" onClick={() => setCurrentPage('roadmaps')}>
+                <div className="bento-card-copy">
+                  <div className="bento-card-icon">
+                    <Route size={22} className="bento-icon-svg" />
+                  </div>
+                  <h3 className="bento-card-title">Dynamic Pathway Routing</h3>
+                  <p className="bento-card-desc">
+                    Generates custom milestone trajectories adapting continuously as your skills evolve.
+                  </p>
+                </div>
+                <div className="bento-card-visual bento-visual-pathway">
+                  <div className="bento-path-node active">Algorithms</div>
+                  <div className="bento-path-line" />
+                  <div className="bento-path-node">Distributed Systems</div>
+                </div>
+              </div>
+
+              {/* Card 3: Square Bento Card */}
+              <div className="bento-card" onClick={() => setCurrentPage('editor')}>
+                <div className="bento-card-copy">
+                  <div className="bento-card-icon">
+                    <Terminal size={22} className="bento-icon-svg" />
+                  </div>
+                  <h3 className="bento-card-title">Sandboxed Runtimes</h3>
+                  <p className="bento-card-desc">
+                    Zero setup required. Run test suites and keystroke telemetry drills directly in your browser.
+                  </p>
+                </div>
+                <div className="bento-card-visual bento-visual-ide">
+                  <div className="bento-ide-badge">✓ 8/8 Tests Passed</div>
+                  <div className="bento-ide-code">fibonacci.js • 14ms</div>
+                </div>
+              </div>
+
+              {/* Card 4: Wide Bento Card */}
+              <div className="bento-card bento-card-wide">
+                <div className="bento-card-copy">
+                  <div className="bento-card-icon">
+                    <Activity size={22} className="bento-icon-svg" />
+                  </div>
+                  <h3 className="bento-card-title">Closed-Loop Career Telemetry</h3>
+                  <p className="bento-card-desc">
+                    Track your speed, problem-solving velocity, and milestone achievements with live analytics.
+                  </p>
+                </div>
+                <div className="bento-card-visual bento-visual-telemetry">
+                  <div className="bento-stat-chip">
+                    <span className="bento-stat-num">50k+</span>
+                    <span className="bento-stat-lbl">Verifications</span>
+                  </div>
+                  <div className="bento-stat-chip">
+                    <span className="bento-stat-num">100%</span>
+                    <span className="bento-stat-lbl">Browser Sandboxed</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </PopSlide>
         </div>
       </section>
 
-
-      {/* ─────────────── CTA BANNER ────────────── */}
-      <section style={{ padding:'90px 0 120px', background: 'var(--bg-primary)', borderTop: '1px solid var(--border-light)' }}>
+      {/* ─────────────── FAQ SECTION ────────────── */}
+      <section className="faq-section">
         <div className="grid-container">
           <PopSlide>
-            <div style={s.banner}>
-              <div style={s.bannerContent}>
-                <h2 style={s.bannerTitle}>
-                  Your development<br />is lifting off.
+            <FaqAccordion
+              title="Got questions? We've got answers."
+              subtitle="Everything you need to know about the Codepolarity career engine, autonomous agents, and sandboxed runtimes."
+              items={codepolarityFaqs}
+            />
+          </PopSlide>
+        </div>
+      </section>
+
+
+      {/* ─────────────── MINIMAL RECTANGLE CTA BANNER ────────────── */}
+      <section className="cta-rect-section">
+        <div className="grid-container">
+          <PopSlide>
+            <div className="cta-rect-banner">
+              <PerspectiveGrid rows={16} cols={16} className="cta-perspective-grid" showOverlay={false} />
+              <div className="cta-rect-left">
+                <h2 className="cta-rect-title">
+                  Ready to accelerate your engineering career?
                 </h2>
-                <p style={s.bannerDesc}>
-                  Join Codepolarity today. Get your personalized roadmap,
-                  practice in the browser, and track your journey to expertise.
+                <p className="cta-rect-desc">
+                  Benchmark your capabilities, build custom learning pathways, and practice in sandboxed browser runtimes.
                 </p>
-                <div style={{ display:'flex', gap:14, flexWrap:'wrap', marginTop: 8 }}>
+              </div>
+
+              <div className="cta-rect-right">
+                <div className="cta-rect-actions">
                   {user ? (
-                    <button onClick={() => setCurrentPage('roadmaps')} style={s.bannerBtn}>
+                    <button onClick={() => setCurrentPage('roadmaps')} className="hero-btn-primary">
                       Continue Learning →
                     </button>
                   ) : (
                     <>
-                      <button onClick={onOpenAuth} style={s.bannerBtn}>
-                        Get started — it's free
+                      <button onClick={onOpenAuth} className="hero-btn-primary">
+                        Start Skill Assessment →
                       </button>
-                      <button onClick={() => setCurrentPage('editor')} style={s.bannerBtnOutline}>
-                        Try the IDE
+                      <button onClick={() => setCurrentPage('editor')} className="hero-btn-secondary">
+                        Launch Playground IDE
                       </button>
                     </>
                   )}
+                </div>
+                <div className="cta-rect-highlights">
+                  <span>✓ Free initial assessment</span>
+                  <span>✓ Sandboxed execution</span>
+                  <span>✓ AI Roadmaps</span>
                 </div>
               </div>
             </div>

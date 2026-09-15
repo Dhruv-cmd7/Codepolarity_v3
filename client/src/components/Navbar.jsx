@@ -1,576 +1,168 @@
-import React, { useState, useEffect, useRef } from 'react';
-import dsLogo from '../assets/ds_logo.svg';
-import { ChevronDown, Award, Map, Terminal, ArrowRight, BookOpen, Users, Code, Shield, HelpCircle, Sparkles, Sun, Moon } from 'lucide-react';
+import React from 'react';
+import logoMark from '../assets/logo.svg';
+import logoText from '../assets/logo_text.svg';
+import { Sun, Moon } from 'lucide-react';
+import AwwwardsNav from './AwwwardsNav';
 
-const Navbar = ({ user, onLogout, onOpenAuth, currentPage, setCurrentPage, theme = 'dark', onToggleTheme }) => {
-  const [scrolled, setScrolled] = useState(false);
-  const [hoveredItem, setHoveredItem] = useState(null);
-  const [toolsOpen, setToolsOpen] = useState(false);
-
-  const navRef = useRef(null);
-  const [highlightStyle, setHighlightStyle] = useState({ left: 0, width: 0, opacity: 0 });
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const topNavItems = [
-    { id: 'landing', label: 'Overview', isDropdown: false },
-    { id: 'tools', label: 'Tools', isDropdown: true },
-    { id: 'about', label: 'About', isDropdown: false },
+const Navbar = ({
+  user,
+  onLogout,
+  onOpenAuth,
+  currentPage,
+  setCurrentPage,
+  theme = 'dark',
+  onToggleTheme,
+}) => {
+  // Navigation items for the bottom collapsed bar
+  const navItems = [
+    {
+      label: 'Overview',
+      href: '#',
+      active: currentPage === 'landing',
+      onClick: () => setCurrentPage('landing'),
+    },
+    {
+      label: 'Roadmaps',
+      href: '#',
+      active: currentPage === 'roadmaps',
+      onClick: () => (user ? setCurrentPage('roadmaps') : onOpenAuth()),
+    },
+    {
+      label: 'Online IDE',
+      href: '#',
+      active: currentPage === 'editor',
+      onClick: () => (user ? setCurrentPage('editor') : onOpenAuth()),
+    },
+    {
+      label: 'Typlab',
+      href: '#',
+      active: currentPage === 'typlab',
+      onClick: () => (user ? setCurrentPage('typlab') : onOpenAuth()),
+    },
   ];
 
-  const getActiveTopItemId = () => {
-    if (currentPage === 'landing') return 'landing';
-    if (currentPage === 'about') return 'about';
-    if (['assessment', 'roadmaps', 'editor', 'typlab'].includes(currentPage)) return 'tools';
-    return '';
-  };
-
-  const updateHighlight = (itemId) => {
-    const parent = navRef.current;
-    if (!parent) return;
-    const activeEl = parent.querySelector(`[data-id="${itemId}"]`);
-    if (activeEl) {
-      setHighlightStyle({
-        left: activeEl.offsetLeft,
-        width: activeEl.offsetWidth,
-        opacity: 1,
-      });
-    } else {
-      setHighlightStyle((prev) => ({ ...prev, opacity: 0 }));
-    }
-  };
-
-  useEffect(() => {
-    updateHighlight(getActiveTopItemId());
-  }, [currentPage]);
-
-  useEffect(() => {
-    const handleResize = () => updateHighlight(hoveredItem || getActiveTopItemId());
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [currentPage, hoveredItem]);
+  // Mega-menu columns revealed on expand
+  const megaColumns = [
+    {
+      title: 'Platform',
+      links: [
+        { label: 'Overview', href: '#', onClick: () => setCurrentPage('landing') },
+        { label: 'Skill Assessment', href: '#', onClick: () => (user ? setCurrentPage('assessment') : onOpenAuth()) },
+        { label: 'About Us', href: '#', onClick: () => setCurrentPage('about') },
+      ],
+    },
+    {
+      title: 'Developer Tools',
+      links: [
+        { label: 'Roadmaps', href: '#', onClick: () => (user ? setCurrentPage('roadmaps') : onOpenAuth()) },
+        { label: 'Online IDE', href: '#', onClick: () => (user ? setCurrentPage('editor') : onOpenAuth()) },
+        { label: 'Typlab Speed', href: '#', onClick: () => (user ? setCurrentPage('typlab') : onOpenAuth()) },
+      ],
+    },
+    {
+      title: 'Account',
+      links: user
+        ? [
+            { label: `User: ${user.username}`, href: '#' },
+            { label: 'Sign Out', href: '#', onClick: onLogout },
+          ]
+        : [
+            { label: 'Get Started', href: '#', onClick: onOpenAuth },
+            { label: 'Sign In', href: '#', onClick: onOpenAuth },
+          ],
+    },
+    {
+      title: 'Appearance',
+      links: [
+        {
+          label: theme === 'dark' ? 'Dark Mode' : 'Light Mode',
+          href: '#',
+          onClick: onToggleTheme,
+        },
+      ],
+    },
+  ];
 
   return (
-    <header style={styles.header}>
-      <div 
-        style={{
-          ...styles.inner,
-          maxWidth: scrolled ? '1020px' : '1240px',
-          height: scrolled ? '48px' : '52px',
-          padding: scrolled ? '0 6px 0 14px' : '0 7px 0 16px',
-          background: scrolled 
-            ? 'var(--nav-bg-scrolled)' 
-            : 'var(--nav-bg)',
-          borderColor: scrolled 
-            ? 'var(--nav-border-scrolled)' 
-            : 'var(--nav-border)',
-          boxShadow: scrolled 
-            ? 'var(--nav-shadow)' 
-            : 'var(--nav-shadow-unscrolled)',
-        }}
-      >
-        {/* Logo */}
+    <>
+      {/* Top Header Bar with Logo and Quick Controls */}
+      <header className="fixed top-5 left-0 right-0 z-40 flex justify-between items-center px-6 pointer-events-none">
+        {/* Brand Logo */}
         <a
           href="/"
-          onClick={(e) => { e.preventDefault(); setCurrentPage('landing'); }}
-          style={styles.logoLink}
+          onClick={(e) => {
+            e.preventDefault();
+            setCurrentPage('landing');
+          }}
+          className="flex items-center gap-2.5 backdrop-blur-xl border border-black/10 dark:border-white/15 bg-white/70 dark:bg-black/60 px-4 py-2 rounded-full shadow-lg pointer-events-auto transition-transform hover:scale-105 cursor-pointer"
           aria-label="Codepolarity"
         >
-          <img 
-            src={dsLogo} 
-            alt="Codepolarity" 
-            style={{ 
-              height: scrolled ? 18 : 20, 
-              width: 'auto', 
-              display: 'block',
-              flexShrink: 0,
-              filter: 'var(--logo-filter)',
-              transition: 'filter 0.3s ease, height 0.3s ease',
-            }} 
+          <img
+            src={logoMark}
+            alt="Codepolarity Icon"
+            className="h-5 w-auto block shrink-0 transition-all"
+            style={{ filter: 'var(--logo-filter)' }}
           />
-          <span style={{
-            ...styles.logoText,
-            color: 'var(--text-main)',
-          }}>
-            Codepolarity
-          </span>
+          <img
+            src={logoText}
+            alt="Codepolarity"
+            className="h-3.5 w-auto block shrink-0 transition-all mt-[1px]"
+            style={{ filter: 'var(--logo-filter)' }}
+          />
         </a>
 
-        {/* Center Nav with Magnetic Pill */}
-        <nav 
-          ref={navRef} 
-          style={styles.nav} 
-          aria-label="Main navigation"
-          onMouseLeave={() => {
-            setHoveredItem(null);
-            setToolsOpen(false);
-            updateHighlight(getActiveTopItemId());
-          }}
-        >
-          {/* Sliding Highlight Pill */}
-          <div 
-            style={{
-              ...styles.highlightPill,
-              transform: `translateX(${highlightStyle.left}px)`,
-              width: highlightStyle.width,
-              opacity: highlightStyle.opacity,
-            }}
-          />
-
-          {topNavItems.map((item) => {
-            const isActive = getActiveTopItemId() === item.id;
-            
-            if (item.isDropdown) {
-              return (
-                <div
-                  key={item.id}
-                  onMouseEnter={() => {
-                    setToolsOpen(true);
-                    setHoveredItem(item.id);
-                    updateHighlight(item.id);
-                  }}
-                  onMouseLeave={() => {
-                    setToolsOpen(false);
-                    setHoveredItem(null);
-                    updateHighlight(getActiveTopItemId());
-                  }}
-                  style={{ position: 'relative' }}
-                >
-                  <button
-                    data-id={item.id}
-                    style={{
-                      ...styles.navLink,
-                      color: isActive || hoveredItem === item.id ? 'var(--nav-link-active-color)' : 'var(--nav-link-color)',
-                      fontWeight: isActive ? '600' : '400',
-                      gap: '4px',
-                    }}
-                  >
-                    {item.label}
-                    <ChevronDown 
-                      size={14} 
-                      style={{
-                        transform: toolsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                        transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                      }}
-                    />
-                  </button>
-
-                  {/* Dropdown Menu Container */}
-                  <div 
-                    style={{
-                      ...styles.dropdownContainer,
-                      opacity: toolsOpen ? 1 : 0,
-                      transform: toolsOpen ? 'translateX(-50%) translateY(0) scale(1)' : 'translateX(-50%) translateY(10px) scale(0.95)',
-                      pointerEvents: toolsOpen ? 'auto' : 'none',
-                    }}
-                  >
-                    {/* Inner Dropdown Box to hold background/borders and bridge the margin gap */}
-                    <div style={styles.dropdownBox}>
-                      {/* Top Indicator Arrow pointer */}
-                      <div style={styles.indicatorArrow} />
-                      <div style={{ width: '100%' }}>
-                        {/* 4 Grid items of Tools */}
-                        <div style={styles.dropdownLeft}>
-                          <button
-                            onClick={() => {
-                              if (!user) onOpenAuth();
-                              else setCurrentPage('assessment');
-                              setToolsOpen(false);
-                            }}
-                            className="nav-dropdown-card dropdown-grid-mesh"
-                            style={styles.dropdownCard}
-                          >
-                            <Award size={20} style={styles.dropdownIcon} />
-                            <div style={styles.dropdownText}>
-                              <span style={styles.dropdownTitle}>Assessment Tools</span>
-                              <p style={styles.dropdownDesc}>Test and analyze your programming skills</p>
-                            </div>
-                          </button>
-
-                          <button
-                            onClick={() => {
-                              if (!user) onOpenAuth();
-                              else setCurrentPage('roadmaps');
-                              setToolsOpen(false);
-                            }}
-                            className="nav-dropdown-card dropdown-grid-mesh"
-                            style={styles.dropdownCard}
-                          >
-                            <Map size={20} style={styles.dropdownIcon} />
-                            <div style={styles.dropdownText}>
-                              <span style={styles.dropdownTitle}>Developer Roadmaps</span>
-                              <p style={styles.dropdownDesc}>Structured path for learning languages</p>
-                            </div>
-                          </button>
-
-                          <button
-                            onClick={() => {
-                              if (!user) onOpenAuth();
-                              else setCurrentPage('editor');
-                              setToolsOpen(false);
-                            }}
-                            className="nav-dropdown-card dropdown-grid-mesh"
-                            style={styles.dropdownCard}
-                          >
-                            <Code size={20} style={styles.dropdownIcon} />
-                            <div style={styles.dropdownText}>
-                              <span style={styles.dropdownTitle}>Online IDE</span>
-                              <p style={styles.dropdownDesc}>Write, run, and preview code in real-time</p>
-                            </div>
-                          </button>
-
-                          <button
-                            onClick={() => {
-                              if (!user) onOpenAuth();
-                              else setCurrentPage('typlab');
-                              setToolsOpen(false);
-                            }}
-                            className="nav-dropdown-card dropdown-grid-mesh"
-                            style={styles.dropdownCard}
-                          >
-                            <Terminal size={20} style={styles.dropdownIcon} />
-                            <div style={styles.dropdownText}>
-                              <span style={styles.dropdownTitle}>Typlab</span>
-                              <p style={styles.dropdownDesc}>Calibrate your coding speed and dexterity</p>
-                            </div>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            }
-
-            return (
-              <button
-                key={item.id}
-                data-id={item.id}
-                onClick={() => {
-                  if (!user && item.id !== 'landing') {
-                    onOpenAuth();
-                  } else {
-                    setCurrentPage(item.id);
-                  }
-                }}
-                onMouseEnter={() => {
-                  setHoveredItem(item.id);
-                  updateHighlight(item.id);
-                }}
-                style={{
-                  ...styles.navLink,
-                  color: isActive || hoveredItem === item.id ? 'var(--nav-link-active-color)' : 'var(--nav-link-color)',
-                  fontWeight: isActive ? '600' : '400',
-                }}
-              >
-                {item.label}
-              </button>
-            );
-          })}
-        </nav>
-
-        {/* Right CTAs */}
-        <div style={styles.actions}>
-          {/* Light/Dark Theme Toggle */}
+        {/* Top Right Quick Controls: Theme & User */}
+        <div className="flex items-center gap-2.5 pointer-events-auto">
           <button
             onClick={onToggleTheme}
-            style={{
-              ...styles.themeToggleBtn,
-              height: scrolled ? '36px' : '38px',
-              width: scrolled ? '36px' : '38px',
-            }}
-            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            className="flex items-center justify-center h-9 w-9 rounded-full border border-black/10 dark:border-white/15 bg-white/70 dark:bg-black/60 backdrop-blur-xl text-neutral-800 dark:text-neutral-200 transition-colors hover:bg-black/5 dark:hover:bg-white/10 cursor-pointer"
+            aria-label="Toggle theme"
             title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
           >
-            {theme === 'dark' ? (
-              <Sun size={17} style={{ color: 'var(--text-main)', transition: 'transform 0.3s ease' }} />
-            ) : (
-              <Moon size={17} style={{ color: 'var(--text-main)', transition: 'transform 0.3s ease' }} />
-            )}
+            {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
 
-
           {user ? (
-            <>
-              <span style={{
-                ...styles.userChip,
-                background: 'var(--nav-link-active-bg)',
-                borderColor: 'var(--border-light)',
-                color: 'var(--text-main)',
-              }}>
-                <span style={styles.onlineDot} />
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-full border border-black/10 dark:border-white/15 bg-white/70 dark:bg-black/60 backdrop-blur-xl text-neutral-800 dark:text-neutral-200">
+                {user.avatar ? (
+                  <img
+                    src={user.avatar}
+                    alt={user.username}
+                    className="w-4 h-4 rounded-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                )}
                 {user.username}
               </span>
               <button
                 onClick={onLogout}
-                style={{
-                  ...styles.signOutBtn,
-                  background: 'var(--nav-link-active-bg)',
-                  borderColor: 'var(--border-light)',
-                  color: 'var(--text-main)',
-                }}
+                className="px-3 py-1.5 text-xs font-medium rounded-full border border-black/10 dark:border-white/15 bg-white/70 dark:bg-black/60 backdrop-blur-xl text-neutral-800 dark:text-neutral-200 transition-colors hover:bg-black/10 dark:hover:bg-white/10 cursor-pointer"
               >
                 Sign out
               </button>
-            </>
+            </div>
           ) : (
             <button
               onClick={onOpenAuth}
-              className="btn-primary"
-              style={{
-                ...styles.downloadBtn,
-                height: scrolled ? '36px' : '38px',
-                padding: scrolled ? '0 16px' : '0 18px',
-                background: 'var(--btn-primary-bg)',
-                color: 'var(--btn-primary-text)',
-                boxShadow: 'var(--btn-primary-shadow)',
-              }}
+              className="px-4 py-1.5 text-xs font-semibold rounded-full bg-black text-white dark:bg-white dark:text-black transition-transform hover:scale-105 shadow-md cursor-pointer"
             >
               Get started
             </button>
           )}
         </div>
-      </div>
-    </header>
+      </header>
+
+      {/* Main Awwwards Nav (Bottom floating pill & expanded mega menu) */}
+      <AwwwardsNav
+        items={navItems}
+        columns={megaColumns}
+        moreLabel="More"
+      />
+    </>
   );
-};
-
-const styles = {
-  header: {
-    position: 'fixed',
-    top: '16px',
-    left: 0,
-    right: 0,
-    zIndex: 1000,
-    display: 'flex',
-    justifyContent: 'center',
-    background: 'transparent',
-    padding: '0 16px',
-  },
-  inner: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    maxWidth: '1240px',
-    border: '1px solid',
-    borderRadius: '999px',
-    padding: '0 7px 0 16px',
-    height: '52px',
-    backdropFilter: 'blur(16px)',
-    WebkitBackdropFilter: 'blur(16px)',
-    transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-    position: 'relative',
-  },
-  logoLink: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '9px',
-    textDecoration: 'none',
-    color: 'var(--text-main)',
-    flex: '1 0 0%',
-    userSelect: 'none',
-    transition: 'opacity 0.2s ease',
-  },
-  logoText: {
-    fontSize: '0.9rem',
-    fontWeight: '600',
-    letterSpacing: '-0.025em',
-    lineHeight: '1',
-    transition: 'color 0.3s',
-    fontFamily: "var(--font-sans)",
-  },
-  nav: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '4px',
-    position: 'absolute',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    zIndex: 2,
-  },
-  highlightPill: {
-    position: 'absolute',
-    left: 0,
-    top: '4px',
-    bottom: '4px',
-    height: 'calc(100% - 8px)',
-    background: 'var(--nav-link-active-bg)',
-    borderRadius: '999px',
-    border: '1px solid var(--nav-link-hover-border)',
-    transition: 'transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease',
-    pointerEvents: 'none',
-    zIndex: 0,
-  },
-  navLink: {
-    border: '1px solid transparent',
-    background: 'transparent',
-    fontFamily: "var(--font-sans)",
-    fontSize: '0.85rem',
-    cursor: 'pointer',
-    padding: '0 16px',
-    borderRadius: '999px',
-    transition: 'color 0.25s ease',
-    letterSpacing: '-0.01em',
-    position: 'relative',
-    zIndex: 1,
-    height: '32px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  dropdownContainer: {
-    position: 'absolute',
-    top: '100%',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    paddingTop: '18px',
-    width: '740px',
-    transition: 'opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-    zIndex: 100,
-  },
-  dropdownBox: {
-    background: 'var(--glass-bg)',
-    backdropFilter: 'blur(24px)',
-    WebkitBackdropFilter: 'blur(24px)',
-    border: '1px solid var(--glass-border)',
-    borderRadius: '18px',
-    boxShadow: 'var(--shadow-box)',
-    padding: '12px',
-    position: 'relative',
-  },
-  indicatorArrow: {
-    position: 'absolute',
-    top: '-5px',
-    left: '50%',
-    transform: 'translateX(-50%) rotate(45deg)',
-    width: '10px',
-    height: '10px',
-    background: 'var(--glass-bg)',
-    borderLeft: '1px solid var(--glass-border)',
-    borderTop: '1px solid var(--glass-border)',
-    zIndex: 10,
-  },
-  dropdownLeft: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(4, 1fr)',
-    gap: '10px',
-    width: '100%',
-  },
-  dropdownCard: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    gap: '22px',
-    padding: '12px',
-    background: 'transparent',
-    border: '1px solid var(--border-light)',
-    borderRadius: '12px',
-    cursor: 'pointer',
-    textAlign: 'left',
-    width: '100%',
-    height: '135px',
-    fontFamily: 'inherit',
-    outline: 'none',
-    transition: 'all 0.25s ease',
-    position: 'relative',
-  },
-  dropdownIcon: {
-    color: '#ffffff',
-    flexShrink: 0,
-  },
-  dropdownText: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '2px',
-    zIndex: 1,
-  },
-  dropdownTitle: {
-    fontSize: '0.82rem',
-    fontWeight: '600',
-    color: 'var(--text-main)',
-  },
-  dropdownDesc: {
-    fontSize: '0.7rem',
-    color: 'var(--text-muted)',
-    lineHeight: '1.3',
-  },
-  actions: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    justifyContent: 'flex-end',
-    flex: '1 0 0%',
-  },
-
-  userChip: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '6px',
-    fontSize: '0.8rem',
-    padding: '0 12px',
-    height: '34px',
-    borderRadius: '999px',
-    border: '1px solid',
-    fontFamily: "var(--font-sans)",
-    fontWeight: '500',
-  },
-  onlineDot: {
-    width: 6,
-    height: 6,
-    borderRadius: '50%',
-    background: '#10b981',
-    boxShadow: 'none',
-  },
-
-  signOutBtn: {
-    border: '1px solid',
-    fontFamily: "var(--font-sans)",
-    fontSize: '0.8125rem',
-    fontWeight: '500',
-    cursor: 'pointer',
-    padding: '0 14px',
-    height: '36px',
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: '999px',
-    transition: 'all 0.25s ease',
-  },
-  downloadBtn: {
-    height: '38px',
-    padding: '0 18px',
-    fontSize: '0.84rem',
-    fontWeight: '600',
-    letterSpacing: '-0.01em',
-    borderRadius: '999px',
-    border: 'none',
-    cursor: 'pointer',
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontFamily: "var(--font-sans)",
-    transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-    whiteSpace: 'nowrap',
-    userSelect: 'none',
-  },
-  themeToggleBtn: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: '999px',
-    background: 'var(--nav-link-hover-bg)',
-    border: '1px solid var(--border-light)',
-    cursor: 'pointer',
-    padding: 0,
-    transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-    flexShrink: 0,
-  },
 };
 
 export default Navbar;
