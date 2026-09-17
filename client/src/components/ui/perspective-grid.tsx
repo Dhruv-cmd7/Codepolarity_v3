@@ -58,12 +58,12 @@ export function PerspectiveGrid({
       {...props}
     >
       <div
-        className="absolute w-[90rem] max-w-none aspect-square grid origin-center pointer-events-auto"
+        className="absolute w-[120rem] max-w-none aspect-square grid origin-center pointer-events-auto"
         style={{
           left: "50%",
           top: "48%",
           transform:
-            "translate(-50%, -50%) rotateX(35deg) rotateY(-8deg) rotateZ(18deg) scale(1.65)",
+            "translate(-50%, -50%) rotateX(35deg) rotateY(-8deg) rotateZ(18deg) scale(1.75)",
           transformStyle: "preserve-3d",
           gridTemplateColumns: `repeat(${colCount}, 1fr)`,
           gridTemplateRows: `repeat(${rowCount}, 1fr)`,
@@ -73,7 +73,7 @@ export function PerspectiveGrid({
           tiles.map((_, i) => (
             <div
               key={i}
-              className="tile min-h-[1px] min-w-[1px] border border-neutral-300/35 dark:border-white/[0.06] bg-transparent transition-colors duration-[1500ms] hover:duration-0 hover:bg-neutral-300/40 hover:border-neutral-400 dark:hover:bg-sky-500/15 dark:hover:border-sky-400/40"
+              className="tile min-h-[1px] min-w-[1px] border border-white/[0.07] bg-transparent transition-colors duration-[1200ms] hover:duration-0 hover:bg-sky-400/25 hover:border-sky-400/70 hover:shadow-[0_0_12px_rgba(56,189,248,0.35)] cursor-pointer"
             />
           ))}
       </div>

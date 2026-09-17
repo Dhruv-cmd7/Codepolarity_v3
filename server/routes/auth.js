@@ -212,6 +212,147 @@ router.post('/google', async (req, res) => {
   }
 });
 
+// @route    POST api/auth/github
+// @desc     Authenticate with GitHub
+// @access   Public
+router.post('/github', async (req, res) => {
+  const { code, githubUser } = req.body;
+
+  try {
+    let email, name, avatar, githubId, username;
+
+    if (code && process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) {
+      // Real GitHub OAuth exchange using authorization code
+      const tokenRes = await fetch('https://github.com/login/oauth/access_token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          client_id: process.env.GITHUB_CLIENT_ID,
+          client_secret: process.env.GITHUB_CLIENT_SECRET,
+          code,
+        }),
+      });
+
+      const tokenData = await tokenRes.json();
+      if (!tokenData.access_token) {
+        return res.status(400).json({ msg: tokenData.error_description || 'GitHub OAuth token exchange failed' });
+      }
+
+      const userRes = await fetch('https://api.github.com/user', {
+        headers: {
+          'Authorization': `Bearer ${tokenData.access_token}`,
+          'User-Agent': 'Codepolarity-App',
+        },
+      });
+
+      const userProfile = await userRes.json();
+      githubId = String(userProfile.id);
+      username = userProfile.login;
+      name = userProfile.name || userProfile.login;
+      avatar = userProfile.avatar_url;
+      email = userProfile.email;
+
+      if (!email) {
+        // Fetch user emails if primary email is private
+        const emailsRes = await fetch('https://api.github.com/user/emails', {
+          headers: {
+            'Authorization': `Bearer ${tokenData.access_token}`,
+            'User-Agent': 'Codepolarity-App',
+          },
+        });
+        const emails = await emailsRes.json();
+        if (Array.isArray(emails)) {
+          const primaryEmailObj = emails.find(e => e.primary) || emails[0];
+          if (primaryEmailObj) email = primaryEmailObj.email;
+        }
+      }
+    } else if (githubUser && (githubUser.githubId || githubUser.id || githubUser.username || githubUser.email)) {
+      // Direct / Custom Client Auth Payload
+      githubId = String(githubUser.githubId || githubUser.id || `gh_${githubUser.username || Date.now()}`);
+      username = githubUser.username || githubUser.login || 'github_user';
+      email = githubUser.email || `${username.toLowerCase()}@users.noreply.github.com`;
+      name = githubUser.name || username;
+      avatar = githubUser.avatar || githubUser.avatar_url || 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png';
+    } else {
+      return res.status(400).json({ msg: 'GitHub auth code or user details required' });
+    }
+
+    if (!email) {
+      email = `${username.toLowerCase()}@users.noreply.github.com`;
+    }
+
+    // 1. Check existing user by githubId
+    let user = await User.findOne({ githubId });
+
+    // 2. Check by email
+    if (!user) {
+      user = await User.findOne({ email: email.toLowerCase() });
+      if (user) {
+        user.githubId = githubId;
+        if (!user.avatar && avatar) user.avatar = avatar;
+        await user.save();
+      }
+    }
+
+    // 3. Create new user if not exists
+    if (!user) {
+      let baseUsername = (username || name).toLowerCase().replace(/[^a-z0-9]/g, '') || 'dev';
+      let uniqueUsername = baseUsername;
+      let counter = 1;
+
+      while (await User.findOne({ username: uniqueUsername })) {
+        uniqueUsername = `${baseUsername}${Math.floor(100 + Math.random() * 900)}`;
+        counter++;
+        if (counter > 10) {
+          uniqueUsername = `${baseUsername}_${Date.now().toString().slice(-4)}`;
+          break;
+        }
+      }
+
+      user = new User({
+        username: uniqueUsername,
+        email: email.toLowerCase(),
+        githubId,
+        avatar: avatar || '',
+        authProvider: 'github',
+      });
+
+      await user.save();
+    }
+
+    const payload = {
+      user: {
+        id: user.id,
+      },
+    };
+
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET || 'supersecretantigravitykey123!@#',
+      { expiresIn: 360000 },
+      (err, token) => {
+        if (err) throw err;
+        res.json({
+          token,
+          user: {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            avatar: user.avatar,
+            studyLevel: user.studyLevel,
+          },
+        });
+      }
+    );
+  } catch (err) {
+    console.error('GitHub auth error:', err.message);
+    res.status(500).json({ msg: 'GitHub authentication failed' });
+  }
+});
+
 // @route    GET api/auth/me
 // @desc     Get user by token
 // @access   Private

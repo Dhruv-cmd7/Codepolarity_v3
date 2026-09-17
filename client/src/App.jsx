@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import Lenis from 'lenis';
 import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage';
 import Assessment from './pages/Assessment';
 import RoadmapExplorer from './pages/RoadmapExplorer';
 import CodeEditor from './pages/CodeEditor';
 import Typlab from './pages/Typlab';
-import About from './pages/About';
+import SignInPage from './pages/SignInPage';
 import { ShieldAlert, X, Sparkles } from 'lucide-react';
 import { FullScreenSignup } from './components/ui/full-screen-signup';
 
@@ -24,6 +25,43 @@ function App() {
 
   // Sandbox load state
   const [editorTemplateId, setEditorTemplateId] = useState(null);
+
+  // Lenis Smooth Scroll Initialization
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 1.0,
+    });
+
+    let rafId;
+    function raf(time) {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
+    rafId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+    };
+  }, [currentPage]);
+
+  // Dynamic Document Title for SEO and Browser UX
+  useEffect(() => {
+    const titles = {
+      landing: 'Codepolarity — Autonomous Developer Career Engine & Skill Benchmarking',
+      roadmaps: 'Developer Roadmaps & Skill Pathways | Codepolarity',
+      assessment: 'Technical Skill Calibration & Benchmark | Codepolarity',
+      editor: 'Browser Sandboxed Online IDE | Codepolarity',
+      typlab: 'Typlab — Keystroke Speed & Code Velocity | Codepolarity',
+      signin: 'Sign In / Register | Codepolarity',
+      login: 'Sign In | Codepolarity',
+      register: 'Register | Codepolarity',
+    };
+    document.title = titles[currentPage] || 'Codepolarity — Autonomous Developer Career Engine';
+  }, [currentPage]);
 
   useEffect(() => {
     if (token) {
@@ -126,6 +164,30 @@ function App() {
 
   const renderPage = () => {
     switch (currentPage) {
+      case 'signin':
+      case 'login':
+        return (
+          <SignInPage
+            token={token}
+            setToken={setToken}
+            user={user}
+            setUser={setUser}
+            setCurrentPage={setCurrentPage}
+            initialMode="login"
+          />
+        );
+      case 'register':
+      case 'signup':
+        return (
+          <SignInPage
+            token={token}
+            setToken={setToken}
+            user={user}
+            setUser={setUser}
+            setCurrentPage={setCurrentPage}
+            initialMode="register"
+          />
+        );
       case 'assessment':
         return (
           <Assessment
@@ -158,19 +220,12 @@ function App() {
         return (
           <Typlab />
         );
-      case 'about':
-        return (
-          <About
-            setCurrentPage={setCurrentPage}
-          />
-        );
       default:
         return (
           <LandingPage
             user={user}
             onOpenAuth={() => {
-              setAuthMode('login');
-              setShowAuthModal(true);
+              setCurrentPage('signin');
             }}
             setCurrentPage={setCurrentPage}
           />
@@ -194,19 +249,20 @@ function App() {
 
   return (
     <div className="app-container">
-      {/* Navbar */}
-      <Navbar
-        user={user}
-        onLogout={handleLogout}
-        onOpenAuth={() => {
-          setAuthMode('login');
-          setShowAuthModal(true);
-        }}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        theme={theme}
-        onToggleTheme={toggleTheme}
-      />
+      {/* Navbar – render on main app pages */}
+      {currentPage !== 'signin' && currentPage !== 'login' && currentPage !== 'register' && currentPage !== 'signup' && (
+        <Navbar
+          user={user}
+          onLogout={handleLogout}
+          onOpenAuth={() => {
+            setCurrentPage('signin');
+          }}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+        />
+      )}
 
       {/* Main View Area – no top padding here; landing page manages its own spacing */}
       <main>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Zap, Route, Terminal, Activity } from 'lucide-react';
+import { Zap, Route, Terminal, Activity, Sparkles, ArrowRight } from 'lucide-react';
 
 import TypedText from '../components/TypedText';
 import Footer from '../components/Footer';
@@ -7,6 +7,7 @@ import FaqAccordion from '../components/ui/faq-accordion';
 import { PerspectiveGrid } from '../components/ui/perspective-grid';
 import logoMark from '../assets/logo.svg';
 import logoCircle from '../assets/logo_circle.svg';
+import logoText from '../assets/logo_text.svg';
 
 /* ─────────────────────────────────────────────────────
    PopSlide – spring pop-slide animation on scroll
@@ -207,7 +208,7 @@ const codepolarityFaqs = [
   },
   {
     question: "How do I get started with a skill assessment?",
-    answer: "Simply click 'Start Skill Assessment' on the homepage to launch your initial calibration drill and generate your customized developer roadmap."
+    answer: "Simply click 'Get Started' on the homepage to launch your initial calibration drill and generate your customized developer roadmap."
   }
 ];
 
@@ -216,39 +217,61 @@ const codepolarityFaqs = [
 ───────────────────────────────────────────────────── */
 const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
   return (
-    <div style={{ overflowX: 'hidden', background: 'var(--bg-primary)', color: 'var(--text-main)', minHeight: '100vh' }}>
+    <div
+      id="main-content"
+      role="region"
+      aria-label="Codepolarity Platform Overview"
+      style={{ overflowX: 'hidden', background: 'var(--bg-primary)', color: 'var(--text-main)', minHeight: '100vh' }}
+    >
       
       {/* ─────────────────── MINIMALIST ENTERPRISE HERO ─────────────────── */}
-      <section className="hero-enterprise-section">
+      <section
+        id="hero-section"
+        aria-labelledby="hero-title"
+        className="hero-enterprise-section"
+      >
+        <div className="hero-ambient-glow" aria-hidden="true" />
         <PerspectiveGrid rows={20} cols={20} className="hero-perspective-grid" />
         <div className="hero-enterprise-container">
-          <PopSlide>
-            <h1 className="hero-enterprise-title">
-              The developer career engine built for <span className="hero-title-accent">high-velocity</span> engineering.
+          <PopSlide delay={0}>
+            <h1 id="hero-title" className="hero-enterprise-title">
+              The developer career engine built for high-velocity engineering.
             </h1>
           </PopSlide>
 
-          <PopSlide delay={80}>
-            <p className="hero-enterprise-subtitle">
+          <PopSlide delay={60}>
+            <p id="hero-subtitle" className="hero-enterprise-subtitle">
               Codepolarity benchmarks programming capabilities, calibrates technical skill tiers with autonomous agents, and orchestrates interactive career pathways tailored for modern software developers.
             </p>
           </PopSlide>
 
-          <PopSlide delay={160}>
+          <PopSlide delay={120}>
             <div className="hero-cta-group">
               {user ? (
                 <button
+                  id="hero-cta-continue"
                   onClick={() => setCurrentPage(user.completedQuiz ? 'roadmaps' : 'assessment')}
                   className="hero-btn-primary"
+                  aria-label={user.completedQuiz ? 'Continue to your developer roadmaps' : 'Start your initial skill assessment'}
                 >
                   {user.completedQuiz ? 'Continue Learning →' : 'Start Assessment →'}
                 </button>
               ) : (
                 <>
-                  <button onClick={onOpenAuth} className="hero-btn-primary">
-                    Start Skill Assessment →
+                  <button
+                    id="hero-cta-start"
+                    onClick={onOpenAuth}
+                    className="hero-btn-primary"
+                    aria-label="Get started with free developer skill calibration"
+                  >
+                    Get Started →
                   </button>
-                  <button onClick={() => setCurrentPage('editor')} className="hero-btn-secondary">
+                  <button
+                    id="hero-cta-playground"
+                    onClick={() => setCurrentPage('editor')}
+                    className="hero-btn-secondary"
+                    aria-label="Launch the online sandbox code editor"
+                  >
                     Launch Playground IDE
                   </button>
                 </>
@@ -258,15 +281,28 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
         </div>
       </section>
 
-      {/* ─────────────────── HORIZONTAL BRICK MARQUEE (FINOUT STYLE) ─────────────────── */}
-      <section className="brick-marquee-section">
+      {/* ─────────────────── HORIZONTAL BRICK MARQUEE (TECH STACK) ─────────────────── */}
+      <section
+        id="tech-stack"
+        aria-label="Supported Developer Tech Stack and Frameworks"
+        className="brick-marquee-section"
+      >
+        <h2 className="sr-only">Supported Programming Languages, Frameworks, and Cloud Tech Stack</h2>
         <div className="brick-marquee-container">
           {/* Row 1: Scrolling Left */}
-          <div className="brick-marquee-row">
+          <div className="brick-marquee-row" role="region" aria-label="Languages and cloud platforms">
             <div className="brick-marquee-track brick-marquee-track-left">
               {[...marqueeRow1, ...marqueeRow1].map((item, idx) => (
                 <div key={`r1-${idx}`} className="brick-marquee-cell">
-                  <img src={item.iconUrl} alt={item.name} className={`brick-marquee-icon ${item.inverted ? 'brick-marquee-icon-inverted' : ''}`} />
+                  <img
+                    src={item.iconUrl}
+                    alt={`${item.name} developer ecosystem technology icon`}
+                    width="24"
+                    height="24"
+                    loading="lazy"
+                    decoding="async"
+                    className={`brick-marquee-icon ${item.inverted ? 'brick-marquee-icon-inverted' : ''}`}
+                  />
                   <span className="brick-marquee-name">{item.name}</span>
                 </div>
               ))}
@@ -274,11 +310,19 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
           </div>
 
           {/* Row 2: Scrolling Right */}
-          <div className="brick-marquee-row">
+          <div className="brick-marquee-row" role="region" aria-label="Databases, containers, and architecture tools">
             <div className="brick-marquee-track brick-marquee-track-right">
               {[...marqueeRow2, ...marqueeRow2].map((item, idx) => (
                 <div key={`r2-${idx}`} className="brick-marquee-cell">
-                  <img src={item.iconUrl} alt={item.name} className={`brick-marquee-icon ${item.inverted ? 'brick-marquee-icon-inverted' : ''}`} />
+                  <img
+                    src={item.iconUrl}
+                    alt={`${item.name} developer ecosystem technology icon`}
+                    width="24"
+                    height="24"
+                    loading="lazy"
+                    decoding="async"
+                    className={`brick-marquee-icon ${item.inverted ? 'brick-marquee-icon-inverted' : ''}`}
+                  />
                   <span className="brick-marquee-name">{item.name}</span>
                 </div>
               ))}
@@ -286,11 +330,19 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
           </div>
 
           {/* Row 3: Scrolling Left (offset speed) */}
-          <div className="brick-marquee-row">
+          <div className="brick-marquee-row" role="region" aria-label="Backend frameworks and foundational languages">
             <div className="brick-marquee-track brick-marquee-track-left" style={{ animationDuration: '52s' }}>
               {[...marqueeRow3, ...marqueeRow3].map((item, idx) => (
                 <div key={`r3-${idx}`} className="brick-marquee-cell">
-                  <img src={item.iconUrl} alt={item.name} className={`brick-marquee-icon ${item.inverted ? 'brick-marquee-icon-inverted' : ''}`} />
+                  <img
+                    src={item.iconUrl}
+                    alt={`${item.name} developer ecosystem technology icon`}
+                    width="24"
+                    height="24"
+                    loading="lazy"
+                    decoding="async"
+                    className={`brick-marquee-icon ${item.inverted ? 'brick-marquee-icon-inverted' : ''}`}
+                  />
                   <span className="brick-marquee-name">{item.name}</span>
                 </div>
               ))}
@@ -300,11 +352,15 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
       </section>
 
       {/* ─────────────── FEATURE BENTO GRID SECTION ────────────── */}
-      <section className="bento-section">
+      <section
+        id="features"
+        aria-labelledby="features-title"
+        className="bento-section"
+      >
         <div className="grid-container">
           <PopSlide>
             <div className="bento-header">
-              <h2 className="bento-title">
+              <h2 id="features-title" className="bento-title">
                 Engineered for <span className="bento-title-accent">high-velocity</span> learning.
               </h2>
               <p className="bento-subtitle">
@@ -312,19 +368,27 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
               </p>
             </div>
 
-            <div className="bento-grid">
+            <div className="bento-grid" role="list">
               {/* Card 1: Wide Bento Card */}
-              <div className="bento-card bento-card-wide" onClick={() => setCurrentPage('assessment')}>
+              <div
+                id="bento-card-assessment"
+                role="article"
+                aria-labelledby="card-assessment-title"
+                tabIndex={0}
+                className="bento-card bento-card-wide"
+                onClick={() => setCurrentPage('assessment')}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setCurrentPage('assessment'); }}
+              >
                 <div className="bento-card-copy">
-                  <div className="bento-card-icon">
+                  <div className="bento-card-icon" aria-hidden="true">
                     <Zap size={22} className="bento-icon-svg" />
                   </div>
-                  <h3 className="bento-card-title">Autonomous Skill Benchmarking</h3>
+                  <h3 id="card-assessment-title" className="bento-card-title">Autonomous Skill Benchmarking</h3>
                   <p className="bento-card-desc">
                     Scans algorithmic complexity, syntax efficiency, and edge case handling in real-time to surface exact knowledge gaps.
                   </p>
                 </div>
-                <div className="bento-card-visual bento-visual-benchmarking">
+                <div className="bento-card-visual bento-visual-benchmarking" aria-hidden="true">
                   <div className="bento-widget-pill">
                     <span className="bento-widget-dot" />
                     <span>Tier Calibration Active</span>
@@ -337,17 +401,25 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
               </div>
 
               {/* Card 2: Square Bento Card */}
-              <div className="bento-card" onClick={() => setCurrentPage('roadmaps')}>
+              <div
+                id="bento-card-roadmaps"
+                role="article"
+                aria-labelledby="card-roadmaps-title"
+                tabIndex={0}
+                className="bento-card"
+                onClick={() => setCurrentPage('roadmaps')}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setCurrentPage('roadmaps'); }}
+              >
                 <div className="bento-card-copy">
-                  <div className="bento-card-icon">
+                  <div className="bento-card-icon" aria-hidden="true">
                     <Route size={22} className="bento-icon-svg" />
                   </div>
-                  <h3 className="bento-card-title">Dynamic Pathway Routing</h3>
+                  <h3 id="card-roadmaps-title" className="bento-card-title">Dynamic Pathway Routing</h3>
                   <p className="bento-card-desc">
                     Generates custom milestone trajectories adapting continuously as your skills evolve.
                   </p>
                 </div>
-                <div className="bento-card-visual bento-visual-pathway">
+                <div className="bento-card-visual bento-visual-pathway" aria-hidden="true">
                   <div className="bento-path-node active">Algorithms</div>
                   <div className="bento-path-line" />
                   <div className="bento-path-node">Distributed Systems</div>
@@ -355,34 +427,47 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
               </div>
 
               {/* Card 3: Square Bento Card */}
-              <div className="bento-card" onClick={() => setCurrentPage('editor')}>
+              <div
+                id="bento-card-editor"
+                role="article"
+                aria-labelledby="card-editor-title"
+                tabIndex={0}
+                className="bento-card"
+                onClick={() => setCurrentPage('editor')}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setCurrentPage('editor'); }}
+              >
                 <div className="bento-card-copy">
-                  <div className="bento-card-icon">
+                  <div className="bento-card-icon" aria-hidden="true">
                     <Terminal size={22} className="bento-icon-svg" />
                   </div>
-                  <h3 className="bento-card-title">Sandboxed Runtimes</h3>
+                  <h3 id="card-editor-title" className="bento-card-title">Sandboxed Runtimes</h3>
                   <p className="bento-card-desc">
                     Zero setup required. Run test suites and keystroke telemetry drills directly in your browser.
                   </p>
                 </div>
-                <div className="bento-card-visual bento-visual-ide">
+                <div className="bento-card-visual bento-visual-ide" aria-hidden="true">
                   <div className="bento-ide-badge">✓ 8/8 Tests Passed</div>
                   <div className="bento-ide-code">fibonacci.js • 14ms</div>
                 </div>
               </div>
 
               {/* Card 4: Wide Bento Card */}
-              <div className="bento-card bento-card-wide">
+              <div
+                id="bento-card-telemetry"
+                role="article"
+                aria-labelledby="card-telemetry-title"
+                className="bento-card bento-card-wide"
+              >
                 <div className="bento-card-copy">
-                  <div className="bento-card-icon">
+                  <div className="bento-card-icon" aria-hidden="true">
                     <Activity size={22} className="bento-icon-svg" />
                   </div>
-                  <h3 className="bento-card-title">Closed-Loop Career Telemetry</h3>
+                  <h3 id="card-telemetry-title" className="bento-card-title">Closed-Loop Career Telemetry</h3>
                   <p className="bento-card-desc">
                     Track your speed, problem-solving velocity, and milestone achievements with live analytics.
                   </p>
                 </div>
-                <div className="bento-card-visual bento-visual-telemetry">
+                <div className="bento-card-visual bento-visual-telemetry" aria-hidden="true">
                   <div className="bento-stat-chip">
                     <span className="bento-stat-num">50k+</span>
                     <span className="bento-stat-lbl">Verifications</span>
@@ -399,7 +484,11 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
       </section>
 
       {/* ─────────────── FAQ SECTION ────────────── */}
-      <section className="faq-section">
+      <section
+        id="faq-section"
+        aria-label="Frequently Asked Questions"
+        className="faq-section"
+      >
         <div className="grid-container">
           <PopSlide>
             <FaqAccordion
@@ -411,15 +500,18 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
         </div>
       </section>
 
-
       {/* ─────────────── MINIMAL RECTANGLE CTA BANNER ────────────── */}
-      <section className="cta-rect-section">
+      <section
+        id="cta-banner"
+        aria-labelledby="cta-banner-title"
+        className="cta-rect-section"
+      >
         <div className="grid-container">
           <PopSlide>
             <div className="cta-rect-banner">
               <PerspectiveGrid rows={16} cols={16} className="cta-perspective-grid" showOverlay={false} />
               <div className="cta-rect-left">
-                <h2 className="cta-rect-title">
+                <h2 id="cta-banner-title" className="cta-rect-title">
                   Ready to accelerate your engineering career?
                 </h2>
                 <p className="cta-rect-desc">
@@ -430,21 +522,36 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
               <div className="cta-rect-right">
                 <div className="cta-rect-actions">
                   {user ? (
-                    <button onClick={() => setCurrentPage('roadmaps')} className="hero-btn-primary">
+                    <button
+                      id="cta-btn-continue"
+                      onClick={() => setCurrentPage('roadmaps')}
+                      className="hero-btn-primary"
+                      aria-label="Continue learning on developer roadmaps"
+                    >
                       Continue Learning →
                     </button>
                   ) : (
                     <>
-                      <button onClick={onOpenAuth} className="hero-btn-primary">
-                        Start Skill Assessment →
+                      <button
+                        id="cta-btn-start"
+                        onClick={onOpenAuth}
+                        className="hero-btn-primary"
+                        aria-label="Get started with free developer skill calibration"
+                      >
+                        Get Started →
                       </button>
-                      <button onClick={() => setCurrentPage('editor')} className="hero-btn-secondary">
+                      <button
+                        id="cta-btn-playground"
+                        onClick={() => setCurrentPage('editor')}
+                        className="hero-btn-secondary"
+                        aria-label="Launch the online sandbox code editor"
+                      >
                         Launch Playground IDE
                       </button>
                     </>
                   )}
                 </div>
-                <div className="cta-rect-highlights">
+                <div className="cta-rect-highlights" aria-label="Platform highlights">
                   <span>✓ Free initial assessment</span>
                   <span>✓ Sandboxed execution</span>
                   <span>✓ AI Roadmaps</span>

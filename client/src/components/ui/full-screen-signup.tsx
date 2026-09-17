@@ -26,6 +26,13 @@ const GoogleIcon = () => (
   </svg>
 );
 
+// Official GitHub Icon
+const GithubIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style={{ display: "block" }}>
+    <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+  </svg>
+);
+
 interface FullScreenSignupProps {
   authMode?: "login" | "register";
   setAuthMode?: (mode: "login" | "register") => void;
@@ -40,6 +47,7 @@ interface FullScreenSignupProps {
   onSubmit?: (e: React.FormEvent) => void;
   onGoogleSuccess?: (credential: string) => void;
   onGoogleError?: (err: string) => void;
+  onGitHubSuccess?: (userObj: any) => void;
   onClose?: () => void;
 }
  
@@ -135,6 +143,45 @@ export const FullScreenSignup: React.FC<FullScreenSignupProps> = ({
     const g = (window as any).google;
     if (g?.accounts?.id) {
       g.accounts.id.prompt();
+    }
+  };
+
+  const handleGitHubClick = async () => {
+    const githubClientId = import.meta.env.VITE_GITHUB_CLIENT_ID;
+    if (githubClientId) {
+      const redirectUri = encodeURIComponent(`${window.location.origin}/auth/github/callback`);
+      window.location.href = `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${redirectUri}&scope=user:email`;
+      return;
+    }
+
+    try {
+      const demoGithubUser = {
+        githubId: `gh_demo_${Date.now().toString().slice(-6)}`,
+        username: emailVal ? emailVal.split('@')[0] : `dev_${Math.floor(1000 + Math.random() * 9000)}`,
+        email: emailVal || `dev_${Math.floor(1000 + Math.random() * 9000)}@github.com`,
+        avatar: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png',
+        name: userVal || 'GitHub Developer'
+      };
+
+      const res = await fetch('/api/auth/github', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ githubUser: demoGithubUser })
+      });
+
+      const data = await res.json();
+      if (res.ok && data.token) {
+        localStorage.setItem('token', data.token);
+        if (onGitHubSuccess) {
+          onGitHubSuccess(data.user);
+        } else {
+          window.location.reload();
+        }
+      } else {
+        setErrorVal(data.msg || 'GitHub authentication failed');
+      }
+    } catch (err) {
+      setErrorVal('Failed to connect to authentication server');
     }
   };
   
@@ -245,12 +292,12 @@ export const FullScreenSignup: React.FC<FullScreenSignupProps> = ({
 
         .fs-card {
           width: 100%;
-          max-width: 1020px;
+          max-width: 820px;
           display: flex;
           flex-direction: row;
           background: #0f131a;
           border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 28px;
+          border-radius: 20px;
           overflow: hidden;
           box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
           position: relative;
@@ -280,20 +327,20 @@ export const FullScreenSignup: React.FC<FullScreenSignupProps> = ({
             linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
           background-size: 28px 28px;
           border-right: 1px solid rgba(255, 255, 255, 0.08);
-          padding: 48px;
+          padding: 32px;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
           overflow: hidden;
-          min-height: 520px;
+          min-height: 420px;
           box-sizing: border-box;
         }
 
         @media (max-width: 768px) {
           .fs-left-panel {
             width: 100%;
-            min-height: 280px;
-            padding: 32px;
+            min-height: 240px;
+            padding: 24px;
             border-right: none;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
           }
@@ -307,7 +354,7 @@ export const FullScreenSignup: React.FC<FullScreenSignupProps> = ({
         }
 
         .fs-title {
-          font-size: 44px;
+          font-size: 32px;
           font-weight: 700;
           line-height: 1.15;
           color: #ffffff;
@@ -316,11 +363,11 @@ export const FullScreenSignup: React.FC<FullScreenSignupProps> = ({
         }
 
         .fs-subtitle {
-          font-size: 14px;
+          font-size: 13px;
           font-weight: 300;
-          line-height: 1.6;
+          line-height: 1.5;
           color: #cbd5e1;
-          margin-top: 16px;
+          margin-top: 12px;
           margin-bottom: 0;
         }
 
@@ -328,7 +375,7 @@ export const FullScreenSignup: React.FC<FullScreenSignupProps> = ({
         .fs-right-panel {
           width: 50%;
           background: #0b0e14;
-          padding: 48px;
+          padding: 32px;
           display: flex;
           flex-direction: column;
           justify-content: center;
@@ -340,21 +387,21 @@ export const FullScreenSignup: React.FC<FullScreenSignupProps> = ({
         @media (max-width: 768px) {
           .fs-right-panel {
             width: 100%;
-            padding: 32px;
+            padding: 24px;
           }
         }
 
         .fs-close-btn {
           position: absolute;
-          top: 24px;
-          right: 24px;
+          top: 18px;
+          right: 18px;
           z-index: 50;
           background: rgba(255, 255, 255, 0.04);
           border: 1px solid rgba(255, 255, 255, 0.08);
           color: #9ca3af;
           border-radius: 50%;
-          width: 38px;
-          height: 38px;
+          width: 34px;
+          height: 34px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -377,13 +424,13 @@ export const FullScreenSignup: React.FC<FullScreenSignupProps> = ({
         .fs-form {
           display: flex;
           flex-direction: column;
-          gap: 20px;
+          gap: 14px;
         }
 
         .fs-form-header {
           display: flex;
           flex-direction: column;
-          margin-bottom: 28px;
+          margin-bottom: 16px;
         }
 
         .fs-logo-wrapper {
@@ -700,33 +747,45 @@ export const FullScreenSignup: React.FC<FullScreenSignupProps> = ({
             </h2>
           </div>
 
-          {/* Google Authentication Section */}
-          <div className="fs-google-wrapper">
-            <div
-              ref={googleBtnRef}
-              style={{
-                width: "100%",
-                display: import.meta.env.VITE_GOOGLE_CLIENT_ID ? "flex" : "none",
-                justifyContent: "center",
-              }}
-            />
-            {(!import.meta.env.VITE_GOOGLE_CLIENT_ID || !googleBtnRef.current?.hasChildNodes()) && (
-              <button
-                type="button"
-                onClick={handleCustomGoogleClick}
-                className="fs-google-btn"
-              >
-                <GoogleIcon />
-                <span>{mode === "login" ? "Sign in with Google" : "Sign up with Google"}</span>
-              </button>
-            )}
+          {/* Social Authentication Section (Google & GitHub) */}
+          <div className="fs-social-grid" style={{ display: 'flex', gap: '10px', width: '100%', marginBottom: '10px' }}>
+            <div style={{ flex: 1 }}>
+              <div
+                ref={googleBtnRef}
+                style={{
+                  width: "100%",
+                  display: import.meta.env.VITE_GOOGLE_CLIENT_ID ? "flex" : "none",
+                  justifyContent: "center",
+                }}
+              />
+              {(!import.meta.env.VITE_GOOGLE_CLIENT_ID || !googleBtnRef.current?.hasChildNodes()) && (
+                <button
+                  type="button"
+                  onClick={handleCustomGoogleClick}
+                  className="fs-google-btn"
+                >
+                  <GoogleIcon />
+                  <span>Google</span>
+                </button>
+              )}
+            </div>
 
-            {googleNotice && (
-              <div className="fs-notice-banner">
-                {googleNotice}
-              </div>
-            )}
+            <button
+              type="button"
+              onClick={handleGitHubClick}
+              className="fs-google-btn"
+              style={{ flex: 1, background: 'rgba(255, 255, 255, 0.08)', borderColor: 'rgba(255, 255, 255, 0.18)' }}
+            >
+              <GithubIcon />
+              <span>GitHub</span>
+            </button>
           </div>
+
+          {googleNotice && (
+            <div className="fs-notice-banner">
+              {googleNotice}
+            </div>
+          )}
 
           {/* Divider */}
           <div className="fs-divider">

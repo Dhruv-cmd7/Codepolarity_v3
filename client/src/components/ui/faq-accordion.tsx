@@ -61,14 +61,14 @@ export function FaqAccordion({
         </div>
       )}
 
-      <div className="flex flex-col gap-3.5 w-full">
+      <div className="flex flex-col gap-2.5 w-full">
         {items.map((item, index) => {
           const isActive = activeIndex === index;
           return (
             <div
               key={index}
               className={cn(
-                "w-full rounded-2xl border transition-all duration-300 overflow-hidden",
+                "w-full rounded-xl border transition-all duration-300 overflow-hidden",
                 isActive 
                   ? "border-l-4 border-l-sky-500 dark:border-l-sky-400 border-slate-200 dark:border-white/15 bg-white dark:bg-[#0f1420] shadow-md dark:shadow-xl dark:shadow-sky-950/20" 
                   : "border-l-4 border-l-transparent border-slate-200 dark:border-white/[0.08] bg-white/80 dark:bg-[#0f131a]/90 hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50 dark:hover:bg-[#151b26]"
@@ -76,14 +76,14 @@ export function FaqAccordion({
             >
               <button
                 type="button"
-                className="w-full flex items-center justify-between px-6 py-5 sm:py-6 text-left cursor-pointer outline-none select-none gap-4"
+                className="w-full flex items-center justify-between px-5 py-3 sm:py-3.5 text-left cursor-pointer outline-none select-none gap-3"
                 onClick={() => toggleItem(index)}
                 aria-expanded={isActive}
               >
-                <div className="flex items-center gap-4 sm:gap-5 min-w-0 flex-1">
+                <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
                   <span
                     className={cn(
-                      "font-mono text-xs sm:text-sm font-semibold w-9 h-7 flex items-center justify-center rounded-lg shrink-0 tracking-wider transition-all duration-200",
+                      "font-mono text-xs font-semibold w-7 h-6 flex items-center justify-center rounded-md shrink-0 tracking-wider transition-all duration-200",
                       isActive
                         ? "text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-950/90 border border-sky-200 dark:border-sky-800/60 shadow-sm"
                         : "text-slate-500 dark:text-neutral-400 bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800/80"
@@ -93,7 +93,7 @@ export function FaqAccordion({
                   </span>
                   <span
                     className={cn(
-                      "text-base sm:text-lg font-semibold tracking-tight transition-colors duration-200 leading-snug",
+                      "text-sm sm:text-base font-semibold tracking-tight transition-colors duration-200 leading-snug",
                       isActive
                         ? "text-slate-900 dark:text-white font-bold"
                         : "text-slate-700 dark:text-neutral-200 hover:text-slate-900 dark:hover:text-white"
@@ -105,13 +105,13 @@ export function FaqAccordion({
 
                 <div
                   className={cn(
-                    "shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border transition-all duration-300",
+                    "shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center border transition-all duration-300",
                     isActive
                       ? "bg-sky-50 dark:bg-sky-950 border-sky-200 dark:border-sky-700/80 text-sky-600 dark:text-sky-400 rotate-180 shadow-md"
                       : "bg-slate-100 dark:bg-neutral-900/80 border-slate-200 dark:border-neutral-800 text-slate-500 dark:text-neutral-400 hover:border-slate-300 dark:hover:border-neutral-700 hover:text-slate-900 dark:hover:text-white"
                   )}
                 >
-                  <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300" />
+                  <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300" />
                 </div>
               </button>
 
@@ -122,7 +122,7 @@ export function FaqAccordion({
                 )}
               >
                 <div className="overflow-hidden">
-                  <div className="faq-answer-content border-t border-slate-100 dark:border-white/[0.08] text-base sm:text-lg font-normal leading-relaxed text-slate-600 dark:text-neutral-300/90">
+                  <div className="faq-answer-content border-t border-slate-100 dark:border-white/[0.08] text-sm font-normal leading-relaxed text-slate-600 dark:text-neutral-300/90">
                     {item.answer}
                   </div>
                 </div>

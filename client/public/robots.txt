@@ -1,0 +1,10 @@
+# Robots.txt for Codepolarity
+# https://codepolarity.com
+
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# Host & Sitemap
+Host: https://codepolarity.com
+Sitemap: https://codepolarity.com/sitemap.xml
