@@ -5,13 +5,15 @@ import {
   User, 
   Eye, 
   EyeOff, 
-  ChevronLeft, 
+  ArrowLeft,
   AlertCircle,
   CheckCircle2,
-  ArrowRight
+  ArrowUpRight,
+  Sun,
+  Moon
 } from 'lucide-react';
-import dsLogo from '../assets/logo.svg';
-import { PerspectiveGrid } from '../components/ui/perspective-grid';
+import logoMark from '../assets/logo.svg';
+import logoText from '../assets/logo_text.svg';
 
 // Official Google Multi-Color G Icon
 const GoogleIcon = () => (
@@ -42,14 +44,16 @@ const GithubIcon = () => (
   </svg>
 );
 
-const SignInPage = ({
+export default function SignInPage({
   token,
   setToken,
   user,
   setUser,
   setCurrentPage,
-  initialMode = 'login'
-}) => {
+  initialMode = 'login',
+  theme = 'dark',
+  onToggleTheme,
+}) {
   const [mode, setMode] = useState(initialMode); // 'login' or 'register'
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -69,7 +73,31 @@ const SignInPage = ({
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
+  // Live Time Ticker
+  const [timeString, setTimeString] = useState('');
+
   const googleBtnRef = useRef(null);
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+
+      const offsetMinutes = -now.getTimezoneOffset();
+      const offsetHours = Math.floor(Math.abs(offsetMinutes) / 60);
+      const sign = offsetMinutes >= 0 ? '+' : '-';
+      const utcStr = `UTC${sign}${offsetHours}`;
+
+      setTimeString(`${hours}:${minutes} ${ampm}, ${utcStr}`);
+    };
+
+    updateTime();
+    const timer = setInterval(updateTime, 1000 * 30);
+    return () => clearInterval(timer);
+  }, []);
 
   // Password strength calculation (0 to 4)
   const getPasswordStrength = (pass) => {
@@ -120,10 +148,10 @@ const SignInPage = ({
           googleBtnRef.current.innerHTML = '';
           g.accounts.id.renderButton(googleBtnRef.current, {
             type: 'standard',
-            theme: 'filled_black',
+            theme: theme === 'dark' ? 'filled_black' : 'outline',
             size: 'large',
             text: mode === 'login' ? 'signin_with' : 'signup_with',
-            shape: 'pill',
+            shape: 'rectangular',
             width: 320,
             logo_alignment: 'left',
           });
@@ -147,7 +175,7 @@ const SignInPage = ({
         existingScript.addEventListener('load', initGsi);
       }
     }
-  }, [mode]);
+  }, [mode, theme]);
 
   const handleGoogleSuccess = async (credential) => {
     setIsLoading(true);
@@ -195,14 +223,12 @@ const SignInPage = ({
 
     const githubClientId = import.meta.env.VITE_GITHUB_CLIENT_ID;
     
-    // If client has real GitHub OAuth configured, redirect to GitHub OAuth authorize
     if (githubClientId) {
       const redirectUri = encodeURIComponent(`${window.location.origin}/auth/github/callback`);
       window.location.href = `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${redirectUri}&scope=user:email`;
       return;
     }
 
-    // Direct / Demo authentication via backend /api/auth/github endpoint
     try {
       const demoGithubUser = {
         githubId: `gh_demo_${Date.now().toString().slice(-6)}`,
@@ -291,7 +317,7 @@ const SignInPage = ({
       const data = await res.json();
       if (res.ok) {
         setToken(data.token);
-        setSuccessMsg(mode === 'login' ? 'Signed in successfully!' : 'Account created!');
+        setSuccessMsg(mode === 'login' ? 'Signed in successfully! Redirecting...' : 'Account created! Redirecting...');
         setTimeout(() => {
           setCurrentPage('roadmaps');
         }, 800);
@@ -306,75 +332,113 @@ const SignInPage = ({
   };
 
   return (
-    <div className="perspective-auth-root">
-      {/* Full Screen Perspective Grid Background */}
-      <div className="full-screen-grid-bg">
-        <PerspectiveGrid rows={32} cols={32} showOverlay={true} fadeRadius={95} />
+    <div className="brutalist-auth-page">
+      {/* Background Pixel Dissolution Art (Subtle Monochrome) */}
+      <div className="brutalist-auth-art" aria-hidden="true">
+        <div className="auth-ambient-glow" />
       </div>
 
-      {/* Dynamic Animated Ambient Lights */}
-      <div className="ambient-blob blob-cyan" />
-      <div className="ambient-blob blob-purple" />
+      {/* Top Header Bar matching Climblabs Hero */}
+      <header className="brutalist-auth-header">
+        {/* Left: Back Navigation Button */}
+        <div className="brutalist-auth-header-left">
+          <button 
+            type="button"
+            onClick={() => setCurrentPage('landing')}
+            className="brutalist-auth-nav-link"
+            aria-label="Return to platform overview"
+          >
+            <ArrowLeft size={15} />
+            <span className="brutalist-bracket">[</span>
+            <span>BACK</span>
+            <span className="brutalist-bracket">]</span>
+          </button>
+        </div>
 
-      {/* Floating Top Header Navigation */}
-      <header className="creative-header">
-        <button 
-          onClick={() => setCurrentPage('landing')}
-          className="glass-back-pill"
-          aria-label="Back to home"
-          title="Back to home"
-        >
-          <ChevronLeft size={16} />
-          <span>Return Home</span>
-        </button>
+        {/* Center: Real Codepolarity Brand Logo */}
+        <div className="brutalist-auth-header-center">
+          <a
+            href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              setCurrentPage('landing');
+            }}
+            className="brutalist-auth-logo"
+            aria-label="Codepolarity Home"
+          >
+            <img
+              src={logoMark}
+              alt="Codepolarity Icon"
+              className="h-[24px] sm:h-[26px] w-auto block shrink-0"
+              style={{ filter: theme === 'dark' ? 'brightness(0) invert(1)' : 'none' }}
+            />
+            <img
+              src={logoText}
+              alt="Codepolarity"
+              className="h-[20px] sm:h-[22px] w-auto block shrink-0"
+              style={{ filter: theme === 'dark' ? 'brightness(0) invert(1)' : 'none' }}
+            />
+          </a>
+        </div>
 
-        <a 
-          href="/" 
-          onClick={(e) => {
-            e.preventDefault();
-            setCurrentPage('landing');
-          }}
-          className="brand-badge-pill"
-          aria-label="Codepolarity"
-        >
-          <img src={dsLogo} alt="Codepolarity Icon" className="brand-logo-spark" />
-        </a>
-      </header>
-
-      {/* Centered Auth Card Container */}
-      <div className="perspective-grid-wrapper">
-        <div className="centered-auth-card">
-          
-          {/* Form Title */}
-          <div className="form-header-title">
-            <h2>{mode === 'login' ? 'Welcome Back' : 'Create Free Account'}</h2>
-            <p>
-              {mode === 'login'
-                ? 'Enter your credentials or use GitHub / Google sign in'
-                : 'Get full access to roadmaps, interactive editor & challenges'}
-            </p>
+        {/* Right: Time & UTC offset + Theme Toggle */}
+        <div className="brutalist-auth-header-right">
+          <div className="brutalist-auth-time" title="Live Local & UTC Time">
+            <span>{timeString || '10:55 PM, UTC+5'}</span>
           </div>
 
-          {/* Feedback Alerts */}
+          {onToggleTheme && (
+            <button
+              type="button"
+              onClick={onToggleTheme}
+              className="brutalist-auth-theme-btn"
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            >
+              {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+            </button>
+          )}
+        </div>
+      </header>
+
+      {/* Centered Brutalist Auth Card */}
+      <main className="brutalist-auth-main">
+        <div className="brutalist-auth-card">
+          
+          {/* Card Top Identifier Badge */}
+          <div className="brutalist-auth-card-top">
+            <div className="brutalist-auth-badge">
+              <span className="brutalist-bracket">[</span>
+              <span>AUTHENTICATION // {mode === 'login' ? 'LOGIN' : 'REGISTER'}</span>
+              <span className="brutalist-bracket">]</span>
+            </div>
+          </div>
+
+          {/* Title */}
+          <div className="brutalist-auth-heading">
+            <h1 className="brutalist-auth-title">
+              {mode === 'login' ? 'Access Workspace.' : 'Initialize Account.'}
+            </h1>
+          </div>
+
+          {/* Alert Banners */}
           {errorMsg && (
-            <div className="alert-box alert-error">
+            <div className="brutalist-alert error" role="alert">
               <AlertCircle size={15} />
               <span>{errorMsg}</span>
             </div>
           )}
 
           {successMsg && (
-            <div className="alert-box alert-success">
+            <div className="brutalist-alert success" role="alert">
               <CheckCircle2 size={15} />
               <span>{successMsg}</span>
             </div>
           )}
 
-          {/* Social Login Options (Google & GitHub Side-by-Side) */}
-          <div className="social-auth-grid">
-            
-            {/* Google Auth Button */}
-            <div className="social-btn-wrap">
+          {/* Social Auth Grid (Side by side) */}
+          <div className="brutalist-social-grid">
+            <div className="brutalist-social-wrap">
               <div
                 ref={googleBtnRef}
                 style={{
@@ -387,7 +451,7 @@ const SignInPage = ({
                 <button
                   type="button"
                   onClick={handleCustomGoogleClick}
-                  className="social-auth-btn google-btn"
+                  className="brutalist-social-btn"
                 >
                   <GoogleIcon />
                   <span>Google</span>
@@ -395,15 +459,14 @@ const SignInPage = ({
               )}
             </div>
 
-            {/* GitHub Auth Button */}
             <button
               type="button"
               onClick={handleGitHubLogin}
               disabled={isGitHubLoading}
-              className="social-auth-btn github-btn"
+              className="brutalist-social-btn"
             >
               {isGitHubLoading ? (
-                <div className="btn-spinner-dark" />
+                <div className="brutalist-spinner" />
               ) : (
                 <>
                   <GithubIcon />
@@ -411,152 +474,178 @@ const SignInPage = ({
                 </>
               )}
             </button>
-
           </div>
 
           {googleNotice && (
-            <p className="google-notice-info">{googleNotice}</p>
+            <p className="brutalist-notice">{googleNotice}</p>
           )}
 
           {/* Divider */}
-          <div className="auth-divider">
-            <div className="divider-line" />
-            <span className="divider-text">Or continue with credentials</span>
-            <div className="divider-line" />
+          <div className="brutalist-divider">
+            <span className="brutalist-divider-line" />
+            <span className="brutalist-divider-text">[ OR WITH CREDENTIALS ]</span>
+            <span className="brutalist-divider-line" />
           </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} noValidate className="auth-form-fields">
+          {/* Auth Form Fields */}
+          <form onSubmit={handleSubmit} noValidate className="brutalist-form" autoComplete="off">
+            {/* Hidden trap inputs to prevent browser autofilling saved credentials on page load */}
+            <input
+              type="text"
+              name="fake_user_trap"
+              style={{ display: 'none', position: 'absolute', opacity: 0, pointerEvents: 'none' }}
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+            />
+            <input
+              type="password"
+              name="fake_pass_trap"
+              style={{ display: 'none', position: 'absolute', opacity: 0, pointerEvents: 'none' }}
+              tabIndex={-1}
+              autoComplete="new-password"
+              aria-hidden="true"
+            />
             
-            {/* Username Input (Registration Mode) */}
+            {/* Username field for register mode */}
             {mode === 'register' && (
-              <div className="form-group-block">
-                <label className="input-label">Username</label>
-                <div className="input-field-wrapper">
-                  <User className="input-left-icon" size={15} />
+              <div className="brutalist-input-group brutalist-input-group-animated">
+                <div className="brutalist-label-row">
+                  <label className="brutalist-label">[ 01 // USERNAME ]</label>
+                </div>
+                <div className="brutalist-field-wrap">
+                  <User size={15} className="brutalist-field-icon" />
                   <input
                     type="text"
                     placeholder="e.g. alexdev"
                     value={username}
+                    autoComplete="off"
                     onChange={(e) => {
                       setUsername(e.target.value);
                       if (usernameError) setUsernameError('');
                     }}
-                    className={`tech-input ${usernameError ? 'is-error' : ''}`}
+                    className={`brutalist-input ${usernameError ? 'is-error' : ''}`}
                   />
                 </div>
-                {usernameError && <span className="field-error-text">{usernameError}</span>}
+                {usernameError && <span className="brutalist-field-error">{usernameError}</span>}
               </div>
             )}
 
-            {/* Email Address Field */}
-            <div className="form-group-block">
-              <label className="input-label">
-                {mode === 'login' ? 'Email or Username' : 'Email Address'}
-              </label>
-              <div className="input-field-wrapper">
-                <Mail className="input-left-icon" size={15} />
+            {/* Email field */}
+            <div className="brutalist-input-group">
+              <div className="brutalist-label-row">
+                <label className="brutalist-label">
+                  {mode === 'login' ? '[ 01 // EMAIL ]' : '[ 02 // EMAIL ]'}
+                </label>
+              </div>
+              <div className="brutalist-field-wrap">
+                <Mail size={15} className="brutalist-field-icon" />
                 <input
                   type="email"
-                  placeholder={mode === 'login' ? 'name@example.com or alexdev' : 'name@example.com'}
+                  placeholder="you@domain.com"
                   value={email}
+                  autoComplete="off"
                   onChange={(e) => {
                     setEmail(e.target.value);
                     if (emailError) setEmailError('');
                   }}
-                  className={`tech-input ${emailError ? 'is-error' : ''}`}
+                  className={`brutalist-input ${emailError ? 'is-error' : ''}`}
                 />
               </div>
-              {emailError && <span className="field-error-text">{emailError}</span>}
+              {emailError && <span className="brutalist-field-error">{emailError}</span>}
             </div>
 
-            {/* Password Field */}
-            <div className="form-group-block">
-              <div className="label-flex-row">
-                <label className="input-label">Password</label>
+            {/* Password field */}
+            <div className="brutalist-input-group">
+              <div className="brutalist-label-row">
+                <label className="brutalist-label">
+                  {mode === 'login' ? '[ 02 // PASSWORD ]' : '[ 03 // PASSWORD ]'}
+                </label>
                 {mode === 'login' && (
                   <button
                     type="button"
                     onClick={() => setErrorMsg('Password reset instructions sent to your email.')}
-                    className="forgot-password-link"
+                    className="brutalist-forgot-btn"
                   >
                     Forgot password?
                   </button>
                 )}
               </div>
-              <div className="input-field-wrapper">
-                <Lock className="input-left-icon" size={15} />
+              <div className="brutalist-field-wrap">
+                <Lock size={15} className="brutalist-field-icon" />
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="••••••••••••"
+                  placeholder="enter password"
                   value={password}
+                  autoComplete="new-password"
                   onChange={(e) => {
                     setPassword(e.target.value);
                     if (passwordError) setPasswordError('');
                   }}
-                  className={`tech-input ${passwordError ? 'is-error' : ''}`}
+                  className={`brutalist-input ${passwordError ? 'is-error' : ''}`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="password-toggle-eye"
+                  className="brutalist-eye-btn"
                   aria-label="Toggle password visibility"
                 >
                   {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
               </div>
-              {passwordError && <span className="field-error-text">{passwordError}</span>}
+              {passwordError && <span className="brutalist-field-error">{passwordError}</span>}
 
-              {/* Password Strength Bar (Register Mode) */}
+              {/* Password strength meter */}
               {mode === 'register' && password.length > 0 && (
-                <div className="strength-meter-wrap">
-                  <div className="meter-bars">
-                    <span className={`bar ${passwordStrength >= 1 ? 'bar-active bar-weak' : ''}`} />
-                    <span className={`bar ${passwordStrength >= 2 ? 'bar-active bar-medium' : ''}`} />
-                    <span className={`bar ${passwordStrength >= 3 ? 'bar-active bar-strong' : ''}`} />
-                    <span className={`bar ${passwordStrength >= 4 ? 'bar-active bar-super' : ''}`} />
+                <div className="brutalist-strength-wrap">
+                  <div className="brutalist-strength-bars">
+                    <span className={`bar ${passwordStrength >= 1 ? 'active' : ''}`} />
+                    <span className={`bar ${passwordStrength >= 2 ? 'active' : ''}`} />
+                    <span className={`bar ${passwordStrength >= 3 ? 'active' : ''}`} />
+                    <span className={`bar ${passwordStrength >= 4 ? 'active' : ''}`} />
                   </div>
-                  <span className="strength-label">
+                  <span className="brutalist-strength-text">
                     {passwordStrength <= 1 ? 'Weak' : passwordStrength === 2 ? 'Medium' : passwordStrength === 3 ? 'Strong' : 'Very Strong'}
                   </span>
                 </div>
               )}
             </div>
 
-            {/* Remember Me Option */}
-            <div className="options-row">
-              <label className="custom-checkbox-container">
+            {/* Remember Me Checkbox */}
+            <div className="brutalist-checkbox-row">
+              <label className="brutalist-checkbox-label">
                 <input
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="checkbox-input"
+                  className="brutalist-checkbox"
                 />
-                <span className="checkbox-text">Keep me logged in on this device</span>
+                <span>Persist session on this workstation</span>
               </label>
             </div>
 
-            {/* Action Submit Button */}
+            {/* Submit Action Button */}
             <button
               type="submit"
               disabled={isLoading}
-              className="submit-action-btn"
+              className="brutalist-submit-btn"
             >
               {isLoading ? (
-                <div className="btn-spinner" />
+                <div className="brutalist-spinner white" />
               ) : (
                 <>
-                  <span>{mode === 'login' ? 'Sign In to Dashboard' : 'Create Free Account'}</span>
-                  <ArrowRight size={16} className="btn-arrow" />
+                  <span className="brutalist-bracket">[</span>
+                  <span>{mode === 'login' ? 'AUTHENTICATE & ENTER ↗' : 'INITIALIZE ACCOUNT ↗'}</span>
+                  <span className="brutalist-bracket">]</span>
                 </>
               )}
             </button>
 
             {/* Footer Mode Switcher */}
-            <div className="auth-card-footer">
+            <div className="brutalist-card-footer">
               {mode === 'login' ? (
                 <span>
-                  New to Codepolarity?{' '}
+                  New engineer?{' '}
                   <button
                     type="button"
                     onClick={() => {
@@ -564,14 +653,14 @@ const SignInPage = ({
                       setErrorMsg('');
                       setSuccessMsg('');
                     }}
-                    className="footer-switch-link"
+                    className="brutalist-switch-link"
                   >
-                    Sign up for free
+                    [ CREATE ACCOUNT ↗ ]
                   </button>
                 </span>
               ) : (
                 <span>
-                  Already have an account?{' '}
+                  Already registered?{' '}
                   <button
                     type="button"
                     onClick={() => {
@@ -579,27 +668,27 @@ const SignInPage = ({
                       setErrorMsg('');
                       setSuccessMsg('');
                     }}
-                    className="footer-switch-link"
+                    className="brutalist-switch-link"
                   >
-                    Sign in instead
+                    [ SIGN IN ↗ ]
                   </button>
                 </span>
               )}
             </div>
-
           </form>
 
         </div>
-      </div>
+      </main>
 
-      {/* Styled JSX scoped CSS */}
+      {/* Scoped CSS matching the Climblabs & Brutalist design system */}
       <style dangerouslySetInnerHTML={{ __html: `
-        .perspective-auth-root {
-          min-height: 100vh;
+        .brutalist-auth-page {
+          height: 100vh;
+          max-height: 100vh;
           width: 100vw;
-          background: #06080d;
+          background: #0a0d14;
           color: #f3f4f6;
-          font-family: 'Google Sans Flex', 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          font-family: var(--font-sans, "Google Sans Flex", sans-serif);
           position: relative;
           display: flex;
           flex-direction: column;
@@ -607,599 +696,1002 @@ const SignInPage = ({
           overflow: hidden;
         }
 
-        /* Ambient Dynamic Glow Blobs */
-        .ambient-blob {
+        /* Subtle Ambient Glow & Precision Engineering Grid */
+        .brutalist-auth-art {
           position: absolute;
-          border-radius: 50%;
-          filter: blur(120px);
+          inset: 0;
           pointer-events: none;
-          opacity: 0.45;
-          animation: floatGlow 14s infinite alternate ease-in-out;
+          z-index: 1;
+          overflow: hidden;
+          background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+          background-size: 32px 32px;
+          mask-image: radial-gradient(ellipse at 50% 45%, black 40%, transparent 80%);
+          -webkit-mask-image: radial-gradient(ellipse at 50% 45%, black 40%, transparent 80%);
         }
 
-        .blob-cyan {
-          top: -100px;
-          left: -100px;
-          width: 500px;
-          height: 500px;
-          background: radial-gradient(circle, rgba(6, 182, 212, 0.25) 0%, transparent 70%);
+        .auth-ambient-glow {
+          position: absolute;
+          top: 15%;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 720px;
+          height: 460px;
+          background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.11) 0%, rgba(37, 99, 235, 0.03) 45%, transparent 70%);
+          filter: blur(95px);
+          animation: ambientPulse 16s ease-in-out infinite alternate;
         }
 
-        .blob-purple {
-          bottom: -150px;
-          right: -100px;
-          width: 600px;
-          height: 600px;
-          background: radial-gradient(circle, rgba(147, 51, 234, 0.2) 0%, transparent 70%);
+        @keyframes ambientPulse {
+          0% {
+            transform: translateX(-50%) scale(0.97);
+            opacity: 0.7;
+          }
+          100% {
+            transform: translateX(-50%) scale(1.05);
+            opacity: 0.95;
+          }
         }
 
-        @keyframes floatGlow {
-          0% { transform: translateY(0px) scale(1); }
-          100% { transform: translateY(-30px) scale(1.1); }
-        }
-
-        /* Header Bar */
-        .creative-header {
+        /* 1. Header Bar */
+        .brutalist-auth-header {
           position: relative;
-          z-index: 30;
+          z-index: 20;
+          display: grid;
+          grid-template-columns: 1fr auto 1fr;
+          align-items: center;
+          padding: 12px clamp(20px, 4vw, 40px);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+          background: rgba(10, 13, 20, 0.75);
+          backdrop-filter: blur(12px);
+          flex-shrink: 0;
+          animation: headerEntrance 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes headerEntrance {
+          0% {
+            opacity: 0;
+            transform: translateY(-12px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .brutalist-auth-header-left {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          padding: 32px 48px 20px;
-          box-sizing: border-box;
+          justify-content: flex-start;
+        }
+
+        .brutalist-auth-header-center {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .brutalist-auth-logo {
+          display: inline-flex;
+          align-items: center;
+          gap: 9px;
+          text-decoration: none;
+          cursor: pointer;
+          transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s;
+        }
+
+        .brutalist-auth-logo:hover {
+          transform: translateY(-1px);
+          opacity: 0.9;
+        }
+
+        .brutalist-auth-time {
+          font-family: var(--font-mono, monospace);
+          font-size: 0.76rem;
+          color: #94a3b8;
+          padding: 4px 11px;
+          border-radius: 4px;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.06);
+          letter-spacing: 0.03em;
         }
 
         @media (max-width: 640px) {
-          .creative-header {
-            padding: 20px 20px 16px;
+          .brutalist-auth-time {
+            display: none;
           }
         }
 
-        .glass-back-pill {
+        .brutalist-auth-header-right {
           display: flex;
           align-items: center;
-          gap: 6px;
-          padding: 8px 16px;
-          border-radius: 999px;
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(16px);
-          color: #d1d5db;
-          font-size: 13px;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all 0.25s ease;
-          font-family: inherit;
-        }
-
-        .glass-back-pill:hover {
-          background: rgba(255, 255, 255, 0.1);
-          color: #ffffff;
-          border-color: rgba(59, 130, 246, 0.4);
-          transform: translateX(-2px);
-        }
-
-        .brand-badge-pill {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          text-decoration: none;
-          background: transparent;
-          border: none;
-          padding: 0;
-          backdrop-filter: none;
-          margin-top: 4px;
-          transition: transform 0.25s ease;
-        }
-
-        .brand-badge-pill:hover {
-          transform: none;
-        }
-
-        .brand-logo-spark {
-          height: 22px;
-          width: auto;
-          filter: brightness(0) invert(1) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.85));
-        }
-
-        .theme-badge-btn {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          padding: 8px 14px;
-          border-radius: 999px;
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          color: #9ca3af;
-          font-size: 12px;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          font-family: inherit;
-        }
-
-        .theme-badge-btn:hover {
-          background: rgba(255, 255, 255, 0.08);
-          color: #ffffff;
-        }
-
-        /* Full Screen Grid Background Wrapper */
-        .full-screen-grid-bg {
-          position: absolute;
-          inset: 0;
-          width: 100%;
-          height: 100%;
-          z-index: 1;
-          overflow: hidden;
-          pointer-events: auto;
-        }
-
-        /* Perspective Grid Wrapper (Card Container) */
-        .perspective-grid-wrapper {
-          flex: 1;
-          width: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
-          z-index: 10;
-          pointer-events: none;
-        }
-
-        /* Centered Authentication Card */
-        .centered-auth-card {
-          width: 100%;
-          max-width: 360px;
-          background: rgba(13, 17, 26, 0.92);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 20px;
-          padding: 24px 22px;
-          box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85), 0 0 1px rgba(255, 255, 255, 0.1) inset;
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
-          animation: cardPopIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-          box-sizing: border-box;
-          margin: 16px auto;
-          pointer-events: auto;
-        }
-
-        @keyframes cardPopIn {
-          from { opacity: 0; transform: scale(0.96) translateY(16px); }
-          to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        @media (max-width: 480px) {
-          .centered-auth-card {
-            padding: 20px 16px;
-            max-width: 92%;
-          }
-        }
-
-        /* Mode Switcher Tabs */
-        .auth-mode-switcher {
-          display: flex;
-          background: #111622;
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 999px;
-          padding: 3px;
-          margin-bottom: 16px;
-        }
-
-        .mode-tab {
-          flex: 1;
-          padding: 6px 10px;
-          border: none;
-          background: transparent;
-          color: #9ca3af;
-          font-size: 12px;
-          font-weight: 600;
-          border-radius: 999px;
-          cursor: pointer;
-          transition: all 0.25s ease;
-          font-family: inherit;
-        }
-
-        .mode-tab.active {
-          background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-          color: #ffffff;
-          box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
-        }
-
-        /* Header Title */
-        .form-header-title {
-          text-align: center;
-          margin-bottom: 14px;
-        }
-
-        .form-header-title h2 {
-          font-size: 18px;
-          font-weight: 700;
-          color: #ffffff;
-          margin: 0 0 4px 0;
-          letter-spacing: -0.01em;
-        }
-
-        .form-header-title p {
-          font-size: 12px;
-          color: #9ca3af;
-          margin: 0;
-          line-height: 1.35;
-        }
-
-        /* Alert Boxes */
-        .alert-box {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          padding: 8px 12px;
-          border-radius: 10px;
-          font-size: 11.5px;
-          margin-bottom: 14px;
-        }
-
-        .alert-error {
-          background: rgba(239, 68, 68, 0.08);
-          border: 1px solid rgba(239, 68, 68, 0.25);
-          color: #f87171;
-        }
-
-        .alert-success {
-          background: rgba(16, 185, 129, 0.08);
-          border: 1px solid rgba(16, 185, 129, 0.25);
-          color: #34d399;
-        }
-
-        /* Social Auth Grid (Google & GitHub Side-by-Side) */
-        .social-auth-grid {
-          display: flex;
-          gap: 10px;
-          margin-bottom: 12px;
-        }
-
-        .social-btn-wrap {
-          flex: 1;
-        }
-
-        .social-auth-btn {
-          width: 100%;
-          height: 36px;
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          border-radius: 10px;
-          color: #ffffff;
-          font-size: 12.5px;
-          font-weight: 600;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-          font-family: inherit;
-        }
-
-        .social-auth-btn:hover {
-          background: rgba(255, 255, 255, 0.08);
-          border-color: rgba(255, 255, 255, 0.25);
-          transform: translateY(-1px);
-        }
-
-        .github-btn {
-          flex: 1;
-          background: #181d27;
-          border-color: rgba(255, 255, 255, 0.12);
-        }
-
-        .github-btn:hover {
-          background: #222938;
-          border-color: rgba(255, 255, 255, 0.25);
-        }
-
-        .google-notice-info {
-          font-size: 11px;
-          color: #93c5fd;
-          background: rgba(59, 130, 246, 0.08);
-          border: 1px solid rgba(59, 130, 246, 0.2);
-          padding: 6px 10px;
-          border-radius: 8px;
-          margin-bottom: 12px;
-          line-height: 1.35;
-        }
-
-        /* Divider */
-        .auth-divider {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          margin: 12px 0;
-        }
-
-        .divider-line {
-          flex: 1;
-          height: 1px;
-          background: rgba(255, 255, 255, 0.08);
-        }
-
-        .divider-text {
-          font-size: 10px;
-          text-transform: uppercase;
-          letter-spacing: 0.06em;
-          color: #6b7280;
-          font-weight: 700;
-        }
-
-        /* Form Fields */
-        .auth-form-fields {
-          display: flex;
-          flex-direction: column;
+          justify-content: flex-end;
           gap: 12px;
         }
 
-        .form-group-block {
+        .brutalist-auth-nav-link {
+          background: transparent;
+          border: none;
+          font-family: var(--font-mono, monospace);
+          font-size: 0.8rem;
+          font-weight: 700;
+          color: #3b82f6;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .brutalist-auth-nav-link:hover {
+          opacity: 0.85;
+          transform: translateY(-1px);
+        }
+
+        .brutalist-auth-theme-btn {
+          width: 34px;
+          height: 34px;
+          border-radius: 8px;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          color: #94a3b8;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .brutalist-auth-theme-btn:hover {
+          color: #ffffff;
+          border-color: rgba(255, 255, 255, 0.2);
+          transform: scale(1.05);
+        }
+
+        /* 2. Main Content & Card */
+        .brutalist-auth-main {
+          position: relative;
+          z-index: 10;
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 12px 20px;
+          min-height: 0;
+          overflow: hidden;
+        }
+
+        .brutalist-auth-card {
+          width: 100%;
+          max-width: 440px;
+          background: #0d111a;
+          border: 1px solid rgba(255, 255, 255, 0.09);
+          border-radius: 14px;
+          padding: 24px 28px 18px;
+          box-shadow: 0 20px 54px -14px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.03), 0 0 32px rgba(59, 130, 246, 0.05);
           display: flex;
           flex-direction: column;
+          gap: 14px;
+          box-sizing: border-box;
+          position: relative;
+          transition: border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+          animation: cardEntrance 1.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes cardEntrance {
+          0% {
+            opacity: 0;
+            transform: translateY(22px) scale(0.98);
+            filter: blur(4px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0px);
+          }
+        }
+
+        .brutalist-auth-card:hover {
+          border-color: rgba(59, 130, 246, 0.28);
+          box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.85), 0 0 38px rgba(59, 130, 246, 0.08);
+        }
+
+        .brutalist-auth-card-top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+          padding-bottom: 10px;
+          animation: cardChildFade 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+        }
+
+        .brutalist-auth-badge {
+          font-family: var(--font-mono, monospace);
+          font-size: 0.74rem;
+          font-weight: 700;
+          color: #3b82f6;
+          letter-spacing: 0.06em;
+          display: inline-flex;
+          align-items: center;
           gap: 4px;
         }
 
-        .label-flex-row {
+        .brutalist-auth-tag {
+          font-family: var(--font-mono, monospace);
+          font-size: 0.72rem;
+          color: #64748b;
+          font-weight: 600;
+          letter-spacing: 0.04em;
+        }
+
+        .brutalist-auth-heading {
           display: flex;
-          justify-content: space-between;
+          flex-direction: column;
+          gap: 5px;
+          animation: cardChildFade 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both;
+        }
+
+        .brutalist-auth-title {
+          font-family: var(--font-sans, "Google Sans Flex", sans-serif);
+          font-size: 1.5rem;
+          font-weight: 700;
+          letter-spacing: -0.025em;
+          color: #ffffff;
+          margin: 0;
+          line-height: 1.2;
+          display: flex;
           align-items: center;
         }
 
-        .input-label {
-          font-size: 11.5px;
-          font-weight: 600;
-          color: #d1d5db;
+        .brutalist-dot {
+          display: inline-block;
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: #3b82f6;
+          box-shadow: 0 0 8px rgba(59, 130, 246, 0.85);
+          margin-right: 10px;
+          flex-shrink: 0;
+          animation: dotHeartbeat 4.2s ease-in-out infinite;
         }
 
-        .forgot-password-link {
+        @keyframes dotHeartbeat {
+          0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.85), 0 0 2px #3b82f6;
+          }
+          50% {
+            opacity: 0.35;
+            transform: scale(0.9);
+            box-shadow: 0 0 3px rgba(59, 130, 246, 0.25);
+          }
+        }
+
+        .brutalist-auth-subtitle {
+          font-size: 0.83rem;
+          color: #94a3b8;
+          margin: 0;
+          line-height: 1.4;
+        }
+
+        /* Alerts */
+        .brutalist-alert {
+          display: flex;
+          align-items: center;
+          gap: 9px;
+          padding: 8px 12px;
+          border-radius: 6px;
+          font-size: 0.8rem;
+          font-weight: 500;
+          animation: alertPop 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes alertPop {
+          0% {
+            opacity: 0;
+            transform: translateY(-8px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .brutalist-alert.error {
+          background: rgba(239, 68, 68, 0.12);
+          border: 1px solid rgba(239, 68, 68, 0.3);
+          color: #fca5a5;
+        }
+
+        .brutalist-alert.success {
+          background: rgba(59, 130, 246, 0.12);
+          border: 1px solid rgba(59, 130, 246, 0.3);
+          color: #93c5fd;
+        }
+
+        /* Social Auth Grid */
+        .brutalist-social-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 10px;
+          animation: cardChildFade 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.26s both;
+        }
+
+        .brutalist-social-wrap {
+          display: flex;
+          width: 100%;
+        }
+
+        .brutalist-social-btn {
+          width: 100%;
+          height: 40px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          padding: 0 14px;
+          border-radius: 8px;
+          background: rgba(255, 255, 255, 0.035);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          color: #f1f5f9;
+          font-size: 0.84rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .brutalist-social-btn:hover {
+          background: rgba(255, 255, 255, 0.07);
+          border-color: rgba(59, 130, 246, 0.35);
+          transform: translateY(-1.5px);
+        }
+
+        .brutalist-social-btn:active {
+          transform: translateY(0);
+        }
+
+        .brutalist-notice {
+          font-size: 0.76rem;
+          color: #94a3b8;
+          margin: 0;
+          font-family: var(--font-mono, monospace);
+        }
+
+        /* Divider */
+        .brutalist-divider {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin: 2px 0;
+          animation: cardChildFade 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.34s both;
+        }
+
+        .brutalist-divider-line {
+          flex: 1;
+          height: 1px;
+          background: rgba(255, 255, 255, 0.07);
+        }
+
+        .brutalist-divider-text {
+          font-family: var(--font-mono, monospace);
+          font-size: 0.68rem;
+          font-weight: 600;
+          color: #64748b;
+          letter-spacing: 0.06em;
+          padding: 0 2px;
+        }
+
+        /* Form */
+        .brutalist-form {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          animation: cardChildFade 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.42s both;
+        }
+
+        .brutalist-input-group {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+        }
+
+        .brutalist-input-group-animated {
+          animation: fieldUnfold 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes fieldUnfold {
+          0% {
+            opacity: 0;
+            transform: translateY(-8px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes cardChildFade {
+          0% {
+            opacity: 0;
+            transform: translateY(8px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .brutalist-label-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .brutalist-label {
+          font-family: var(--font-mono, monospace);
+          font-size: 0.72rem;
+          font-weight: 700;
+          color: #94a3b8;
+          letter-spacing: 0.05em;
+        }
+
+        .brutalist-forgot-btn {
           background: transparent;
           border: none;
-          color: #60a5fa;
-          font-size: 11px;
+          font-family: var(--font-mono, monospace);
+          font-size: 0.72rem;
+          color: #3b82f6;
           cursor: pointer;
           padding: 0;
-          font-family: inherit;
+          transition: opacity 0.2s;
         }
 
-        .forgot-password-link:hover {
+        .brutalist-forgot-btn:hover {
+          opacity: 0.8;
           text-decoration: underline;
         }
 
-        .input-field-wrapper {
+        .brutalist-field-wrap {
           position: relative;
-          width: 100%;
+          display: flex;
+          align-items: center;
         }
 
-        .input-left-icon {
+        .brutalist-field-wrap:focus-within .brutalist-field-icon {
+          color: #3b82f6;
+          transform: scale(1.1);
+        }
+
+        .brutalist-field-icon {
           position: absolute;
           left: 12px;
-          top: 50%;
-          transform: translateY(-50%);
-          color: #6b7280;
+          color: #64748b;
           pointer-events: none;
-          transition: color 0.2s ease;
+          transition: color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .tech-input {
+        .brutalist-input {
           width: 100%;
-          background: #111622;
-          border: 1px solid rgba(255, 255, 255, 0.09);
-          border-radius: 10px;
-          padding: 9px 12px 9px 36px;
+          height: 40px;
+          background: #090d14;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 8px;
+          padding: 0 38px 0 36px;
+          font-size: 0.88rem;
           color: #ffffff;
-          font-size: 12.5px;
           font-family: inherit;
-          box-sizing: border-box;
           outline: none;
-          transition: all 0.2s ease;
+          box-sizing: border-box;
+          transition: border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Prevent Chrome/Edge/Safari autofill from overriding background with light blue */
-        .tech-input:-webkit-autofill,
-        .tech-input:-webkit-autofill:hover, 
-        .tech-input:-webkit-autofill:focus, 
-        .tech-input:-webkit-autofill:active {
-          -webkit-box-shadow: 0 0 0 1000px #111622 inset !important;
-          -webkit-text-fill-color: #ffffff !important;
-          caret-color: #ffffff !important;
-          transition: background-color 5000s ease-in-out 0s;
+        .brutalist-input::placeholder {
+          color: rgba(148, 163, 184, 0.4);
+          opacity: 1;
+          transition: opacity 0.2s ease, transform 0.2s ease;
         }
 
-        .tech-input::placeholder {
-          color: #4b5563;
+        .brutalist-input:focus::placeholder {
+          opacity: 0;
+          transform: translateX(4px);
         }
 
-        .tech-input:focus {
+        .brutalist-input:focus {
           border-color: #3b82f6;
-          background: #151c2c;
-          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+          background-color: #0b1019;
+          box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.22), 0 0 14px rgba(59, 130, 246, 0.12);
         }
 
-        .tech-input:focus ~ .input-left-icon,
-        .tech-input:focus + .input-left-icon {
-          color: #60a5fa;
+        .brutalist-input.is-error {
+          border-color: #ef4444;
         }
 
-        .tech-input.is-error {
-          border-color: rgba(239, 68, 68, 0.6);
-        }
-
-        .field-error-text {
-          font-size: 10.5px;
-          color: #f87171;
-        }
-
-        .password-toggle-eye {
-          position: absolute;
-          right: 10px;
-          top: 50%;
-          transform: translateY(-50%);
-          background: transparent;
-          border: none;
-          color: #6b7280;
-          cursor: pointer;
-          padding: 4px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .password-toggle-eye:hover {
-          color: #60a5fa;
-        }
-
-        /* Strength Meter */
-        .strength-meter-wrap {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          margin-top: 3px;
-        }
-
-        .meter-bars {
-          flex: 1;
-          display: flex;
-          gap: 3px;
-        }
-
-        .bar {
-          flex: 1;
-          height: 3px;
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 2px;
-          transition: all 0.3s ease;
-        }
-
-        .bar-active.bar-weak { background: #ef4444; }
-        .bar-active.bar-medium { background: #f59e0b; }
-        .bar-active.bar-strong { background: #10b981; }
-        .bar-active.bar-super { background: #3b82f6; }
-
-        .strength-label {
-          font-size: 10px;
-          color: #9ca3af;
-          font-weight: 600;
-          min-width: 55px;
-          text-align: right;
-        }
-
-        /* Options Row */
-        .options-row {
-          display: flex;
-          align-items: center;
+        .brutalist-field-error {
+          font-size: 0.74rem;
+          color: #ef4444;
           margin-top: 1px;
         }
 
-        .custom-checkbox-container {
+        .brutalist-eye-btn {
+          position: absolute;
+          right: 10px;
+          background: transparent;
+          border: none;
+          color: #64748b;
+          cursor: pointer;
           display: flex;
           align-items: center;
-          gap: 6px;
-          cursor: pointer;
+          padding: 3px;
+          transition: color 0.25s, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .checkbox-input {
-          accent-color: #2563eb;
-          width: 13px;
-          height: 13px;
-          border-radius: 3px;
-          cursor: pointer;
+        .brutalist-eye-btn:hover {
+          color: #cbd5e1;
+          transform: scale(1.1);
         }
 
-        .checkbox-text {
-          font-size: 11.5px;
-          color: #9ca3af;
-        }
-
-        /* Primary Action Submit Button */
-        .submit-action-btn {
-          width: 100%;
-          background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
-          color: #090c12;
-          border: none;
-          padding: 9px 16px;
-          border-radius: 999px;
-          font-size: 13px;
-          font-weight: 700;
-          cursor: pointer;
-          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-          margin-top: 4px;
+        /* Strength Meter */
+        .brutalist-strength-wrap {
           display: flex;
+          align-items: center;
+          gap: 9px;
+          margin-top: 2px;
+        }
+
+        .brutalist-strength-bars {
+          display: flex;
+          gap: 4px;
+          flex: 1;
+        }
+
+        .brutalist-strength-bars .bar {
+          height: 3px;
+          flex: 1;
+          background: rgba(255, 255, 255, 0.08);
+          border-radius: 2px;
+          transition: background 0.3s ease;
+        }
+
+        .brutalist-strength-bars .bar.active {
+          background: #3b82f6;
+        }
+
+        .brutalist-strength-text {
+          font-family: var(--font-mono, monospace);
+          font-size: 0.7rem;
+          color: #94a3b8;
+        }
+
+        /* Checkbox */
+        .brutalist-checkbox-row {
+          display: flex;
+          align-items: center;
+          margin: 1px 0 2px;
+        }
+
+        .brutalist-checkbox-label {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.81rem;
+          color: #94a3b8;
+          cursor: pointer;
+          user-select: none;
+          transition: color 0.25s;
+        }
+
+        .brutalist-checkbox-label:hover {
+          color: #e2e8f0;
+        }
+
+        .brutalist-checkbox {
+          accent-color: #3b82f6;
+          width: 14px;
+          height: 14px;
+          cursor: pointer;
+          border-radius: 4px;
+        }
+
+        /* Submit Button */
+        .brutalist-submit-btn {
+          width: 100%;
+          height: 42px;
+          background: #2563eb;
+          color: #ffffff;
+          border: none;
+          border-radius: 8px;
+          padding: 0 18px;
+          font-family: var(--font-mono, monospace);
+          font-size: 0.84rem;
+          font-weight: 700;
+          letter-spacing: 0.04em;
+          cursor: pointer;
+          display: inline-flex;
           align-items: center;
           justify-content: center;
           gap: 6px;
-          font-family: inherit;
-          box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
+          margin-top: 2px;
+          box-shadow: none;
+          transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .submit-action-btn:hover {
-          background: #ffffff;
-          transform: translateY(-1px);
-          box-shadow: 0 6px 20px rgba(255, 255, 255, 0.25);
+        .brutalist-submit-btn:hover {
+          background: #1d4ed8;
+          transform: translateY(-1.5px);
+          box-shadow: none;
         }
 
-        .submit-action-btn:hover .btn-arrow {
-          transform: translateX(3px);
+        .brutalist-submit-btn:active {
+          transform: translateY(0);
+          background: #1e40af;
+          box-shadow: none;
         }
 
-        .btn-arrow {
-          transition: transform 0.2s ease;
-        }
-
-        .submit-action-btn:disabled {
-          opacity: 0.6;
+        .brutalist-submit-btn:disabled {
+          opacity: 0.7;
           cursor: not-allowed;
           transform: none;
         }
 
-        .btn-spinner {
-          width: 14px;
-          height: 14px;
-          border: 2px solid rgba(0, 0, 0, 0.2);
-          border-top-color: #000;
-          border-radius: 50%;
-          animation: spin 0.8s linear infinite;
+        .brutalist-bracket {
+          font-weight: 800;
         }
 
-        .btn-spinner-dark {
-          width: 14px;
-          height: 14px;
+        /* Footer Switcher */
+        .brutalist-card-footer {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.82rem;
+          color: #94a3b8;
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
+          padding-top: 12px;
+          margin-top: 2px;
+          animation: cardChildFade 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+        }
+
+        .brutalist-switch-link {
+          background: transparent;
+          border: none;
+          color: #3b82f6;
+          font-family: var(--font-mono, monospace);
+          font-weight: 700;
+          font-size: 0.83rem;
+          cursor: pointer;
+          padding: 0;
+          margin-left: 5px;
+          transition: opacity 0.2s;
+        }
+
+        .brutalist-switch-link:hover {
+          opacity: 0.85;
+          text-decoration: underline;
+        }
+
+        /* Spinner */
+        .brutalist-spinner {
+          width: 15px;
+          height: 15px;
           border: 2px solid rgba(255, 255, 255, 0.2);
-          border-top-color: #fff;
+          border-top-color: #3b82f6;
           border-radius: 50%;
-          animation: spin 0.8s linear infinite;
+          animation: spin 0.7s linear infinite;
+        }
+
+        .brutalist-spinner.white {
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          border-top-color: #ffffff;
         }
 
         @keyframes spin {
           to { transform: rotate(360deg); }
         }
 
-        /* Footer Prompt */
-        .auth-card-footer {
-          text-align: center;
-          font-size: 11.5px;
-          color: #6b7280;
-          margin-top: 6px;
+        /* ────────────────── Comprehensive Light Mode Polishing ────────────────── */
+        [data-theme="light"] .brutalist-auth-page {
+          background: #f8fafc;
+          color: #0f172a;
         }
 
-        .footer-switch-link {
-          background: transparent;
-          border: none;
-          color: #60a5fa;
+        /* Ambient background art in light mode */
+        [data-theme="light"] .brutalist-auth-art {
+          background-image: radial-gradient(rgba(15, 23, 42, 0.065) 1px, transparent 1px);
+          background-size: 32px 32px;
+          mask-image: radial-gradient(ellipse at 50% 45%, black 45%, transparent 80%);
+          -webkit-mask-image: radial-gradient(ellipse at 50% 45%, black 45%, transparent 80%);
+        }
+
+        [data-theme="light"] .auth-ambient-glow {
+          background: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.07) 0%, rgba(59, 130, 246, 0.02) 50%, transparent 70%);
+          filter: blur(100px);
+        }
+
+        /* Top Header Bar */
+        [data-theme="light"] .brutalist-auth-header {
+          background: rgba(255, 255, 255, 0.88);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+          box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+        }
+
+        [data-theme="light"] .brutalist-auth-nav-link {
+          color: #2563eb;
+        }
+
+        [data-theme="light"] .brutalist-auth-nav-link:hover {
+          color: #1d4ed8;
+          opacity: 1;
+        }
+
+        [data-theme="light"] .brutalist-auth-logo img {
+          filter: none !important;
+        }
+
+        [data-theme="light"] .brutalist-auth-time {
+          background: rgba(15, 23, 42, 0.04);
+          border: 1px solid rgba(15, 23, 42, 0.08);
+          color: #475569;
+          font-weight: 600;
+        }
+
+        [data-theme="light"] .brutalist-auth-theme-btn {
+          background: rgba(15, 23, 42, 0.04);
+          border: 1px solid rgba(15, 23, 42, 0.09);
+          color: #334155;
+        }
+
+        [data-theme="light"] .brutalist-auth-theme-btn:hover {
+          background: rgba(15, 23, 42, 0.08);
+          border-color: rgba(15, 23, 42, 0.18);
+          color: #0f172a;
+        }
+
+        /* Brutalist Auth Card */
+        [data-theme="light"] .brutalist-auth-card {
+          background: #ffffff;
+          border: 1px solid rgba(15, 23, 42, 0.09);
+          box-shadow: 
+            0 20px 45px -12px rgba(15, 23, 42, 0.08),
+            0 0 0 1px rgba(15, 23, 42, 0.02),
+            0 4px 12px -2px rgba(15, 23, 42, 0.03);
+        }
+
+        [data-theme="light"] .brutalist-auth-card:hover {
+          border-color: rgba(37, 99, 235, 0.35);
+          box-shadow: 
+            0 24px 50px -10px rgba(15, 23, 42, 0.1),
+            0 0 0 1px rgba(37, 99, 235, 0.15),
+            0 0 28px rgba(37, 99, 235, 0.06);
+        }
+
+        [data-theme="light"] .brutalist-auth-card-top {
+          border-bottom: 1px solid rgba(15, 23, 42, 0.07);
+        }
+
+        [data-theme="light"] .brutalist-auth-badge {
+          color: #2563eb;
+        }
+
+        [data-theme="light"] .brutalist-auth-tag {
+          color: #64748b;
+        }
+
+        [data-theme="light"] .brutalist-dot {
+          background: #2563eb;
+          box-shadow: 0 0 8px rgba(37, 99, 235, 0.5);
+        }
+
+        [data-theme="light"] .brutalist-auth-title {
+          color: #0f172a;
+        }
+
+        [data-theme="light"] .brutalist-auth-subtitle {
+          color: #64748b;
+        }
+
+        /* Social OAuth Buttons */
+        [data-theme="light"] .brutalist-social-btn {
+          background: #ffffff;
+          border: 1px solid rgba(15, 23, 42, 0.11);
+          color: #1e293b;
+          box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+        }
+
+        [data-theme="light"] .brutalist-social-btn:hover {
+          background: #f8fafc;
+          border-color: rgba(37, 99, 235, 0.4);
+          color: #0f172a;
+          transform: translateY(-1.5px);
+          box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.07);
+        }
+
+        [data-theme="light"] .brutalist-social-btn:active {
+          background: #f1f5f9;
+          transform: translateY(0);
+        }
+
+        [data-theme="light"] .brutalist-notice {
+          color: #64748b;
+        }
+
+        /* Divider */
+        [data-theme="light"] .brutalist-divider-line {
+          background: rgba(15, 23, 42, 0.09);
+        }
+
+        [data-theme="light"] .brutalist-divider-text {
+          color: #64748b;
+        }
+
+        /* Labels & Icons */
+        [data-theme="light"] .brutalist-label {
+          color: #475569;
           font-weight: 700;
-          cursor: pointer;
-          padding: 0;
-          font-family: inherit;
-          font-size: inherit;
         }
 
-        .footer-switch-link:hover {
-          text-decoration: underline;
+        [data-theme="light"] .brutalist-forgot-btn {
+          color: #2563eb;
         }
-      ` }} />
+
+        [data-theme="light"] .brutalist-forgot-btn:hover {
+          color: #1d4ed8;
+        }
+
+        [data-theme="light"] .brutalist-field-icon {
+          color: #64748b;
+        }
+
+        [data-theme="light"] .brutalist-field-wrap:focus-within .brutalist-field-icon {
+          color: #2563eb;
+        }
+
+        /* Form Inputs */
+        [data-theme="light"] .brutalist-input {
+          background: #f8fafc;
+          border: 1px solid rgba(15, 23, 42, 0.12);
+          color: #0f172a;
+          box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.03);
+        }
+
+        [data-theme="light"] .brutalist-input::placeholder {
+          color: rgba(15, 23, 42, 0.32);
+          opacity: 1;
+          transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        [data-theme="light"] .brutalist-input:focus::placeholder {
+          opacity: 0;
+          transform: translateX(4px);
+        }
+
+        [data-theme="light"] .brutalist-input:hover {
+          background: #ffffff;
+          border-color: rgba(15, 23, 42, 0.25);
+        }
+
+        [data-theme="light"] .brutalist-input:focus {
+          background-color: #ffffff !important;
+          border-color: #2563eb !important;
+          color: #0f172a !important;
+          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15), 0 1px 2px rgba(15, 23, 42, 0.05) !important;
+        }
+
+        [data-theme="light"] .brutalist-input.is-error {
+          background: #fef2f2 !important;
+          border-color: #ef4444 !important;
+          color: #0f172a !important;
+        }
+
+        [data-theme="light"] .brutalist-field-error {
+          color: #dc2626;
+        }
+
+        /* Browser Autofill Support in Light Mode */
+        [data-theme="light"] .brutalist-input:-webkit-autofill,
+        [data-theme="light"] .brutalist-input:-webkit-autofill:hover,
+        [data-theme="light"] .brutalist-input:-webkit-autofill:focus,
+        [data-theme="light"] .brutalist-input:-webkit-autofill:active {
+          -webkit-box-shadow: 0 0 0 1000px #f8fafc inset !important;
+          -webkit-text-fill-color: #0f172a !important;
+          caret-color: #0f172a !important;
+          border-color: rgba(15, 23, 42, 0.14) !important;
+        }
+
+        [data-theme="light"] .brutalist-input:focus:-webkit-autofill {
+          -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+          border-color: #2563eb !important;
+        }
+
+        [data-theme="light"] .brutalist-eye-btn {
+          color: #64748b;
+        }
+
+        [data-theme="light"] .brutalist-eye-btn:hover {
+          color: #0f172a;
+        }
+
+        /* Password Strength Meter */
+        [data-theme="light"] .brutalist-strength-bars .bar {
+          background: rgba(15, 23, 42, 0.1);
+        }
+
+        [data-theme="light"] .brutalist-strength-bars .bar.active {
+          background: #2563eb;
+        }
+
+        [data-theme="light"] .brutalist-strength-text {
+          color: #64748b;
+        }
+
+        /* Checkbox */
+        [data-theme="light"] .brutalist-checkbox {
+          accent-color: #2563eb;
+        }
+
+        [data-theme="light"] .brutalist-checkbox-label {
+          color: #475569;
+        }
+
+        [data-theme="light"] .brutalist-checkbox-label:hover {
+          color: #0f172a;
+        }
+
+        /* Submit Button */
+        [data-theme="light"] .brutalist-submit-btn {
+          background: #2563eb;
+          color: #ffffff;
+          box-shadow: 0 2px 8px -1px rgba(37, 99, 235, 0.35);
+        }
+
+        [data-theme="light"] .brutalist-submit-btn:hover {
+          background: #1d4ed8;
+          box-shadow: 0 4px 14px -2px rgba(37, 99, 235, 0.45);
+        }
+
+        [data-theme="light"] .brutalist-submit-btn:active {
+          background: #1e40af;
+          box-shadow: none;
+        }
+
+        /* Footer */
+        [data-theme="light"] .brutalist-card-footer {
+          border-top: 1px solid rgba(15, 23, 42, 0.07);
+          color: #64748b;
+        }
+
+        [data-theme="light"] .brutalist-switch-link {
+          color: #2563eb;
+        }
+
+        [data-theme="light"] .brutalist-switch-link:hover {
+          color: #1d4ed8;
+        }
+
+        /* Alerts */
+        [data-theme="light"] .brutalist-alert.error {
+          background: #fef2f2;
+          border: 1px solid rgba(239, 68, 68, 0.25);
+          color: #b91c1c;
+        }
+
+        [data-theme="light"] .brutalist-alert.success {
+          background: #eff6ff;
+          border: 1px solid rgba(37, 99, 235, 0.25);
+          color: #1d4ed8;
+        }
+
+        /* Spinners */
+        [data-theme="light"] .brutalist-spinner {
+          border-color: rgba(15, 23, 42, 0.15);
+          border-top-color: #2563eb;
+        }
+
+        [data-theme="light"] .brutalist-spinner.white {
+          border-color: rgba(255, 255, 255, 0.3);
+          border-top-color: #ffffff;
+        }
+      `}} />
     </div>
   );
-};
-
-export default SignInPage;
+}

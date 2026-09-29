@@ -207,7 +207,7 @@ export function AwwwardsNav({
                           link.onClick(e);
                         }
                       }}
-                      className="group flex items-center text-sm font-medium text-neutral-700 hover:text-black dark:text-neutral-300 dark:hover:text-white transition-all duration-150 cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis py-0.5 hover:translate-x-1"
+                      className="group flex items-center text-sm font-medium text-neutral-700 hover:text-black dark:text-neutral-300 dark:hover:text-white transition-all duration-75 ease-out cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis py-0.5 hover:translate-x-1"
                     >
                       {link.label}
                     </a>
@@ -236,7 +236,7 @@ export function AwwwardsNav({
             }
           }}
           className={cn(
-            "flex h-full min-w-[100px] shrink-0 cursor-pointer select-none items-center justify-center gap-2 rounded-xl border px-3.5 text-xs sm:text-sm font-medium transition-all duration-200 overflow-hidden active:scale-[0.97]",
+            "flex h-full min-w-[100px] shrink-0 cursor-pointer select-none items-center justify-center gap-2 rounded-xl border px-3.5 text-xs sm:text-sm font-medium transition-all duration-100 ease-out overflow-hidden active:scale-[0.97]",
             "border-black/10 bg-black/[0.04] text-neutral-700 hover:bg-black hover:text-white hover:border-black",
             "dark:border-white/10 dark:bg-white/[0.05] dark:text-neutral-200 dark:hover:bg-white dark:hover:text-black dark:hover:border-white dark:hover:shadow-[0_2px_12px_rgba(255,255,255,0.15)]",
             showClose && "bg-black text-white border-black dark:bg-white dark:text-black dark:border-white font-semibold",
@@ -256,7 +256,7 @@ export function AwwwardsNav({
             <div
               key={item.label}
               className={cn(
-                "group flex h-full flex-1 items-center justify-center rounded-xl border transition-all duration-200 overflow-hidden cursor-pointer active:scale-[0.97]",
+                "group flex h-full flex-1 items-center justify-center rounded-xl border transition-all duration-100 ease-out overflow-hidden cursor-pointer active:scale-[0.97]",
                 // Inactive pill: subtle website surface color & border
                 "border-black/10 bg-black/[0.03] hover:bg-black hover:text-white hover:border-black",
                 "dark:border-white/10 dark:bg-white/[0.05] dark:hover:bg-white dark:hover:text-black dark:hover:border-white dark:hover:shadow-[0_2px_12px_rgba(255,255,255,0.15)]",
@@ -273,7 +273,7 @@ export function AwwwardsNav({
                   }
                 }}
                 className={cn(
-                  "w-full h-full flex items-center justify-center px-2 sm:px-3 text-center text-xs sm:text-sm font-medium transition-colors cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis select-none",
+                  "w-full h-full flex items-center justify-center px-2 sm:px-3 text-center text-xs sm:text-sm font-medium transition-colors duration-75 ease-out cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis select-none",
                   item.active
                     ? "text-black dark:text-white group-hover:text-white dark:group-hover:text-black"
                     : "text-neutral-700 dark:text-neutral-300 group-hover:text-white dark:group-hover:text-black"
@@ -292,7 +292,7 @@ export function AwwwardsNav({
               aria-label="Toggle theme"
               title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
               className={cn(
-                "group flex h-full w-[44px] shrink-0 items-center justify-center rounded-xl border transition-all duration-200 cursor-pointer active:scale-[0.97]",
+                "group flex h-full w-[44px] shrink-0 items-center justify-center rounded-xl border transition-all duration-100 ease-out cursor-pointer active:scale-[0.97]",
                 "border-black/10 bg-black/[0.03] text-neutral-700 hover:bg-black hover:text-white hover:border-black",
                 "dark:border-white/10 dark:bg-white/[0.05] dark:text-neutral-300 dark:hover:bg-white dark:hover:text-black dark:hover:border-white dark:hover:shadow-[0_2px_12px_rgba(255,255,255,0.15)]"
               )}

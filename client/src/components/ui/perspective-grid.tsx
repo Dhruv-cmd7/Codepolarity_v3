@@ -10,6 +10,8 @@ export interface PerspectiveGridProps extends React.HTMLAttributes<HTMLDivElemen
   cols?: number;
   /** Fallback grid dimension if rows or cols are not provided (default: 20) */
   gridSize?: number;
+  /** Scale factor of the perspective plane (default: 1.4) */
+  scale?: number;
   /** Whether to show the gradient overlay (default: true) */
   showOverlay?: boolean;
   /** Fade radius percentage for the gradient overlay (default: 80) */
@@ -24,6 +26,7 @@ export function PerspectiveGrid({
   rows = 20,
   cols = 20,
   gridSize,
+  scale = 1.4,
   showOverlay = true,
   fadeRadius = 80,
   className,
@@ -62,8 +65,7 @@ export function PerspectiveGrid({
         style={{
           left: "50%",
           top: "48%",
-          transform:
-            "translate(-50%, -50%) rotateX(35deg) rotateY(-8deg) rotateZ(18deg) scale(1.75)",
+          transform: `translate(-50%, -50%) rotateX(35deg) rotateY(-8deg) rotateZ(18deg) scale(${scale})`,
           transformStyle: "preserve-3d",
           gridTemplateColumns: `repeat(${colCount}, 1fr)`,
           gridTemplateRows: `repeat(${rowCount}, 1fr)`,
@@ -73,7 +75,7 @@ export function PerspectiveGrid({
           tiles.map((_, i) => (
             <div
               key={i}
-              className="tile min-h-[1px] min-w-[1px] border border-white/[0.07] bg-transparent transition-colors duration-[1200ms] hover:duration-0 hover:bg-sky-400/25 hover:border-sky-400/70 hover:shadow-[0_0_12px_rgba(56,189,248,0.35)] cursor-pointer"
+              className="tile min-h-[1px] min-w-[1px] border border-black/[0.06] dark:border-white/[0.07] bg-transparent transition-colors duration-[1200ms] hover:duration-0 hover:bg-sky-400/20 dark:hover:bg-sky-400/25 hover:border-sky-400/50 dark:hover:border-sky-400/70 hover:shadow-[0_0_12px_rgba(56,189,248,0.25)] dark:hover:shadow-[0_0_12px_rgba(56,189,248,0.35)] cursor-pointer"
             />
           ))}
       </div>

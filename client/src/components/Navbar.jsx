@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { Sun, Moon } from 'lucide-react';
 import logoMark from '../assets/logo.svg';
 import logoText from '../assets/logo_text.svg';
 import AwwwardsNav from './AwwwardsNav';
@@ -12,15 +13,6 @@ const Navbar = ({
   theme = 'dark',
   onToggleTheme,
 }) => {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 30);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   // Navigation items for the bottom collapsed bar
   const navItems = [
@@ -111,22 +103,28 @@ const Navbar = ({
     },
   ];
 
-  const headerItemStyle = (isScrolled) => ({
-    transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease',
-    transform: isScrolled ? 'translateY(-24px) scale(0.92)' : 'translateY(0px) scale(1)',
-    opacity: isScrolled ? 0 : 1,
-    filter: isScrolled ? 'blur(4px)' : 'blur(0px)',
-    pointerEvents: isScrolled ? 'none' : 'auto',
-    willChange: 'transform, opacity, filter',
-  });
+  const [scrolledPastHero, setScrolledPastHero] = React.useState(false);
+
+  React.useEffect(() => {
+    if (currentPage !== 'landing') {
+      setScrolledPastHero(true);
+      return;
+    }
+    const handleScroll = () => {
+      setScrolledPastHero(window.scrollY > 280);
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [currentPage]);
 
   return (
     <>
-      {/* Top Header Bar with Logo (Center) and Quick Controls (Right) */}
-      <header className="fixed top-14 md:top-16 left-0 right-0 z-40 flex justify-end items-center px-6 md:px-10 pointer-events-none">
-        {/* Brand Logo (Centered) */}
-        <div className="pointer-events-auto absolute left-1/2 -translate-x-1/2">
-          <div style={headerItemStyle(scrolled)}>
+      {/* Top Header Bar: Logo (pages other than landing) & User Profile */}
+      <header className="fixed top-5 md:top-6 left-0 right-0 z-40 flex justify-between items-center px-6 md:px-10 pointer-events-none">
+        {/* Brand Logo: shown on non-landing pages where hero section isn't present */}
+        {currentPage !== 'landing' ? (
+          <div className="pointer-events-auto">
             <a
               href="/"
               onClick={(e) => {
@@ -150,63 +148,108 @@ const Navbar = ({
               />
             </a>
           </div>
-        </div>
+        ) : (
+          <div />
+        )}
 
-        {/* Top Right Quick Controls: User Profile (when logged in) */}
-        {user && (
-          <div
-            style={headerItemStyle(scrolled)}
-            className="flex items-center gap-2 pointer-events-auto"
-          >
-            <span
-              className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-full"
-              style={{
-                background: "var(--nav-bg)",
-                border: "1px solid var(--nav-border)",
-                color: "var(--nav-link-color)",
-                backdropFilter: "blur(16px)",
-                WebkitBackdropFilter: "blur(16px)",
-              }}
-            >
-              {user.avatar ? (
-                <img
-                  src={user.avatar}
-                  alt={user.username}
-                  className="w-4 h-4 rounded-full object-cover"
-                  referrerPolicy="no-referrer"
-                />
-              ) : (
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent-cyan)', display: 'inline-block', flexShrink: 0 }} />
-              )}
-              {user.username}
-            </span>
-            <button
-              onClick={onLogout}
-              className="px-3 py-1.5 text-xs font-medium rounded-full transition-all cursor-pointer"
-              style={{
-                background: "var(--nav-bg)",
-                border: "1px solid var(--nav-border)",
-                color: "var(--nav-link-color)",
-                backdropFilter: "blur(16px)",
-                WebkitBackdropFilter: "blur(16px)",
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = "var(--nav-link-active-color)"; e.currentTarget.style.borderColor = "var(--nav-border-scrolled)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = "var(--nav-link-color)"; e.currentTarget.style.borderColor = "var(--nav-border)"; }}
-            >
-              Sign out
-            </button>
+        {/* Top Right Quick Controls: Theme Toggle & User Profile */}
+        {(currentPage !== 'landing' || scrolledPastHero) && (
+          <div className="flex items-center gap-2 pointer-events-auto transition-opacity duration-300">
+            {onToggleTheme && (
+              <button
+                type="button"
+                onClick={onToggleTheme}
+                aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+                title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+                className="w-8 h-8 rounded-full transition-all duration-150 ease-out cursor-pointer flex items-center justify-center"
+                style={{
+                  background: "var(--nav-bg)",
+                  border: "1px solid var(--nav-border)",
+                  color: "var(--nav-link-color)",
+                  backdropFilter: "blur(16px)",
+                  WebkitBackdropFilter: "blur(16px)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "var(--nav-link-active-color)";
+                  e.currentTarget.style.borderColor = "var(--nav-border-scrolled)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "var(--nav-link-color)";
+                  e.currentTarget.style.borderColor = "var(--nav-border)";
+                }}
+              >
+                <div className="transition-transform duration-500 ease-out hover:rotate-45 active:scale-75 flex items-center justify-center">
+                  {theme === 'dark' ? (
+                    <Sun className="h-3.5 w-3.5 text-amber-400" />
+                  ) : (
+                    <Moon className="h-3.5 w-3.5 text-indigo-500" />
+                  )}
+                </div>
+              </button>
+            )}
+
+            {user && (
+              <>
+                <span
+                  className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-full"
+                  style={{
+                    background: "var(--nav-bg)",
+                    border: "1px solid var(--nav-border)",
+                    color: "var(--nav-link-color)",
+                    backdropFilter: "blur(16px)",
+                    WebkitBackdropFilter: "blur(16px)",
+                  }}
+                >
+                  {user.avatar ? (
+                    <img
+                      src={user.avatar}
+                      alt={user.username}
+                      className="w-4 h-4 rounded-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent-cyan)', display: 'inline-block', flexShrink: 0 }} />
+                  )}
+                  {user.username}
+                </span>
+                <button
+                  onClick={onLogout}
+                  className="px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-100 ease-out cursor-pointer"
+                  style={{
+                    background: "var(--nav-bg)",
+                    border: "1px solid var(--nav-border)",
+                    color: "var(--nav-link-color)",
+                    backdropFilter: "blur(16px)",
+                    WebkitBackdropFilter: "blur(16px)",
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = "var(--nav-link-active-color)"; e.currentTarget.style.borderColor = "var(--nav-border-scrolled)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "var(--nav-link-color)"; e.currentTarget.style.borderColor = "var(--nav-border)"; }}
+                >
+                  Sign out
+                </button>
+              </>
+            )}
           </div>
         )}
       </header>
 
       {/* Main Awwwards Nav (Bottom floating pill & expanded mega menu) */}
-      <AwwwardsNav
-        items={navItems}
-        columns={megaColumns}
-        moreLabel="More"
-        theme={theme}
-        onToggleTheme={onToggleTheme}
-      />
+      <div
+        style={{
+          transition: 'opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+          opacity: currentPage === 'landing' && !scrolledPastHero ? 0 : 1,
+          pointerEvents: currentPage === 'landing' && !scrolledPastHero ? 'none' : 'auto',
+          transform: currentPage === 'landing' && !scrolledPastHero ? 'translateY(30px)' : 'translateY(0)',
+        }}
+      >
+        <AwwwardsNav
+          items={navItems}
+          columns={megaColumns}
+          moreLabel="More"
+          theme={theme}
+          onToggleTheme={onToggleTheme}
+        />
+      </div>
     </>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Zap, Route, Terminal, Activity, Sparkles, ArrowRight } from 'lucide-react';
+import { Zap, Route, Terminal, Activity, Sparkles, ArrowRight, Keyboard, BookOpen } from 'lucide-react';
 
 import TypedText from '../components/TypedText';
 import Footer from '../components/Footer';
@@ -8,6 +8,8 @@ import { PerspectiveGrid } from '../components/ui/perspective-grid';
 import logoMark from '../assets/logo.svg';
 import logoCircle from '../assets/logo_circle.svg';
 import logoText from '../assets/logo_text.svg';
+import ClimblabsHero from '../components/ClimblabsHero';
+import BrutalistFeatures from '../components/BrutalistFeatures';
 
 /* ─────────────────────────────────────────────────────
    PopSlide – spring pop-slide animation on scroll
@@ -192,30 +194,30 @@ const marqueeRow3 = [
 const codepolarityFaqs = [
   {
     question: "What is Codepolarity?",
-    answer: "Codepolarity is an autonomous developer career engine that benchmarks programming capabilities, calibrates technical skill tiers with AI agents, and orchestrates interactive career pathways."
+    answer: "Codepolarity is an integrated software engineering learning platform. It unifies modular curriculum roadmaps, cloud execution environments, syntax intelligence, and code typing telemetry into a single high-performance workspace."
   },
   {
-    question: "How do the autonomous agents assist my learning?",
-    answer: "Our specialized Detection, Investigation, and Orchestration agents continuously scan your code, build personalized roadmap trajectories, and verify your solutions in sandboxed runtimes."
+    question: "Are local development environments required?",
+    answer: "No local configuration is necessary. Codepolarity delivers isolated in-browser runtimes with real-time compilation, execution, and automated test runners across all major programming languages."
   },
   {
-    question: "Is Codepolarity suitable for all experience levels?",
-    answer: "Yes! Whether you are building core programming foundations or mastering distributed system architecture, Codepolarity dynamically adapts to your current tier."
+    question: "How are the interactive roadmaps structured?",
+    answer: "Every roadmap functions as an end-to-end technical syllabus. Milestones break complex concepts into progressive modules complete with core architectural theory, interactive challenges, and reference implementations."
   },
   {
-    question: "Can I run and test code directly in the browser?",
-    answer: "Absolutely. Codepolarity includes a full-featured browser sandbox IDE with algorithm test runners and keystroke telemetry drills—no local setup required."
+    question: "What is the role of Typlab in developer education?",
+    answer: "Writing code requires distinct tactile ergonomics—navigating brackets, operators, indentation, and language keywords that standard typing tests ignore. Typlab tracks keystroke telemetry on production code snippets to build native fluency."
   },
   {
-    question: "How do I get started with a skill assessment?",
-    answer: "Simply click 'Get Started' on the homepage to launch your initial calibration drill and generate your customized developer roadmap."
+    question: "How does the platform measure technical progression?",
+    answer: "Your centralized dashboard records verified curriculum modules, runtime test passes, and keystroke metrics, generating an authentic, quantifiable profile of engineering mastery."
   }
 ];
 
 /* ─────────────────────────────────────────────────────
    LANDING PAGE COMPONENT
 ───────────────────────────────────────────────────── */
-const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
+const LandingPage = ({ user, onOpenAuth, setCurrentPage, theme = 'dark', onToggleTheme }) => {
   return (
     <div
       id="main-content"
@@ -224,62 +226,14 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
       style={{ overflowX: 'hidden', background: 'var(--bg-primary)', color: 'var(--text-main)', minHeight: '100vh' }}
     >
       
-      {/* ─────────────────── MINIMALIST ENTERPRISE HERO ─────────────────── */}
-      <section
-        id="hero-section"
-        aria-labelledby="hero-title"
-        className="hero-enterprise-section"
-      >
-        <div className="hero-ambient-glow" aria-hidden="true" />
-        <PerspectiveGrid rows={20} cols={20} className="hero-perspective-grid" />
-        <div className="hero-enterprise-container">
-          <PopSlide delay={0}>
-            <h1 id="hero-title" className="hero-enterprise-title">
-              The developer career engine built for high-velocity engineering.
-            </h1>
-          </PopSlide>
-
-          <PopSlide delay={60}>
-            <p id="hero-subtitle" className="hero-enterprise-subtitle">
-              Codepolarity benchmarks programming capabilities, calibrates technical skill tiers with autonomous agents, and orchestrates interactive career pathways tailored for modern software developers.
-            </p>
-          </PopSlide>
-
-          <PopSlide delay={120}>
-            <div className="hero-cta-group">
-              {user ? (
-                <button
-                  id="hero-cta-continue"
-                  onClick={() => setCurrentPage(user.completedQuiz ? 'roadmaps' : 'assessment')}
-                  className="hero-btn-primary"
-                  aria-label={user.completedQuiz ? 'Continue to your developer roadmaps' : 'Start your initial skill assessment'}
-                >
-                  {user.completedQuiz ? 'Continue Learning →' : 'Start Assessment →'}
-                </button>
-              ) : (
-                <>
-                  <button
-                    id="hero-cta-start"
-                    onClick={onOpenAuth}
-                    className="hero-btn-primary"
-                    aria-label="Get started with free developer skill calibration"
-                  >
-                    Get Started →
-                  </button>
-                  <button
-                    id="hero-cta-playground"
-                    onClick={() => setCurrentPage('editor')}
-                    className="hero-btn-secondary"
-                    aria-label="Launch the online sandbox code editor"
-                  >
-                    Launch Playground IDE
-                  </button>
-                </>
-              )}
-            </div>
-          </PopSlide>
-        </div>
-      </section>
+      {/* ─────────────────── CLIMBLABS PIXEL DISSOLUTION HERO ─────────────────── */}
+      <ClimblabsHero
+        user={user}
+        onOpenAuth={onOpenAuth}
+        setCurrentPage={setCurrentPage}
+        theme={theme}
+        onToggleTheme={onToggleTheme}
+      />
 
       {/* ─────────────────── HORIZONTAL BRICK MARQUEE (TECH STACK) ─────────────────── */}
       <section
@@ -351,137 +305,14 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
         </div>
       </section>
 
-      {/* ─────────────── FEATURE BENTO GRID SECTION ────────────── */}
-      <section
-        id="features"
-        aria-labelledby="features-title"
-        className="bento-section"
-      >
-        <div className="grid-container">
-          <PopSlide>
-            <div className="bento-header">
-              <h2 id="features-title" className="bento-title">
-                Engineered for <span className="bento-title-accent">high-velocity</span> learning.
-              </h2>
-              <p className="bento-subtitle">
-                Everything you need to benchmark your technical capabilities, master complex software engineering concepts, and track your career progression.
-              </p>
-            </div>
-
-            <div className="bento-grid" role="list">
-              {/* Card 1: Wide Bento Card */}
-              <div
-                id="bento-card-assessment"
-                role="article"
-                aria-labelledby="card-assessment-title"
-                tabIndex={0}
-                className="bento-card bento-card-wide"
-                onClick={() => setCurrentPage('assessment')}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setCurrentPage('assessment'); }}
-              >
-                <div className="bento-card-copy">
-                  <div className="bento-card-icon" aria-hidden="true">
-                    <Zap size={22} className="bento-icon-svg" />
-                  </div>
-                  <h3 id="card-assessment-title" className="bento-card-title">Autonomous Skill Benchmarking</h3>
-                  <p className="bento-card-desc">
-                    Scans algorithmic complexity, syntax efficiency, and edge case handling in real-time to surface exact knowledge gaps.
-                  </p>
-                </div>
-                <div className="bento-card-visual bento-visual-benchmarking" aria-hidden="true">
-                  <div className="bento-widget-pill">
-                    <span className="bento-widget-dot" />
-                    <span>Tier Calibration Active</span>
-                  </div>
-                  <div className="bento-widget-metric">
-                    <span className="bento-metric-val">99.4%</span>
-                    <span className="bento-metric-lbl">Accuracy Score</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Card 2: Square Bento Card */}
-              <div
-                id="bento-card-roadmaps"
-                role="article"
-                aria-labelledby="card-roadmaps-title"
-                tabIndex={0}
-                className="bento-card"
-                onClick={() => setCurrentPage('roadmaps')}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setCurrentPage('roadmaps'); }}
-              >
-                <div className="bento-card-copy">
-                  <div className="bento-card-icon" aria-hidden="true">
-                    <Route size={22} className="bento-icon-svg" />
-                  </div>
-                  <h3 id="card-roadmaps-title" className="bento-card-title">Dynamic Pathway Routing</h3>
-                  <p className="bento-card-desc">
-                    Generates custom milestone trajectories adapting continuously as your skills evolve.
-                  </p>
-                </div>
-                <div className="bento-card-visual bento-visual-pathway" aria-hidden="true">
-                  <div className="bento-path-node active">Algorithms</div>
-                  <div className="bento-path-line" />
-                  <div className="bento-path-node">Distributed Systems</div>
-                </div>
-              </div>
-
-              {/* Card 3: Square Bento Card */}
-              <div
-                id="bento-card-editor"
-                role="article"
-                aria-labelledby="card-editor-title"
-                tabIndex={0}
-                className="bento-card"
-                onClick={() => setCurrentPage('editor')}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setCurrentPage('editor'); }}
-              >
-                <div className="bento-card-copy">
-                  <div className="bento-card-icon" aria-hidden="true">
-                    <Terminal size={22} className="bento-icon-svg" />
-                  </div>
-                  <h3 id="card-editor-title" className="bento-card-title">Sandboxed Runtimes</h3>
-                  <p className="bento-card-desc">
-                    Zero setup required. Run test suites and keystroke telemetry drills directly in your browser.
-                  </p>
-                </div>
-                <div className="bento-card-visual bento-visual-ide" aria-hidden="true">
-                  <div className="bento-ide-badge">✓ 8/8 Tests Passed</div>
-                  <div className="bento-ide-code">fibonacci.js • 14ms</div>
-                </div>
-              </div>
-
-              {/* Card 4: Wide Bento Card */}
-              <div
-                id="bento-card-telemetry"
-                role="article"
-                aria-labelledby="card-telemetry-title"
-                className="bento-card bento-card-wide"
-              >
-                <div className="bento-card-copy">
-                  <div className="bento-card-icon" aria-hidden="true">
-                    <Activity size={22} className="bento-icon-svg" />
-                  </div>
-                  <h3 id="card-telemetry-title" className="bento-card-title">Closed-Loop Career Telemetry</h3>
-                  <p className="bento-card-desc">
-                    Track your speed, problem-solving velocity, and milestone achievements with live analytics.
-                  </p>
-                </div>
-                <div className="bento-card-visual bento-visual-telemetry" aria-hidden="true">
-                  <div className="bento-stat-chip">
-                    <span className="bento-stat-num">50k+</span>
-                    <span className="bento-stat-lbl">Verifications</span>
-                  </div>
-                  <div className="bento-stat-chip">
-                    <span className="bento-stat-num">100%</span>
-                    <span className="bento-stat-lbl">Browser Sandboxed</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </PopSlide>
-        </div>
-      </section>
+      {/* ─────────────── ARCHITECTURAL BRUTALIST FEATURES SECTION ────────────── */}
+      <PopSlide>
+        <BrutalistFeatures
+          setCurrentPage={setCurrentPage}
+          onOpenAuth={onOpenAuth}
+          user={user}
+        />
+      </PopSlide>
 
       {/* ─────────────── FAQ SECTION ────────────── */}
       <section
@@ -509,13 +340,13 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
         <div className="grid-container">
           <PopSlide>
             <div className="cta-rect-banner">
-              <PerspectiveGrid rows={16} cols={16} className="cta-perspective-grid" showOverlay={false} />
+              <PerspectiveGrid rows={24} cols={24} scale={1.5} className="cta-perspective-grid" showOverlay={false} />
               <div className="cta-rect-left">
                 <h2 id="cta-banner-title" className="cta-rect-title">
-                  Ready to accelerate your engineering career?
+                  Accelerate your engineering trajectory.
                 </h2>
                 <p className="cta-rect-desc">
-                  Benchmark your capabilities, build custom learning pathways, and practice in sandboxed browser runtimes.
+                  Experience structured curriculum roadmaps, cloud execution sandboxes, and precision velocity drills built for ambitious software engineers.
                 </p>
               </div>
 
@@ -528,7 +359,7 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
                       className="hero-btn-primary"
                       aria-label="Continue learning on developer roadmaps"
                     >
-                      Continue Learning →
+                      Resume Curriculum →
                     </button>
                   ) : (
                     <>
@@ -536,9 +367,9 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
                         id="cta-btn-start"
                         onClick={onOpenAuth}
                         className="hero-btn-primary"
-                        aria-label="Get started with free developer skill calibration"
+                        aria-label="Get started for free with Codepolarity"
                       >
-                        Get Started →
+                        Start Learning Free →
                       </button>
                       <button
                         id="cta-btn-playground"
@@ -546,15 +377,10 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage }) => {
                         className="hero-btn-secondary"
                         aria-label="Launch the online sandbox code editor"
                       >
-                        Launch Playground IDE
+                        Open Sandbox IDE
                       </button>
                     </>
                   )}
-                </div>
-                <div className="cta-rect-highlights" aria-label="Platform highlights">
-                  <span>✓ Free initial assessment</span>
-                  <span>✓ Sandboxed execution</span>
-                  <span>✓ AI Roadmaps</span>
                 </div>
               </div>
             </div>

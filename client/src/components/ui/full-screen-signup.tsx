@@ -809,8 +809,8 @@ export const FullScreenSignup: React.FC<FullScreenSignupProps> = ({
                 <div className="fs-input-box">
                   <input
                     type="text"
-                    placeholder="Username"
-                    autoComplete="new-password"
+                    placeholder="choose a username"
+                    autoComplete="off"
                     className={`fs-input ${usernameError ? "fs-input-error-border" : ""}`}
                     value={userVal}
                     onChange={(e) => {
@@ -830,8 +830,8 @@ export const FullScreenSignup: React.FC<FullScreenSignupProps> = ({
               <div className="fs-input-box">
                 <input
                   type="email"
-                  placeholder="Email"
-                  autoComplete="new-password"
+                  placeholder="you@domain.com"
+                  autoComplete="off"
                   className={`fs-input ${emailError ? "fs-input-error-border" : ""}`}
                   value={emailVal}
                   onChange={(e) => {
@@ -850,7 +850,7 @@ export const FullScreenSignup: React.FC<FullScreenSignupProps> = ({
               <div className="fs-input-box">
                 <input
                   type={showPassword ? "text" : "password"}
-                  placeholder="Password"
+                  placeholder="enter password"
                   autoComplete="new-password"
                   className={`fs-input ${passwordError ? "fs-input-error-border" : ""}`}
                   value={passwordVal}

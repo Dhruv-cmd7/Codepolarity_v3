@@ -26,6 +26,75 @@ function App() {
   // Sandbox load state
   const [editorTemplateId, setEditorTemplateId] = useState(null);
 
+  // Theme Management
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('theme') || 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+    document.documentElement.style.colorScheme = theme;
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = (e) => {
+    const next = theme === 'dark' ? 'light' : 'dark';
+
+    let x = window.innerWidth - 60;
+    let y = 30;
+
+    if (e?.clientX && e.clientX > 0 && e?.clientY && e.clientY > 0) {
+      x = e.clientX;
+      y = e.clientY;
+    } else if (e?.currentTarget && typeof e.currentTarget.getBoundingClientRect === 'function') {
+      const rect = e.currentTarget.getBoundingClientRect();
+      x = rect.left + rect.width / 2;
+      y = rect.top + rect.height / 2;
+    }
+
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+
+    // Instant fallback if View Transitions not available
+    if (!document.startViewTransition) {
+      document.documentElement.setAttribute('data-theme', next);
+      document.documentElement.classList.toggle('dark', next === 'dark');
+      document.documentElement.style.colorScheme = next;
+      localStorage.setItem('theme', next);
+      setTheme(next);
+      return;
+    }
+
+    // Capture old state immediately, then mutate DOM inside the transition callback
+    const transition = document.startViewTransition(() => {
+      document.documentElement.setAttribute('data-theme', next);
+      document.documentElement.classList.toggle('dark', next === 'dark');
+      document.documentElement.style.colorScheme = next;
+      localStorage.setItem('theme', next);
+      setTheme(next);
+    });
+
+    transition.ready.then(() => {
+      // Cinema-smooth, steady radial wave: immediate start, calm steady travel, soft landing
+      document.documentElement.animate(
+        {
+          clipPath: [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${endRadius}px at ${x}px ${y}px)`,
+          ],
+        },
+        {
+          duration: 720,
+          easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+          pseudoElement: '::view-transition-new(root)',
+        }
+      );
+    });
+  };
+
   // Lenis Smooth Scroll Initialization
   useEffect(() => {
     const lenis = new Lenis({
@@ -51,7 +120,7 @@ function App() {
   // Dynamic Document Title for SEO and Browser UX
   useEffect(() => {
     const titles = {
-      landing: 'Codepolarity — Autonomous Developer Career Engine & Skill Benchmarking',
+      landing: 'Codepolarity — The Software Engineering Learning Platform',
       roadmaps: 'Developer Roadmaps & Skill Pathways | Codepolarity',
       assessment: 'Technical Skill Calibration & Benchmark | Codepolarity',
       editor: 'Browser Sandboxed Online IDE | Codepolarity',
@@ -174,6 +243,8 @@ function App() {
             setUser={setUser}
             setCurrentPage={setCurrentPage}
             initialMode="login"
+            theme={theme}
+            onToggleTheme={toggleTheme}
           />
         );
       case 'register':
@@ -186,6 +257,8 @@ function App() {
             setUser={setUser}
             setCurrentPage={setCurrentPage}
             initialMode="register"
+            theme={theme}
+            onToggleTheme={toggleTheme}
           />
         );
       case 'assessment':
@@ -214,6 +287,9 @@ function App() {
             user={user}
             initialTemplateId={editorTemplateId}
             onClearTemplate={() => setEditorTemplateId(null)}
+            setCurrentPage={setCurrentPage}
+            theme={theme}
+            onToggleTheme={toggleTheme}
           />
         );
       case 'typlab':
@@ -228,29 +304,16 @@ function App() {
               setCurrentPage('signin');
             }}
             setCurrentPage={setCurrentPage}
+            theme={theme}
+            onToggleTheme={toggleTheme}
           />
         );
     }
   };
-
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme') || 'dark';
-  });
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    document.documentElement.classList.toggle('dark', theme === 'dark');
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
-  };
-
   return (
     <div className="app-container">
-      {/* Navbar – render on main app pages */}
-      {currentPage !== 'signin' && currentPage !== 'login' && currentPage !== 'register' && currentPage !== 'signup' && (
+      {/* Navbar – render on main app pages (except editor which has its own unified IDE header) */}
+      {currentPage !== 'signin' && currentPage !== 'login' && currentPage !== 'register' && currentPage !== 'signup' && currentPage !== 'editor' && (
         <Navbar
           user={user}
           onLogout={handleLogout}
