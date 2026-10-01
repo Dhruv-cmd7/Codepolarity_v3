@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useLayoutEffect } from 'react';
 import {
   Terminal,
   GitCommit,
@@ -28,6 +28,52 @@ export const OutputPanel = ({
 }) => {
   const [copied, setCopied] = useState(false);
 
+  const containerRef = useRef(null);
+  const outputTabRef = useRef(null);
+  const flowchartTabRef = useRef(null);
+  const traceTabRef = useRef(null);
+
+  const tabRefs = {
+    output: outputTabRef,
+    flowchart: flowchartTabRef,
+    trace: traceTabRef,
+  };
+
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, ready: false });
+
+  useLayoutEffect(() => {
+    const updateIndicator = () => {
+      const activeEl = tabRefs[activeTab]?.current;
+      if (activeEl) {
+        setIndicatorStyle({
+          left: activeEl.offsetLeft,
+          width: activeEl.offsetWidth,
+          ready: true,
+        });
+      }
+    };
+
+    updateIndicator();
+
+    const container = containerRef.current;
+    if (!container) return;
+
+    let resizeObserver = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => {
+        updateIndicator();
+      });
+      resizeObserver.observe(container);
+    }
+
+    window.addEventListener('resize', updateIndicator);
+
+    return () => {
+      if (resizeObserver) resizeObserver.disconnect();
+      window.removeEventListener('resize', updateIndicator);
+    };
+  }, [activeTab, trace.length]);
+
   const isLight = theme === 'light';
 
   const handleCopyOutput = () => {
@@ -38,75 +84,78 @@ export const OutputPanel = ({
 
   return (
     <div className={`h-full flex flex-col border-l overflow-hidden select-none transition-colors ${
-      isLight ? 'bg-white border-slate-200 text-slate-800' : 'bg-[#0c0d12] border-white/[0.08] text-zinc-200'
+      isLight ? 'bg-white border-slate-200 text-slate-800' : 'bg-[#0a0d14] border-white/[0.08] text-zinc-200'
     }`}>
       {/* Top Header with Modern Sliding Toggle */}
       <div className={`h-11 border-b px-2.5 flex items-center justify-between shrink-0 transition-colors ${
-        isLight ? 'bg-slate-50/70 border-slate-200' : 'bg-[#090a0f] border-white/[0.08]'
+        isLight ? 'bg-slate-50/70 border-slate-200' : 'bg-[#0f131a] border-white/[0.08]'
       }`}>
         {/* Sliding Segmented Toggle Control */}
-        <div className={`relative flex items-center p-0.5 rounded-lg border text-xs font-medium w-full max-w-sm transition-colors ${
-          isLight ? 'bg-slate-200/60 border-slate-200' : 'bg-zinc-900/80 border-white/[0.06]'
-        }`}>
+        <div
+          ref={containerRef}
+          className={`relative flex items-center p-0.5 rounded-lg border text-xs font-medium w-full max-w-sm transition-colors ${
+            isLight ? 'bg-slate-200/60 border-slate-200' : 'bg-[#151b26] border-white/[0.06]'
+          }`}
+        >
           {/* Sliding Active Pill Background */}
-          <div
-            className={`absolute top-0.5 bottom-0.5 rounded-md transition-all duration-200 ease-out shadow-xs pointer-events-none ${
-              isLight
-                ? 'bg-white border border-slate-200/90 shadow-xs'
-                : 'bg-white/[0.14] border border-white/[0.1] shadow-xs'
-            }`}
-            style={{
-              width: 'calc(33.333% - 3px)',
-              left:
-                activeTab === 'output'
-                  ? '2px'
-                  : activeTab === 'flowchart'
-                  ? 'calc(33.333% + 1px)'
-                  : 'calc(66.666% - 0px)'
-            }}
-          />
+          {indicatorStyle.ready && (
+            <div
+              className={`absolute top-0.5 bottom-0.5 rounded-md transition-all duration-200 ease-out shadow-xs pointer-events-none ${
+                isLight
+                  ? 'bg-white border border-slate-200/90 shadow-xs'
+                  : 'bg-white/[0.14] border border-white/[0.1] shadow-xs'
+              }`}
+              style={{
+                left: `${indicatorStyle.left}px`,
+                width: `${indicatorStyle.width}px`,
+              }}
+            />
+          )}
 
           {/* Option 1: Output */}
           <button
+            ref={outputTabRef}
             onClick={() => setActiveTab('output')}
-            className={`relative z-10 flex-1 py-1 px-2 text-xs rounded-md transition-colors cursor-pointer flex items-center justify-center gap-1.5 ${
+            className={`relative z-10 flex-1 py-1 px-2 text-xs rounded-md transition-colors cursor-pointer flex items-center justify-center gap-1.5 min-w-0 ${
               activeTab === 'output'
                 ? isLight ? 'text-slate-900 font-semibold' : 'text-white font-semibold'
                 : isLight ? 'text-slate-500 hover:text-slate-800' : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
-            <Terminal size={12} />
-            <span>Output</span>
+            <Terminal size={12} className="shrink-0" />
+            <span className="truncate">Output</span>
           </button>
 
           {/* Option 2: Flowchart */}
           <button
+            ref={flowchartTabRef}
             onClick={() => setActiveTab('flowchart')}
-            className={`relative z-10 flex-1 py-1 px-2 text-xs rounded-md transition-colors cursor-pointer flex items-center justify-center gap-1.5 ${
+            className={`relative z-10 flex-1 py-1 px-2 text-xs rounded-md transition-colors cursor-pointer flex items-center justify-center gap-1.5 min-w-0 ${
               activeTab === 'flowchart'
                 ? isLight ? 'text-slate-900 font-semibold' : 'text-white font-semibold'
                 : isLight ? 'text-slate-500 hover:text-slate-800' : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
-            <GitCommit size={12} />
-            <span>Flowchart</span>
+            <GitCommit size={12} className="shrink-0" />
+            <span className="truncate">Flowchart</span>
           </button>
 
           {/* Option 3: Visual Execution */}
           <button
+            ref={traceTabRef}
             onClick={() => setActiveTab('trace')}
-            className={`relative z-10 flex-1 py-1 px-2 text-xs rounded-md transition-colors cursor-pointer flex items-center justify-center gap-1.5 ${
+            className={`relative z-10 flex-1 py-1 px-2 text-xs rounded-md transition-colors cursor-pointer flex items-center justify-center gap-1.5 min-w-0 ${
               activeTab === 'trace'
-                ? isLight ? 'text-emerald-950 font-bold' : 'text-emerald-400 font-semibold'
+                ? isLight ? 'text-blue-950 font-bold' : 'text-blue-400 font-semibold'
                 : isLight ? 'text-slate-500 hover:text-slate-800' : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
-            <Sparkles size={12} className={activeTab === 'trace' ? 'text-emerald-500' : ''} />
+            <Sparkles size={12} className={`shrink-0 ${activeTab === 'trace' ? (isLight ? 'text-blue-600' : 'text-blue-400') : ''}`} />
             <span className="truncate">Visual Execution</span>
             {trace.length > 0 && (
               <span className={`text-[10px] font-mono px-1 py-0.2 rounded shrink-0 ${
                 activeTab === 'trace'
-                  ? isLight ? 'bg-emerald-100 text-emerald-800 font-bold' : 'bg-emerald-500/20 text-emerald-300'
+                  ? isLight ? 'bg-blue-100 text-blue-800 font-bold' : 'bg-blue-500/20 text-blue-300'
                   : isLight ? 'text-slate-400' : 'text-zinc-500'
               }`}>
                 {trace.length}
@@ -131,7 +180,7 @@ export const OutputPanel = ({
                 }`}
                 title="Copy Terminal Output"
               >
-                {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
+                {copied ? <Check size={13} className="text-blue-400" /> : <Copy size={13} />}
               </button>
             </>
           )}
@@ -143,11 +192,11 @@ export const OutputPanel = ({
         {/* ================= 1. TERMINAL OUTPUT TAB ================= */}
         {activeTab === 'output' && (
           <div className={`flex-1 p-3 overflow-y-auto font-mono text-xs select-text scrollbar-thin space-y-2 transition-colors ${
-            isLight ? 'bg-white text-slate-800' : 'bg-[#08090d] text-zinc-200'
+            isLight ? 'bg-white text-slate-800' : 'bg-[#0a0d14] text-zinc-200'
           }`}>
             {isRunning ? (
               <div className={`flex items-center gap-2 ${isLight ? 'text-slate-500' : 'text-zinc-400'}`}>
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping" />
                 <span>Compiling and executing {language?.toUpperCase()} program...</span>
               </div>
             ) : terminalOutput ? (

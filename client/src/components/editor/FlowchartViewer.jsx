@@ -189,8 +189,8 @@ export const FlowchartViewer = ({
               isPlaying
                 ? 'bg-amber-500 text-white hover:bg-amber-600'
                 : isLight
-                ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
-                : 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold'
+                ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                : 'bg-blue-600 hover:bg-blue-500 text-white font-semibold'
             }`}
             title={isPlaying ? 'Pause Auto Step' : 'Auto Step Flowchart'}
           >
@@ -227,7 +227,7 @@ export const FlowchartViewer = ({
           <span className={`text-[11px] font-mono px-2 py-0.5 rounded-md ${
             isLight ? 'bg-slate-100 text-slate-600' : 'bg-zinc-800/80 text-zinc-400'
           }`}>
-            Step <span className="font-bold text-emerald-600 dark:text-emerald-400">{currentNodeIndex + 1}</span> of {flowchartNodes.length}
+            Step <span className="font-bold text-blue-600 dark:text-blue-400">{currentNodeIndex + 1}</span> of {flowchartNodes.length}
           </span>
         </div>
 
@@ -311,7 +311,7 @@ export const FlowchartViewer = ({
                 markerHeight="6"
                 orient="auto-start-reverse"
               >
-                <path d="M 0 1 L 8 5 L 0 9 z" fill="#10b981" />
+                <path d="M 0 1 L 8 5 L 0 9 z" fill="#3b82f6" />
               </marker>
 
               <marker
@@ -323,7 +323,7 @@ export const FlowchartViewer = ({
                 markerHeight="6"
                 orient="auto-start-reverse"
               >
-                <path d="M 0 1 L 8 5 L 0 9 z" fill="#10b981" />
+                <path d="M 0 1 L 8 5 L 0 9 z" fill="#3b82f6" />
               </marker>
 
               <marker
@@ -451,7 +451,7 @@ export const FlowchartViewer = ({
                     <path
                       d={`M ${pFrom.x} ${pFrom.bottom} L ${pTo.x} ${pTo.top}`}
                       fill="none"
-                      stroke="#10b981"
+                      stroke="#3b82f6"
                       strokeWidth={isFromActive ? '2.5' : '2'}
                       markerEnd="url(#flow-arrow-true)"
                     />
@@ -461,14 +461,14 @@ export const FlowchartViewer = ({
                       width="48"
                       height="18"
                       rx="4"
-                      fill={isLight ? '#ecfdf5' : '#064e3b'}
-                      stroke="#10b981"
+                      fill={isLight ? '#eff6ff' : '#172554'}
+                      stroke="#3b82f6"
                       strokeWidth="1"
                     />
                     <text
                       x={pFrom.x + 32}
                       y={(pFrom.bottom + pTo.top) / 2 + 4}
-                      fill="#10b981"
+                      fill="#3b82f6"
                       fontSize="9"
                       fontWeight="bold"
                       textAnchor="middle"
@@ -487,7 +487,7 @@ export const FlowchartViewer = ({
                   key={`direct-${idx}`}
                   d={`M ${pFrom.x} ${pFrom.bottom} L ${pTo.x} ${pTo.top}`}
                   fill="none"
-                  stroke={isPathActive ? '#10b981' : isLight ? '#cbd5e1' : '#3f3f46'}
+                  stroke={isPathActive ? '#3b82f6' : isLight ? '#cbd5e1' : '#3f3f46'}
                   strokeWidth={isPathActive ? '2.2' : '1.5'}
                   markerEnd={isPathActive ? 'url(#flow-arrow-active)' : 'url(#flow-arrow-default)'}
                 />
@@ -528,24 +528,24 @@ export const FlowchartViewer = ({
                         : 'rounded-2xl bg-amber-950/30 border-2 border-amber-500/60 text-amber-100'
                       : isIO
                       ? isLight
-                        ? 'rounded-xl bg-emerald-50/80 border-2 border-emerald-400 text-emerald-950 shadow-xs'
-                        : 'rounded-xl bg-emerald-950/30 border-2 border-emerald-500/50 text-emerald-100'
+                        ? 'rounded-xl bg-cyan-50/80 border-2 border-cyan-400 text-cyan-950 shadow-xs'
+                        : 'rounded-xl bg-cyan-950/30 border-2 border-cyan-500/50 text-cyan-100'
                       : isLight
                       ? 'rounded-xl bg-white border border-slate-200/90 text-slate-800 shadow-sm hover:border-slate-300'
-                      : 'rounded-xl bg-[#12141f] border border-white/[0.08] text-zinc-100 hover:border-white/[0.16]'
+                      : 'rounded-xl bg-[#0f131a] border border-white/[0.08] text-zinc-100 hover:border-white/[0.16]'
                   } ${
                     isActive
                       ? isLight
-                        ? 'ring-4 ring-emerald-500/30 border-emerald-500 shadow-lg scale-102'
-                        : 'ring-4 ring-emerald-400/30 border-emerald-400 shadow-[0_0_25px_rgba(52,211,153,0.3)] scale-102'
+                        ? 'ring-4 ring-blue-500/30 border-blue-500 shadow-lg scale-102'
+                        : 'ring-4 ring-blue-400/30 border-blue-400 shadow-[0_0_25px_rgba(59,130,246,0.3)] scale-102'
                       : ''
                   } ${isSelected ? 'outline-2 outline-blue-500' : ''}`}
                 >
                   {/* Active Indicator Pulse Ring */}
                   {isActive && (
                     <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                      <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500 text-[9px] text-white font-bold items-center justify-center">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-4 w-4 bg-blue-600 text-[9px] text-white font-bold items-center justify-center">
                         ✓
                       </span>
                     </span>
@@ -559,7 +559,7 @@ export const FlowchartViewer = ({
                         : isDecision
                         ? isLight ? 'bg-amber-100 text-amber-900' : 'bg-amber-900/50 text-amber-300'
                         : isIO
-                        ? isLight ? 'bg-emerald-100 text-emerald-900' : 'bg-emerald-900/50 text-emerald-300'
+                        ? isLight ? 'bg-cyan-100 text-cyan-900' : 'bg-cyan-900/50 text-cyan-300'
                         : isLight ? 'bg-slate-100 text-slate-700' : 'bg-zinc-800 text-zinc-300'
                     }`}>
                       {isTerminal ? (index === 0 ? 'Start' : 'End') : isDecision ? '◆ Decision' : isIO ? '▲ Output (IO)' : '■ Process'}
@@ -593,7 +593,7 @@ export const FlowchartViewer = ({
                     <div className={`mt-2 pt-1.5 flex items-center justify-between text-[10px] font-mono border-t ${
                       isLight ? 'border-amber-200' : 'border-amber-500/20'
                     }`}>
-                      <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1 font-bold">
+                      <span className="text-blue-600 dark:text-blue-400 flex items-center gap-1 font-bold">
                         <CheckCircle2 size={11} /> True: Body
                       </span>
                       <span className="text-rose-600 dark:text-rose-400 flex items-center gap-1 font-bold">
@@ -610,7 +610,7 @@ export const FlowchartViewer = ({
 
       {/* 3. Bottom Flowchart Legend */}
       <div className={`h-7 border-t px-3 flex items-center justify-between text-[11px] font-mono shrink-0 select-none transition-colors ${
-        isLight ? 'bg-white border-slate-200 text-slate-500' : 'bg-[#0d0e14] border-white/[0.06] text-zinc-400'
+        isLight ? 'bg-white border-slate-200 text-slate-500' : 'bg-[#0f131a] border-white/[0.06] text-zinc-400'
       }`}>
         <div className="flex items-center gap-3">
           <span className="flex items-center gap-1">
@@ -626,7 +626,7 @@ export const FlowchartViewer = ({
             <span className="font-sans text-[10px]">Decision</span>
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded bg-emerald-500 inline-block" />
+            <span className="w-2 h-2 rounded bg-cyan-500 inline-block" />
             <span className="font-sans text-[10px]">Output</span>
           </span>
           <span className="flex items-center gap-1">

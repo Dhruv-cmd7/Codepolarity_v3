@@ -35,7 +35,7 @@ export const EditorSidebar = ({
     <div className="flex h-full shrink-0 select-none z-20">
       {/* 1. Slim Activity Rail (44px) */}
       <aside className={`w-11 border-r flex flex-col items-center justify-between py-2.5 shrink-0 transition-colors ${
-        isLight ? 'bg-slate-50/80 border-slate-200' : 'bg-[#090a0f] border-white/[0.08]'
+        isLight ? 'bg-slate-50/80 border-slate-200' : 'bg-[#0a0d14] border-white/[0.08]'
       }`}>
         {/* Top Rail: Language Picker Toggle */}
         <div className="flex flex-col items-center gap-2 w-full">
@@ -44,8 +44,8 @@ export const EditorSidebar = ({
             className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all cursor-pointer relative ${
               isOpen
                 ? isLight
-                  ? 'bg-white text-emerald-600 shadow-sm border border-slate-200 font-semibold'
-                  : 'bg-white/[0.12] text-emerald-400 font-semibold'
+                  ? 'bg-white text-blue-600 shadow-sm border border-slate-200 font-semibold'
+                  : 'bg-white/[0.12] text-blue-400 font-semibold'
                 : isLight
                 ? 'text-slate-500 hover:text-slate-900 hover:bg-slate-200/60'
                 : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.06]'
@@ -54,7 +54,7 @@ export const EditorSidebar = ({
           >
             <Code2 size={16} />
             {isOpen && (
-              <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 bg-emerald-500 rounded-r" />
+              <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 bg-blue-500 rounded-r" />
             )}
           </button>
         </div>
@@ -89,11 +89,11 @@ export const EditorSidebar = ({
       {/* 2. Clean Dedicated Languages Drawer */}
       {isOpen && (
         <aside className={`w-52 border-r flex flex-col shrink-0 overflow-hidden transition-all duration-150 animate-fade-in ${
-          isLight ? 'bg-white border-slate-200 text-slate-800' : 'bg-[#090a0f] border-white/[0.08] text-slate-100'
+          isLight ? 'bg-white border-slate-200 text-slate-800' : 'bg-[#0f131a] border-white/[0.08] text-slate-100'
         }`}>
           {/* Drawer Header */}
           <div className={`h-9 px-3 border-b flex items-center justify-between shrink-0 ${
-            isLight ? 'bg-slate-50/70 border-slate-200' : 'bg-[#07080c] border-white/[0.06]'
+            isLight ? 'bg-slate-50/70 border-slate-200' : 'bg-[#0a0d14] border-white/[0.06]'
           }`}>
             <span className="text-[11px] font-semibold tracking-wider uppercase text-zinc-400">
               Languages ({languages.length})
@@ -147,8 +147,8 @@ export const EditorSidebar = ({
                     className={`w-full group px-2.5 py-2 rounded-md transition-all cursor-pointer flex items-center justify-between gap-2 text-xs text-left ${
                       isActive
                         ? isLight
-                          ? 'bg-emerald-50 text-emerald-950 font-semibold border border-emerald-300/80 shadow-xs'
-                          : 'bg-emerald-500/10 text-emerald-300 font-semibold border border-emerald-500/20'
+                          ? 'bg-blue-50 text-blue-950 font-semibold border border-blue-300/80 shadow-xs'
+                          : 'bg-blue-500/10 text-blue-300 font-semibold border border-blue-500/20'
                         : isLight
                         ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
                         : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]'
@@ -164,7 +164,7 @@ export const EditorSidebar = ({
                         {lang.fileName}
                       </span>
                       {isActive && (
-                        <Check size={12} className="text-emerald-500 shrink-0" />
+                        <Check size={12} className="text-blue-500 shrink-0" />
                       )}
                     </div>
                   </button>

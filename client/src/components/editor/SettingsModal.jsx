@@ -32,7 +32,7 @@ export const SettingsModal = ({
       <div className={`w-full max-w-sm rounded-xl shadow-2xl p-5 relative flex flex-col gap-4 text-xs transition-colors border ${
         isLight
           ? 'bg-white border-slate-200 text-slate-800'
-          : 'bg-[#12141c] border-white/[0.1] text-zinc-200'
+          : 'bg-[#0f131a] border-white/[0.1] text-zinc-200'
       }`}>
         {/* Header */}
         <div className={`flex items-center justify-between border-b pb-3 ${
@@ -111,8 +111,8 @@ export const SettingsModal = ({
                     className={`p-2 rounded-md border text-left transition-all cursor-pointer text-xs ${
                       isSelected
                         ? isLight
-                          ? 'bg-emerald-50 border-emerald-300 text-emerald-950 font-semibold shadow-xs'
-                          : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300 font-semibold'
+                          ? 'bg-blue-50 border-blue-300 text-blue-950 font-semibold shadow-xs'
+                          : 'bg-blue-500/10 border-blue-500/30 text-blue-300 font-semibold'
                         : isLight
                         ? 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'
                         : 'bg-zinc-900/50 hover:bg-zinc-900 border-white/[0.06] text-zinc-400'
@@ -177,7 +177,7 @@ export const SettingsModal = ({
                 type="checkbox"
                 checked={settings.wordWrap}
                 onChange={(e) => onUpdateSettings({ wordWrap: e.target.checked })}
-                className={`w-4 h-4 rounded cursor-pointer ${isLight ? 'accent-slate-900' : 'accent-emerald-500'}`}
+                className={`w-4 h-4 rounded cursor-pointer ${isLight ? 'accent-slate-900' : 'accent-blue-500'}`}
               />
             </label>
 
@@ -189,7 +189,7 @@ export const SettingsModal = ({
                 type="checkbox"
                 checked={settings.lineNumbers}
                 onChange={(e) => onUpdateSettings({ lineNumbers: e.target.checked })}
-                className={`w-4 h-4 rounded cursor-pointer ${isLight ? 'accent-slate-900' : 'accent-emerald-500'}`}
+                className={`w-4 h-4 rounded cursor-pointer ${isLight ? 'accent-slate-900' : 'accent-blue-500'}`}
               />
             </label>
 
@@ -201,7 +201,7 @@ export const SettingsModal = ({
                 type="checkbox"
                 checked={settings.minimap}
                 onChange={(e) => onUpdateSettings({ minimap: e.target.checked })}
-                className={`w-4 h-4 rounded cursor-pointer ${isLight ? 'accent-slate-900' : 'accent-emerald-500'}`}
+                className={`w-4 h-4 rounded cursor-pointer ${isLight ? 'accent-slate-900' : 'accent-blue-500'}`}
               />
             </label>
           </div>

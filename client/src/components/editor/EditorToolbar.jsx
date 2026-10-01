@@ -12,7 +12,8 @@ import {
   PanelLeft,
   MoreHorizontal,
   Sun,
-  Moon
+  Moon,
+  ArrowLeft
 } from 'lucide-react';
 import logoMark from '../../assets/logo.svg';
 import logoText from '../../assets/logo_text.svg';
@@ -63,10 +64,30 @@ export const EditorToolbar = ({
 
   return (
     <header className={`h-11 border-b px-3 flex items-center justify-between gap-3 select-none shrink-0 z-30 transition-colors ${
-      isLight ? 'bg-white border-slate-200 text-slate-800' : 'bg-[#090a0f] border-white/[0.08] text-slate-100'
+      isLight ? 'bg-white border-slate-200 text-slate-800' : 'bg-[#0a0d14] border-white/[0.08] text-slate-100'
     }`}>
-      {/* Left: Brand Logo, Breadcrumb, Title & Language Indicator */}
+      {/* Left: Back Arrow, Brand Logo, Breadcrumb, Title & Language Indicator */}
       <div className="flex items-center gap-2 min-w-0">
+        {/* Back Navigation Arrow to Home */}
+        <button
+          onClick={() => {
+            if (setCurrentPage) {
+              setCurrentPage('landing');
+            } else if (typeof window !== 'undefined' && window.history.length > 1) {
+              window.history.back();
+            }
+          }}
+          className={`p-1.5 rounded-md text-xs transition-colors cursor-pointer flex items-center justify-center shrink-0 ${
+            isLight
+              ? 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
+              : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.08]'
+          }`}
+          title="Back to Home"
+          aria-label="Back to Home"
+        >
+          <ArrowLeft size={15} />
+        </button>
+
         {/* Brand */}
         <button
           onClick={() => setCurrentPage && setCurrentPage('landing')}
@@ -130,8 +151,8 @@ export const EditorToolbar = ({
           onClick={() => setSidebarOpen(prev => !prev)}
           className={`text-xs font-semibold py-1 px-2.5 rounded-md flex items-center gap-1.5 transition-all cursor-pointer border ${
             isLight
-              ? 'bg-emerald-50 text-emerald-800 border-emerald-200/80 hover:bg-emerald-100/70 shadow-xs'
-              : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20'
+              ? 'bg-blue-50 text-blue-700 border-blue-200/80 hover:bg-blue-100/70 shadow-xs'
+              : 'bg-blue-500/10 text-blue-400 border-blue-500/20 hover:bg-blue-500/20'
           }`}
           title="Change Language (opens sidebar)"
         >
@@ -147,15 +168,15 @@ export const EditorToolbar = ({
           disabled={isRunning}
           className={`group h-7 px-3 rounded-md text-xs font-semibold transition-all duration-150 flex items-center gap-1.5 cursor-pointer disabled:opacity-50 active:scale-[0.97] select-none ${
             isLight
-              ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs border border-emerald-700/20'
-              : 'bg-emerald-500 hover:bg-emerald-400 text-zinc-950 shadow-xs border border-emerald-400/30'
+              ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-xs border border-blue-700/20'
+              : 'bg-blue-600 hover:bg-blue-500 text-white shadow-[0_0_16px_rgba(59,130,246,0.35)] border border-blue-400/40'
           }`}
           title="Run Code (Ctrl + Enter)"
         >
           <Play size={11} className={`fill-current transition-transform duration-150 group-hover:scale-105 ${isRunning ? 'animate-spin' : ''}`} />
           <span>{isRunning ? 'Running...' : 'Run'}</span>
           <span className={`text-[10px] font-mono tracking-tight ml-0.5 ${
-            isLight ? 'text-emerald-100/75' : 'text-zinc-950/60'
+            isLight ? 'text-blue-100/75' : 'text-blue-100/80'
           }`}>
             ⌘↵
           </span>
@@ -227,7 +248,7 @@ export const EditorToolbar = ({
           }`}
           title="Copy Code"
         >
-          {isCopied ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+          {isCopied ? <Check size={14} className="text-blue-400" /> : <Copy size={14} />}
         </button>
 
         {/* Theme Toggle */}

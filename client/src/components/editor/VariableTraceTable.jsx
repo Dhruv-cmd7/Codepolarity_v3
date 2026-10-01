@@ -97,12 +97,12 @@ export const VariableTraceTable = ({
 
   return (
     <div className={`h-full flex flex-col overflow-hidden font-sans select-none transition-colors ${
-      isLight ? 'bg-white text-slate-800' : 'bg-[#0c0d12] text-zinc-200'
+      isLight ? 'bg-white text-slate-800' : 'bg-[#0a0d14] text-zinc-200'
     }`}>
       
       {/* 1. PYTHON TUTOR CONTROLLER BAR */}
       <div className={`h-10 border-b px-3 flex items-center justify-between shrink-0 transition-colors gap-2 overflow-x-auto scrollbar-none ${
-        isLight ? 'bg-slate-50 border-slate-200' : 'bg-[#090a0f] border-white/[0.08]'
+        isLight ? 'bg-slate-50 border-slate-200' : 'bg-[#0f131a] border-white/[0.08]'
       }`}>
         {/* Step Indicator */}
         <div className="flex items-center gap-2 shrink-0 whitespace-nowrap">
@@ -111,7 +111,7 @@ export const VariableTraceTable = ({
             <span className={`font-normal ${isLight ? 'text-slate-500' : 'text-zinc-500'}`}> of {trace.length}</span>
           </span>
           <span className={isLight ? 'text-slate-300' : 'text-zinc-700'}>•</span>
-          <span className="text-[11px] font-mono text-emerald-600 font-semibold">
+          <span className={`text-[11px] font-mono font-semibold ${isLight ? 'text-blue-600' : 'text-blue-400'}`}>
             Line {currentStep.line}
           </span>
         </div>
@@ -161,7 +161,7 @@ export const VariableTraceTable = ({
             {isPlaying ? (
               <Pause size={12} className="fill-current text-amber-500" />
             ) : (
-              <Play size={12} className="fill-current text-emerald-500" />
+              <Play size={12} className="fill-current text-blue-500" />
             )}
           </button>
 
@@ -171,8 +171,8 @@ export const VariableTraceTable = ({
             disabled={currentStepIndex === trace.length - 1}
             className={`px-2.5 py-1 rounded font-semibold text-xs flex items-center gap-1 cursor-pointer transition-colors disabled:opacity-30 shadow-xs border ${
               isLight
-                ? 'bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-600'
-                : 'bg-emerald-500/20 border-emerald-500/40 hover:bg-emerald-500/30 text-emerald-300'
+                ? 'bg-blue-600 hover:bg-blue-700 text-white border-blue-600'
+                : 'bg-blue-500/20 border-blue-500/40 hover:bg-blue-500/30 text-blue-300'
             }`}
             title="Next step (Right Arrow)"
           >
@@ -201,7 +201,7 @@ export const VariableTraceTable = ({
           isLight ? 'text-slate-500' : 'text-zinc-400'
         }`}>
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+            <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
             <span>Just executed</span>
           </div>
           {nextStep && (
@@ -218,10 +218,10 @@ export const VariableTraceTable = ({
         
         {/* LEFT COLUMN: CODE WITH LINE POINTER ARROWS */}
         <div className={`flex-1 border-r flex flex-col overflow-hidden transition-colors ${
-          isLight ? 'bg-[#fafbfc] border-slate-200' : 'bg-[#08090d] border-white/[0.08]'
+          isLight ? 'bg-[#fafbfc] border-slate-200' : 'bg-[#0a0d14] border-white/[0.08]'
         }`}>
           <div className={`h-7 border-b px-3 flex items-center justify-between text-[11px] font-medium transition-colors ${
-            isLight ? 'bg-slate-100 border-slate-200 text-slate-600' : 'bg-[#0c0d12] border-white/[0.06] text-zinc-400'
+            isLight ? 'bg-slate-100 border-slate-200 text-slate-600' : 'bg-[#0f131a] border-white/[0.06] text-zinc-400'
           }`}>
             <span>Execution Code</span>
             <span className={`text-[10px] font-mono ${isLight ? 'text-slate-400' : 'text-zinc-500'}`}>Monitored Lines</span>
@@ -242,8 +242,8 @@ export const VariableTraceTable = ({
                   className={`flex items-center py-1 px-2 rounded transition-colors group min-w-full w-max ${
                     isCurrent
                       ? isLight
-                        ? 'bg-emerald-50 text-emerald-950 font-semibold border-l-2 border-emerald-500 shadow-xs'
-                        : 'bg-emerald-500/20 text-white font-medium border-l-2 border-emerald-400'
+                        ? 'bg-blue-50 text-blue-950 font-semibold border-l-2 border-blue-500 shadow-xs'
+                        : 'bg-blue-500/15 text-white font-medium border-l-2 border-blue-400'
                       : isLight
                       ? 'text-slate-700 hover:bg-slate-100'
                       : 'text-zinc-400 hover:bg-white/[0.03]'
@@ -259,7 +259,7 @@ export const VariableTraceTable = ({
                   {/* Execution Pointer Arrow */}
                   <span className="w-5 text-center select-none shrink-0">
                     {isCurrent ? (
-                      <span className="text-emerald-500 font-bold text-xs animate-pulse">➔</span>
+                      <span className="text-blue-400 font-bold text-xs animate-pulse">➔</span>
                     ) : (
                       <span className="text-transparent text-xs">·</span>
                     )}
@@ -277,12 +277,12 @@ export const VariableTraceTable = ({
 
         {/* RIGHT COLUMN: FRAMES & OBJECTS (MEMORY) */}
         <div className={`w-full md:w-80 flex flex-col overflow-hidden transition-colors border-l ${
-          isLight ? 'bg-slate-50/60 border-slate-200' : 'bg-[#0c0d12] border-white/[0.08]'
+          isLight ? 'bg-slate-50/60 border-slate-200' : 'bg-[#0a0d14] border-white/[0.08]'
         }`}>
           
           {/* Header: Frames */}
           <div className={`h-7 border-b px-3 flex items-center justify-between text-[11px] font-medium transition-colors ${
-            isLight ? 'bg-slate-100 border-slate-200 text-slate-700' : 'bg-[#090a0f] border-white/[0.06] text-zinc-400'
+            isLight ? 'bg-slate-100 border-slate-200 text-slate-700' : 'bg-[#0f131a] border-white/[0.06] text-zinc-400'
           }`}>
             <span className="flex items-center gap-1.5 font-medium">
               <Cpu size={12} className={isLight ? 'text-slate-500' : 'text-zinc-400'} />
@@ -295,13 +295,13 @@ export const VariableTraceTable = ({
             
             {/* Python Tutor Frame Box */}
             <div className={`rounded-xl overflow-hidden border shadow-xs transition-colors ${
-              isLight ? 'bg-white border-slate-200' : 'bg-[#111218] border-white/[0.1]'
+              isLight ? 'bg-white border-slate-200' : 'bg-[#0f131a] border-white/[0.08]'
             }`}>
               <div className={`h-7 px-3 flex items-center justify-between border-b ${
-                isLight ? 'bg-slate-100/80 border-slate-200' : 'bg-zinc-900/80 border-white/[0.06]'
+                isLight ? 'bg-slate-100/80 border-slate-200' : 'bg-[#151b26] border-white/[0.06]'
               }`}>
                 <span className={`text-[10px] uppercase font-mono font-bold tracking-wider ${
-                  isLight ? 'text-emerald-700' : 'text-emerald-400'
+                  isLight ? 'text-blue-700' : 'text-blue-400'
                 }`}>
                   main frame
                 </span>
@@ -319,7 +319,7 @@ export const VariableTraceTable = ({
                     <div
                       key={varName}
                       className={`px-3 py-2 flex items-center justify-between transition-colors ${
-                        isModified ? (isLight ? 'bg-emerald-50/50' : 'bg-emerald-500/10') : ''
+                        isModified ? (isLight ? 'bg-blue-50/50' : 'bg-blue-500/10') : ''
                       }`}
                     >
                       {/* Variable Name */}
@@ -341,8 +341,8 @@ export const VariableTraceTable = ({
                           className={`font-mono text-xs px-2.5 py-0.5 rounded border transition-all ${
                             isModified
                               ? isLight
-                                ? 'bg-emerald-100 text-emerald-950 border-emerald-400 font-bold ring-2 ring-emerald-200 shadow-xs'
-                                : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50 font-bold ring-1 ring-emerald-500/30'
+                                ? 'bg-blue-100 text-blue-950 border-blue-400 font-bold ring-2 ring-blue-200 shadow-xs'
+                                : 'bg-blue-500/20 text-blue-300 border-blue-500/50 font-bold ring-1 ring-blue-500/30'
                               : isLight
                               ? 'bg-slate-100 border-slate-200 text-slate-800 font-medium'
                               : 'bg-zinc-900 border-white/[0.08] text-white'
@@ -359,10 +359,10 @@ export const VariableTraceTable = ({
 
             {/* Python Tutor Program Output Box */}
             <div className={`rounded-xl overflow-hidden border shadow-xs transition-colors ${
-              isLight ? 'bg-white border-slate-200' : 'bg-black/40 border-white/[0.08]'
+              isLight ? 'bg-white border-slate-200' : 'bg-[#0f131a] border-white/[0.08]'
             }`}>
               <div className={`h-7 px-3 flex items-center justify-between border-b ${
-                isLight ? 'bg-slate-100/80 border-slate-200 text-slate-700' : 'bg-zinc-900/60 border-white/[0.04] text-zinc-300'
+                isLight ? 'bg-slate-100/80 border-slate-200 text-slate-700' : 'bg-[#151b26] border-white/[0.04] text-zinc-300'
               }`}>
                 <span className="text-[10px] uppercase font-mono font-semibold flex items-center gap-1.5">
                   <Terminal size={12} className={isLight ? 'text-slate-500' : 'text-zinc-400'} />
@@ -371,7 +371,7 @@ export const VariableTraceTable = ({
                 <span className={`text-[9px] font-mono ${isLight ? 'text-slate-500' : 'text-zinc-500'}`}>stdout</span>
               </div>
               <div className={`p-3 font-mono text-[11px] whitespace-pre-wrap leading-relaxed select-text min-h-16 rounded-b-xl ${
-                isLight ? 'bg-slate-50/70 text-slate-800' : 'bg-black/30 text-emerald-400'
+                isLight ? 'bg-slate-50/70 text-slate-800' : 'bg-[#0a0d14] text-cyan-400'
               }`}>
                 {getAccumulatedOutput()}
               </div>
@@ -384,12 +384,12 @@ export const VariableTraceTable = ({
 
       {/* 3. BOTTOM EXPLANATION STRIP (What happened in this step) */}
       <div className={`h-9 border-t px-3 flex items-center gap-2 shrink-0 transition-colors ${
-        isLight ? 'bg-slate-50 border-slate-200 text-slate-700' : 'bg-[#090a0f] border-white/[0.08] text-zinc-300'
+        isLight ? 'bg-slate-50 border-slate-200 text-slate-700' : 'bg-[#0f131a] border-white/[0.08] text-zinc-300'
       }`}>
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+        <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
         <span className="text-xs truncate">
           <strong className={`font-semibold ${isLight ? 'text-slate-900' : 'text-white'}`}>Line {currentStep.line}: </strong>
-          <span className={`font-mono font-medium ${isLight ? 'text-emerald-700' : 'text-emerald-300'}`}>{currentStep.statement}</span>
+          <span className={`font-mono font-medium ${isLight ? 'text-blue-700' : 'text-blue-300'}`}>{currentStep.statement}</span>
           <span className={`mx-1.5 ${isLight ? 'text-slate-300' : 'text-zinc-500'}`}>—</span>
           <span className={isLight ? 'text-slate-700' : 'text-zinc-300'}>{currentStep.travel || currentStep.note}</span>
         </span>

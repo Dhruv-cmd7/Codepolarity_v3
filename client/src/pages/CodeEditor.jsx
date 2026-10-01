@@ -412,7 +412,7 @@ const CodeEditor = ({ token, user, initialTemplateId, onClearTemplate, setCurren
 
   return (
     <div className={`flex flex-col h-screen w-screen overflow-hidden font-sans select-none transition-colors ${
-      isLight ? 'bg-[#f8fafc] text-slate-900' : 'bg-[#090a0f] text-slate-100'
+      isLight ? 'bg-[#f0f3f7] text-slate-900' : 'bg-[#0a0d14] text-slate-100'
     }`}>
       {/* Top Unified IDE Command Bar */}
       <EditorToolbar
@@ -461,7 +461,7 @@ const CodeEditor = ({ token, user, initialTemplateId, onClearTemplate, setCurren
           {/* Editor Container */}
           <div
             className={`flex flex-col overflow-hidden transition-colors ${
-              isLight ? 'bg-white' : 'bg-[#0c0d12]'
+              isLight ? 'bg-white' : 'bg-[#0a0d14]'
             } ${
               layoutMode === 'editor-only' ? 'w-full h-full' : ''
             }`}
@@ -471,13 +471,13 @@ const CodeEditor = ({ token, user, initialTemplateId, onClearTemplate, setCurren
           >
             {/* Editor File Tab Header */}
             <div className={`h-9 border-b px-2 flex items-center justify-between shrink-0 select-none transition-colors ${
-              isLight ? 'bg-slate-50/70 border-slate-200' : 'bg-[#090a0f] border-white/[0.08]'
+              isLight ? 'bg-slate-50/70 border-slate-200' : 'bg-[#0f131a] border-white/[0.08]'
             }`}>
               <div className="flex items-center">
                 <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-t text-xs font-medium border-b-2 transition-colors ${
                   isLight
                     ? 'bg-white text-slate-800 border-blue-500 shadow-xs'
-                    : 'bg-[#0c0d12] text-zinc-200 border-blue-500'
+                    : 'bg-[#0a0d14] text-zinc-100 border-blue-500'
                 }`}>
                   <FileCode2 size={13} style={{ color: selectedLang.color || '#3b82f6' }} />
                   <span>{selectedLang.fileName}</span>
@@ -505,7 +505,7 @@ const CodeEditor = ({ token, user, initialTemplateId, onClearTemplate, setCurren
             </div>
 
             {/* Monaco Editor Component */}
-            <div className={`flex-1 relative overflow-hidden ${isLight ? 'bg-white' : 'bg-[#0c0d12]'}`}>
+            <div className={`flex-1 relative overflow-hidden ${isLight ? 'bg-white' : 'bg-[#0a0d14]'}`}>
               <Editor
                 height="100%"
                 language={selectedLang.monacoLang}
@@ -538,7 +538,7 @@ const CodeEditor = ({ token, user, initialTemplateId, onClearTemplate, setCurren
                 }}
                 loading={
                   <div className={`h-full flex items-center justify-center text-xs ${
-                    isLight ? 'bg-white text-slate-400' : 'bg-[#0c0d12] text-zinc-500'
+                    isLight ? 'bg-white text-slate-400' : 'bg-[#0a0d14] text-zinc-500'
                   }`}>
                     Loading compiler editor...
                   </div>
@@ -611,7 +611,7 @@ const CodeEditor = ({ token, user, initialTemplateId, onClearTemplate, setCurren
         <div className={`fixed bottom-8 right-6 z-50 px-3.5 py-1.5 rounded-lg shadow-xl text-xs font-medium flex items-center gap-2 animate-fade-in border ${
           isLight
             ? 'bg-white border-slate-200 text-slate-800 shadow-slate-200/50'
-            : 'bg-[#12141c] border-white/[0.1] text-zinc-200'
+            : 'bg-[#0f131a] border-white/[0.1] text-zinc-200'
         }`}>
           <span>{toastMessage}</span>
         </div>

@@ -21,7 +21,7 @@ export const ShortcutsModal = ({ isOpen, onClose, theme = 'dark' }) => {
       <div className={`w-full max-w-sm rounded-xl shadow-2xl p-5 relative flex flex-col gap-3.5 text-xs transition-colors border ${
         isLight
           ? 'bg-white border-slate-200 text-slate-800'
-          : 'bg-[#12141c] border-white/[0.1] text-zinc-200'
+          : 'bg-[#0f131a] border-white/[0.1] text-zinc-200'
       }`}>
         {/* Header */}
         <div className={`flex items-center justify-between border-b pb-3 ${

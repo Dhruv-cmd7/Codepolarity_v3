@@ -1,10 +1,10 @@
 export const defineCustomMonacoThemes = (monaco) => {
-  // Codepolarity Minimal Studio Theme - Clean, restrained, high-clarity
+  // Codepolarity Minimal Studio Theme - Clean, restrained, high-clarity (matches website dark navy palette)
   monaco.editor.defineTheme('codepolarity-minimal', {
     base: 'vs-dark',
     inherit: true,
     rules: [
-      { background: '0c0d12', token: '' },
+      { background: '0a0d14', token: '' },
       { token: 'comment', foreground: '52525b', fontStyle: 'italic' },
       { token: 'keyword', foreground: 'c084fc' },
       { token: 'identifier', foreground: 'e4e4e7' },
@@ -19,23 +19,23 @@ export const defineCustomMonacoThemes = (monaco) => {
       { token: 'attribute.value', foreground: '86efac' },
     ],
     colors: {
-      'editor.background': '#0c0d12',
-      'editor.foreground': '#e4e4e7',
-      'editor.lineHighlightBackground': '#14161f',
-      'editor.selectionBackground': '#27272a88',
-      'editor.inactiveSelectionBackground': '#27272a44',
+      'editor.background': '#0a0d14',
+      'editor.foreground': '#f3f4f6',
+      'editor.lineHighlightBackground': '#151b26',
+      'editor.selectionBackground': '#3b82f633',
+      'editor.inactiveSelectionBackground': '#3b82f61a',
       'editorCursor.foreground': '#ffffff',
-      'editorLineNumber.foreground': '#3f3f46',
-      'editorLineNumber.activeForeground': '#a1a1aa',
-      'editorIndentGuide.background': '#1e2029',
-      'editorIndentGuide.activeBackground': '#3f3f46',
-      'editorWhitespace.foreground': '#27272a',
-      'editorWidget.background': '#12141c',
-      'editorWidget.border': '#27272a',
-      'editorSuggestWidget.background': '#12141c',
-      'editorSuggestWidget.border': '#27272a',
-      'editorSuggestWidget.selectedBackground': '#1f222e',
-      'minimap.background': '#0c0d12',
+      'editorLineNumber.foreground': '#475569',
+      'editorLineNumber.activeForeground': '#94a3b8',
+      'editorIndentGuide.background': '#1c2331',
+      'editorIndentGuide.activeBackground': '#3b82f6',
+      'editorWhitespace.foreground': '#1c2331',
+      'editorWidget.background': '#0f131a',
+      'editorWidget.border': '#1c2331',
+      'editorSuggestWidget.background': '#0f131a',
+      'editorSuggestWidget.border': '#1c2331',
+      'editorSuggestWidget.selectedBackground': '#1c2331',
+      'minimap.background': '#0a0d14',
     }
   });
 
