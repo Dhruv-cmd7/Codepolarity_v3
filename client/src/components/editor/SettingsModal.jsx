@@ -39,10 +39,10 @@ export const SettingsModal = ({
           isLight ? 'border-slate-200' : 'border-white/[0.08]'
         }`}>
           <div className="flex items-center gap-2">
-            <Sliders size={15} className={isLight ? 'text-slate-600' : 'text-zinc-400'} />
-            <h3 className={`font-semibold ${isLight ? 'text-slate-900' : 'text-white'}`}>
-              Editor Preferences
-            </h3>
+            <Sliders size={14} className="text-blue-400" />
+            <span className="font-mono text-xs font-bold text-blue-400">
+              [ 02 // PREFERENCES ]
+            </span>
           </div>
           <button
             onClick={onClose}

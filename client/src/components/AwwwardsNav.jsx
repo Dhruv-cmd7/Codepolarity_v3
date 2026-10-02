@@ -13,32 +13,32 @@ import { cn } from "@/lib/utils";
  */
 
 const DEFAULT_ITEMS = [
-  { label: "Overview", href: "#" },
-  { label: "Roadmaps", href: "#" },
-  { label: "Online IDE", href: "#" },
-  { label: "Typlab", href: "#" },
+  { label: "Overview", href: "/" },
+  { label: "Roadmaps", href: "/roadmaps" },
+  { label: "Online IDE", href: "/editor" },
+  { label: "Typlab", href: "/typlab" },
 ];
 
 const DEFAULT_COLUMNS = [
   {
     title: "Platform",
     links: [
-      { label: "Overview", href: "#" },
-      { label: "Assessment", href: "#" },
+      { label: "Overview", href: "/" },
+      { label: "Assessment", href: "/assessment" },
     ],
   },
   {
     title: "Tools",
     links: [
-      { label: "Roadmaps", href: "#" },
-      { label: "Online IDE", href: "#" },
-      { label: "Typlab Speed", href: "#" },
+      { label: "Roadmaps", href: "/roadmaps" },
+      { label: "Online IDE", href: "/editor" },
+      { label: "Typlab Speed", href: "/typlab" },
     ],
   },
   {
     title: "Account",
     links: [
-      { label: "Sign In", href: "#" },
+      { label: "Sign In", href: "/signin" },
     ],
   },
   {
@@ -275,11 +275,16 @@ export function AwwwardsNav({
                 className={cn(
                   "w-full h-full flex items-center justify-center px-2 sm:px-3 text-center text-xs sm:text-sm font-medium transition-colors duration-75 ease-out cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis select-none",
                   item.active
-                    ? "text-black dark:text-white group-hover:text-white dark:group-hover:text-black"
+                    ? "text-black dark:text-white group-hover:text-white dark:group-hover:text-black font-semibold"
                     : "text-neutral-700 dark:text-neutral-300 group-hover:text-white dark:group-hover:text-black"
                 )}
               >
-                {item.label}
+                <span className="flex items-center justify-center gap-1.5">
+                  {item.active && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0 animate-pulse" />
+                  )}
+                  <span>{item.label}</span>
+                </span>
               </a>
             </div>
           ))}

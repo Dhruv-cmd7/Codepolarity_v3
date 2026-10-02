@@ -1,36 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd
+        http://www.google.com/schemas/sitemap-image/1.1
+        http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd">
   <url>
     <loc>https://codepolarity.com/</loc>
-    <lastmod>2026-09-16</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-10-02</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://codepolarity.com/og-image.svg</image:loc>
+      <image:title>Codepolarity — Autonomous Developer Career Engine</image:title>
+      <image:caption>Interactive Developer Roadmaps, Sandboxed Browser IDE, and Skill Benchmarking</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://codepolarity.com/favicon.svg</image:loc>
+      <image:title>Codepolarity Emblem</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://codepolarity.com/roadmaps</loc>
-    <lastmod>2026-09-16</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://codepolarity.com/og-image.svg</image:loc>
+      <image:title>Developer Roadmaps and Career Pathways</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://codepolarity.com/assessment</loc>
-    <lastmod>2026-09-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <lastmod>2026-10-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://codepolarity.com/og-image.svg</image:loc>
+      <image:title>Technical Skill Calibration &amp; Benchmarking</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://codepolarity.com/editor</loc>
-    <lastmod>2026-09-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <lastmod>2026-10-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://codepolarity.com/og-image.svg</image:loc>
+      <image:title>Browser Sandboxed Online IDE</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://codepolarity.com/typlab</loc>
-    <lastmod>2026-09-16</lastmod>
+    <lastmod>2026-10-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://codepolarity.com/og-image.svg</image:loc>
+      <image:title>Typlab Keystroke Velocity &amp; Syntax Speed Drill</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://codepolarity.com/signin</loc>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
 </urlset>

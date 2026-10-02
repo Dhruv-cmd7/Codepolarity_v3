@@ -1,0 +1,72 @@
+# Codepolarity — Complete Technical & Platform Context for LLMs
+
+## Overview
+Codepolarity is an autonomous software engineering career engine and learning platform. It integrates structured curriculum pathways, automated skill assessment benchmarks, a cloud sandboxed browser IDE, and code typing telemetry (Typlab) into a zero-configuration developer environment.
+
+## Canonical Endpoints & Routes
+- Homepage (`/`): High-level overview, platform capabilities, interactive architectural demo, technology ecosystem showcase, FAQ accordion, and call to action.
+- Roadmaps (`/roadmaps`): Milestone-driven learning pathways covering Frontend Architecture, Backend Engineering, Full-Stack Development, Distributed Systems, Cloud & DevOps, and Data Structures & Algorithms.
+- Assessment (`/assessment`): Multi-stage technical calibration engine assessing computer science foundations, algorithm efficiency, system design patterns, and engineering problem-solving.
+- Online IDE (`/editor`): Cloud-powered, client-isolated browser code sandbox supporting multi-language execution, live test runners, syntax highlighting, and algorithm templates.
+- Typlab (`/typlab`): Code velocity telemetry lab specifically engineered for software developers. Measures real-world typing speed (WPM), accuracy, and keystroke ergonomics on syntax constructs (brackets, semicolons, async/await, lambdas, operators) across React, Python, CSS, Go, and Rust.
+- Authentication (`/signin`, `/register`): User account management, session persistence, and developer career tier tracking.
+
+## Core Features & Functionality
+
+### 1. Developer Roadmaps (`/roadmaps`)
+- Each roadmap is structured as an interactive milestone graph with progressive difficulty.
+- Nodes provide concise theoretical concepts, key takeaways, code examples, external reference documentation, and interactive challenge tasks.
+- Tracks user completion percentage and displays verified progress badges.
+- Available tracks:
+  - Frontend Engineering: Semantic HTML, modern CSS layouts (Flexbox, Grid), JavaScript ES6+, React Hooks & state management, performance profiling, responsive design.
+  - Backend Engineering: Node.js & Express, RESTful API architecture, Python FastAPI, relational databases (PostgreSQL), NoSQL (MongoDB, Redis), caching strategies, authentication (JWT, OAuth2).
+  - Computer Science & Algorithms: Big-O time and space complexity, Arrays, Linked Lists, Trees, Graphs, Dynamic Programming, Sorting & Searching algorithms.
+  - System Design & Cloud: Microservices architecture, load balancing, message queues (Kafka, RabbitMQ), containerization (Docker, Kubernetes), CDN caching, horizontal scaling.
+
+### 2. Technical Skill Calibration Engine (`/assessment`)
+- Objective benchmarking tool designed to replace subjective resume screening with verified capability metrics.
+- Presents progressive multiple-choice and conceptual problem-solving challenges across computer science, system design, and debugging.
+- Calibrates candidate into engineering tiers (Tier 1 Foundational, Tier 2 Intermediate, Tier 3 Advanced / Staff Architect).
+- Offers personalized roadmap recommendations based on diagnostic weak spots.
+
+### 3. Browser Sandbox IDE (`/editor`)
+- Instant zero-setup cloud development environment running inside an isolated sandbox.
+- Supports JavaScript, TypeScript, Python, and C++.
+- Includes real-time console output, execution time metrics, error stack trace parsing, and built-in algorithm test suites.
+- Directly integrated with roadmap challenges so learners can test code solutions in one click.
+
+### 4. Typlab Keystroke Velocity Lab (`/typlab`)
+- Standard typing tests measure prose speed, which fails to reflect coding efficiency where programmers spend significant time navigating curly braces, indentation, arrow syntax, and special characters.
+- Typlab provides authentic syntax snippets from production codebases.
+- Live telemetry measures Gross WPM, Net WPM, Error Rate, and Keystroke Rhythm.
+- Audio-tactile mechanical keyboard feedback modes and error chime options.
+
+## Frequently Asked Questions (FAQ) & Knowledge Base
+
+### Q: What is Codepolarity?
+A: Codepolarity is an integrated software engineering learning platform and developer career engine. It unifies modular curriculum roadmaps, cloud execution environments, syntax intelligence, and code typing telemetry into a single high-performance workspace.
+
+### Q: What makes Codepolarity different from LeetCode, HackerRank, or traditional bootcamps?
+A: While LeetCode focuses narrowly on competitive algorithmic puzzles, Codepolarity provides a holistic engineering journey: end-to-end curriculum roadmaps, real-world sandboxed IDE development, tactile coding velocity drills (Typlab), and diagnostic skill calibration that reflects practical software craftsmanship.
+
+### Q: Are local development environments required to run code?
+A: No local configuration is necessary. Codepolarity delivers isolated in-browser runtimes with real-time compilation, execution, and automated test runners across all major programming languages.
+
+### Q: How are the interactive developer roadmaps structured?
+A: Every roadmap functions as an end-to-end technical syllabus. Milestones break complex concepts into progressive modules complete with core architectural theory, interactive challenges, and reference implementations.
+
+### Q: What is the role of Typlab in developer education?
+A: Writing code requires distinct tactile ergonomics—navigating brackets, operators, indentation, and language keywords that standard typing tests ignore. Typlab tracks keystroke telemetry on production code snippets to build native fluency.
+
+### Q: How does the technical assessment calibrate developer skill tiers?
+A: The assessment evaluates algorithmic reasoning, time and space complexity, API design, and system architecture. The engine scores answers to diagnose strengths and knowledge gaps, mapping directly to recommended curriculum tracks.
+
+### Q: Is Codepolarity free to use?
+A: Yes. Core developer roadmaps, the browser sandbox IDE, Typlab keystroke drills, and initial skill assessments are freely accessible to developers worldwide.
+
+## Entity & Knowledge Graph Summary
+- Name: Codepolarity
+- URL: https://codepolarity.com/
+- Application Category: DeveloperApplication, EducationalApplication
+- Target Audience: Software Engineers, Computer Science Students, Technical Recruiters, Engineering Leads
+- Technologies Highlighted: React, Vite, Node.js, Python, TypeScript, Docker, Kubernetes, PostgreSQL, Redis, Supabase, Cloudflare, Web Standards

@@ -1,23 +1,29 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" prefix="og: https://ogp.me/ns#">
 
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/favicon.svg" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="help" type="text/plain" href="/llms.txt" title="LLM Context Standard" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <!-- Primary Meta Tags -->
-  <title>Codepolarity — Autonomous Developer Career Engine & Skill Benchmarking</title>
-  <meta name="title" content="Codepolarity — Autonomous Developer Career Engine & Skill Benchmarking" />
+  <title>Codepolarity — Autonomous Developer Career Engine &amp; Skill Benchmarking</title>
+  <meta name="title" content="Codepolarity — Autonomous Developer Career Engine &amp; Skill Benchmarking" />
   <meta name="description"
-    content="Codepolarity is an autonomous developer career engine. Benchmark your programming skills, calibrate technical tiers with AI agents, navigate interactive learning roadmaps, and practice in a zero-setup browser IDE." />
+    content="Codepolarity is an integrated software engineering learning platform and developer career engine. Master curriculum roadmaps, calibrate skills with diagnostic assessments, drill keystroke velocity in Typlab, and build in a zero-setup browser IDE." />
   <meta name="keywords"
-    content="developer career engine, coding assessment, technical skill benchmarking, programming roadmaps, browser IDE sandbox, algorithms practice, software engineering interview, AI code evaluation, developer telemetry" />
+    content="developer career engine, coding assessment, technical skill benchmarking, programming roadmaps, browser IDE sandbox, algorithms practice, software engineering interview, AI code evaluation, developer telemetry, Typlab code typing speed" />
   <meta name="author" content="Codepolarity" />
   <meta name="publisher" content="Codepolarity" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
   <link rel="canonical" href="https://codepolarity.com/" />
+  <link rel="alternate" hreflang="x-default" href="https://codepolarity.com/" />
+  <link rel="alternate" hreflang="en" href="https://codepolarity.com/" />
 
   <!-- Theme & Mobile App -->
   <meta name="theme-color" content="#0a0d14" />
@@ -31,10 +37,11 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://codepolarity.com/" />
   <meta property="og:site_name" content="Codepolarity" />
-  <meta property="og:title" content="Codepolarity — Autonomous Developer Career Engine & Skill Benchmarking" />
+  <meta property="og:title" content="Codepolarity — Autonomous Developer Career Engine &amp; Skill Benchmarking" />
   <meta property="og:description"
-    content="Benchmark programming capabilities, calibrate technical tiers with autonomous AI agents, and master career pathways with sandboxed browser runtimes." />
+    content="Benchmark programming capabilities, master curated developer roadmaps, drill keystroke velocity in Typlab, and run code in isolated cloud browser sandboxes." />
   <meta property="og:image" content="https://codepolarity.com/og-image.svg" />
+  <meta property="og:image:secure_url" content="https://codepolarity.com/og-image.svg" />
   <meta property="og:image:type" content="image/svg+xml" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -43,20 +50,22 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@codepolarity" />
+  <meta name="twitter:creator" content="@codepolarity" />
   <meta name="twitter:url" content="https://codepolarity.com/" />
-  <meta name="twitter:title" content="Codepolarity — Autonomous Developer Career Engine & Skill Benchmarking" />
+  <meta name="twitter:title" content="Codepolarity — Autonomous Developer Career Engine &amp; Skill Benchmarking" />
   <meta name="twitter:description"
-    content="Benchmark programming capabilities, calibrate technical tiers with autonomous AI agents, and master career pathways with sandboxed browser runtimes." />
+    content="Benchmark programming capabilities, master curated developer roadmaps, drill keystroke velocity in Typlab, and run code in isolated cloud browser sandboxes." />
   <meta name="twitter:image" content="https://codepolarity.com/og-image.svg" />
   <meta name="twitter:image:alt" content="Codepolarity Autonomous Developer Career Engine" />
 
-  <!-- Resource Preconnects -->
+  <!-- Resource Preconnects for Core Web Vitals -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wdth,wght@8..144,25..150,300..700&family=Google+Sans+Code:ital@0;1&display=swap" rel="stylesheet" />
 
-  <!-- Structured Data / JSON-LD for Search Engines -->
+  <!-- Comprehensive Structured Data / JSON-LD Knowledge Graph for Search & AI Engines -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -66,8 +75,11 @@
           "@id": "https://codepolarity.com/#website",
           "url": "https://codepolarity.com/",
           "name": "Codepolarity",
-          "description": "Autonomous developer career engine for benchmarking coding capabilities and interactive roadmaps.",
+          "description": "Autonomous developer career engine for benchmarking coding capabilities, interactive roadmaps, and sandboxed browser IDE.",
           "inLanguage": "en-US",
+          "publisher": {
+            "@id": "https://codepolarity.com/#organization"
+          },
           "potentialAction": {
             "@type": "SearchAction",
             "target": "https://codepolarity.com/?q={search_term_string}",
@@ -81,11 +93,20 @@
           "url": "https://codepolarity.com/",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://codepolarity.com/favicon.svg"
+            "url": "https://codepolarity.com/favicon.svg",
+            "caption": "Codepolarity Logo"
           },
           "sameAs": [
-            "https://github.com",
+            "https://github.com/Dhruv-cmd7/Codepolarity_v3",
             "https://linkedin.com"
+          ],
+          "knowsAbout": [
+            "Software Engineering",
+            "Full-Stack Web Development",
+            "Computer Science Fundamentals",
+            "System Architecture",
+            "Algorithm Optimization",
+            "Developer Career Acceleration"
           ]
         },
         {
@@ -97,16 +118,67 @@
           "offers": {
             "@type": "Offer",
             "price": "0",
-            "priceCurrency": "USD"
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
           },
-          "description": "Autonomous developer career engine that benchmarks programming capabilities, calibrates technical skill tiers with AI agents, and orchestrates interactive career pathways.",
+          "description": "Autonomous developer career engine that benchmarks programming capabilities, calibrates technical skill tiers with AI agents, orchestrates interactive career pathways, and delivers zero-setup browser IDE runtimes.",
           "aggregateRating": {
             "@type": "AggregateRating",
             "ratingValue": "4.9",
             "ratingCount": "1280",
             "bestRating": "5",
             "worstRating": "1"
-          }
+          },
+          "featureList": [
+            "Interactive Developer Roadmaps & Milestones",
+            "Diagnostic Technical Skill Assessment & Tier Calibration",
+            "Zero-Setup Browser Sandboxed IDE",
+            "Typlab Keystroke Velocity & Syntax Ergonomics Telemetry",
+            "Instant Automated Algorithm Test Runners"
+          ]
+        },
+        {
+          "@type": "EducationalOrganization",
+          "@id": "https://codepolarity.com/#education",
+          "name": "Codepolarity Academy",
+          "url": "https://codepolarity.com/",
+          "description": "Interactive technical syllabus and coding career pathways for software engineers."
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://codepolarity.com/#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://codepolarity.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Developer Roadmaps",
+              "item": "https://codepolarity.com/roadmaps"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Skill Assessment",
+              "item": "https://codepolarity.com/assessment"
+            },
+            {
+              "@type": "ListItem",
+              "position": 4,
+              "name": "Online IDE Sandbox",
+              "item": "https://codepolarity.com/editor"
+            },
+            {
+              "@type": "ListItem",
+              "position": 5,
+              "name": "Typlab",
+              "item": "https://codepolarity.com/typlab"
+            }
+          ]
         },
         {
           "@type": "FAQPage",
@@ -117,39 +189,55 @@
               "name": "What is Codepolarity?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Codepolarity is an autonomous developer career engine that benchmarks programming capabilities, calibrates technical skill tiers with AI agents, and orchestrates interactive career pathways."
+                "text": "Codepolarity is an integrated software engineering learning platform and developer career engine. It unifies modular curriculum roadmaps, cloud execution environments, syntax intelligence, and code typing telemetry into a single high-performance workspace."
               }
             },
             {
               "@type": "Question",
-              "name": "How do the autonomous agents assist my learning?",
+              "name": "What makes Codepolarity different from LeetCode or traditional platforms?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Our specialized Detection, Investigation, and Orchestration agents continuously scan your code, build personalized roadmap trajectories, and verify your solutions in sandboxed runtimes."
+                "text": "Unlike platforms that focus solely on competitive algorithmic puzzles, Codepolarity provides a holistic engineering journey: end-to-end curriculum roadmaps, real-world sandboxed IDE development, tactile coding velocity drills (Typlab), and diagnostic skill calibration that reflects practical software craftsmanship."
               }
             },
             {
               "@type": "Question",
-              "name": "Is Codepolarity suitable for all experience levels?",
+              "name": "Are local development environments required to run code?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes! Whether you are building core programming foundations or mastering distributed system architecture, Codepolarity dynamically adapts to your current tier."
+                "text": "No local configuration is necessary. Codepolarity delivers isolated in-browser runtimes with real-time compilation, execution, and automated test runners across all major programming languages."
               }
             },
             {
               "@type": "Question",
-              "name": "Can I run and test code directly in the browser?",
+              "name": "How are the interactive developer roadmaps structured?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Absolutely. Codepolarity includes a full-featured browser sandbox IDE with algorithm test runners and keystroke telemetry drills—no local setup required."
+                "text": "Every roadmap functions as an end-to-end technical syllabus. Milestones break complex concepts into progressive modules complete with core architectural theory, interactive challenges, and reference implementations."
               }
             },
             {
               "@type": "Question",
-              "name": "How do I get started with a skill assessment?",
+              "name": "What is the role of Typlab in developer education?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Simply click 'Get Started' on the homepage to launch your initial calibration drill and generate your customized developer roadmap."
+                "text": "Writing code requires distinct tactile ergonomics—navigating brackets, operators, indentation, and language keywords that standard typing tests ignore. Typlab tracks keystroke telemetry on production code snippets to build native fluency."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does the technical assessment calibrate developer skill tiers?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The assessment evaluates algorithmic reasoning, time and space complexity, API design, and system architecture. The engine scores answers to diagnose strengths and knowledge gaps, mapping directly to recommended curriculum tracks."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is Codepolarity free to use?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Core developer roadmaps, the browser sandbox IDE, Typlab keystroke drills, and initial skill assessments are freely accessible to developers worldwide."
               }
             }
           ]

@@ -4,7 +4,8 @@ import {
   GitCommit,
   Sparkles,
   Copy,
-  Check
+  Check,
+  RotateCcw
 } from 'lucide-react';
 import { FlowchartViewer } from './FlowchartViewer';
 import { VariableTraceTable } from './VariableTraceTable';
@@ -86,24 +87,24 @@ export const OutputPanel = ({
     <div className={`h-full flex flex-col border-l overflow-hidden select-none transition-colors ${
       isLight ? 'bg-white border-slate-200 text-slate-800' : 'bg-[#0a0d14] border-white/[0.08] text-zinc-200'
     }`}>
-      {/* Top Header with Modern Sliding Toggle */}
-      <div className={`h-11 border-b px-2.5 flex items-center justify-between shrink-0 transition-colors ${
-        isLight ? 'bg-slate-50/70 border-slate-200' : 'bg-[#0f131a] border-white/[0.08]'
+      {/* Top Header with Signature Brutalist Tabs */}
+      <div className={`h-11 border-b px-3 flex items-center justify-between gap-2 shrink-0 transition-colors ${
+        isLight ? 'bg-slate-50/95 border-slate-200' : 'bg-[#0c1017] border-white/[0.08]'
       }`}>
         {/* Sliding Segmented Toggle Control */}
         <div
           ref={containerRef}
-          className={`relative flex items-center p-0.5 rounded-lg border text-xs font-medium w-full max-w-sm transition-colors ${
-            isLight ? 'bg-slate-200/60 border-slate-200' : 'bg-[#151b26] border-white/[0.06]'
+          className={`relative inline-flex items-center p-1 rounded-xl border font-mono text-xs font-semibold transition-colors ${
+            isLight ? 'bg-slate-200/60 border-slate-200' : 'bg-black/40 border-white/[0.08]'
           }`}
         >
           {/* Sliding Active Pill Background */}
           {indicatorStyle.ready && (
             <div
-              className={`absolute top-0.5 bottom-0.5 rounded-md transition-all duration-200 ease-out shadow-xs pointer-events-none ${
+              className={`absolute top-1 bottom-1 rounded-lg transition-all duration-200 ease-out shadow-xs pointer-events-none ${
                 isLight
                   ? 'bg-white border border-slate-200/90 shadow-xs'
-                  : 'bg-white/[0.14] border border-white/[0.1] shadow-xs'
+                  : 'bg-white/[0.12] border border-white/[0.1] shadow-xs'
               }`}
               style={{
                 left: `${indicatorStyle.left}px`,
@@ -116,47 +117,47 @@ export const OutputPanel = ({
           <button
             ref={outputTabRef}
             onClick={() => setActiveTab('output')}
-            className={`relative z-10 flex-1 py-1 px-2 text-xs rounded-md transition-colors cursor-pointer flex items-center justify-center gap-1.5 min-w-0 ${
+            className={`relative z-10 py-1.5 px-3.5 text-xs rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-1.5 whitespace-nowrap select-none font-medium ${
               activeTab === 'output'
-                ? isLight ? 'text-slate-900 font-semibold' : 'text-white font-semibold'
+                ? isLight ? 'text-slate-950 font-semibold' : 'text-white font-semibold'
                 : isLight ? 'text-slate-500 hover:text-slate-800' : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
-            <Terminal size={12} className="shrink-0" />
-            <span className="truncate">Output</span>
+            <Terminal size={13} className="shrink-0 text-blue-400" />
+            <span>Output</span>
           </button>
 
           {/* Option 2: Flowchart */}
           <button
             ref={flowchartTabRef}
             onClick={() => setActiveTab('flowchart')}
-            className={`relative z-10 flex-1 py-1 px-2 text-xs rounded-md transition-colors cursor-pointer flex items-center justify-center gap-1.5 min-w-0 ${
+            className={`relative z-10 py-1.5 px-3.5 text-xs rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-1.5 whitespace-nowrap select-none font-medium ${
               activeTab === 'flowchart'
-                ? isLight ? 'text-slate-900 font-semibold' : 'text-white font-semibold'
+                ? isLight ? 'text-slate-950 font-semibold' : 'text-white font-semibold'
                 : isLight ? 'text-slate-500 hover:text-slate-800' : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
-            <GitCommit size={12} className="shrink-0" />
-            <span className="truncate">Flowchart</span>
+            <GitCommit size={13} className="shrink-0 text-emerald-400" />
+            <span>Flowchart</span>
           </button>
 
           {/* Option 3: Visual Execution */}
           <button
             ref={traceTabRef}
             onClick={() => setActiveTab('trace')}
-            className={`relative z-10 flex-1 py-1 px-2 text-xs rounded-md transition-colors cursor-pointer flex items-center justify-center gap-1.5 min-w-0 ${
+            className={`relative z-10 py-1.5 px-3.5 text-xs rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-1.5 whitespace-nowrap select-none font-medium ${
               activeTab === 'trace'
-                ? isLight ? 'text-blue-950 font-bold' : 'text-blue-400 font-semibold'
+                ? isLight ? 'text-blue-700 font-semibold' : 'text-blue-400 font-semibold'
                 : isLight ? 'text-slate-500 hover:text-slate-800' : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
-            <Sparkles size={12} className={`shrink-0 ${activeTab === 'trace' ? (isLight ? 'text-blue-600' : 'text-blue-400') : ''}`} />
-            <span className="truncate">Visual Execution</span>
+            <Sparkles size={13} className={`shrink-0 ${activeTab === 'trace' ? (isLight ? 'text-blue-600' : 'text-blue-400') : 'text-amber-400'}`} />
+            <span>Trace</span>
             {trace.length > 0 && (
-              <span className={`text-[10px] font-mono px-1 py-0.2 rounded shrink-0 ${
+              <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full shrink-0 font-medium ${
                 activeTab === 'trace'
-                  ? isLight ? 'bg-blue-100 text-blue-800 font-bold' : 'bg-blue-500/20 text-blue-300'
-                  : isLight ? 'text-slate-400' : 'text-zinc-500'
+                  ? isLight ? 'bg-blue-100 text-blue-800 border border-blue-200' : 'bg-blue-500/25 text-blue-300 border border-blue-500/40'
+                  : isLight ? 'bg-slate-100 text-slate-500' : 'bg-white/[0.06] text-zinc-400'
               }`}>
                 {trace.length}
               </span>
@@ -165,22 +166,42 @@ export const OutputPanel = ({
         </div>
 
         {/* Right Output Action Buttons */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           {activeTab === 'output' && (
             <>
               {executionStats && (
-                <span className={`text-[10px] font-mono mr-1.5 ${isLight ? 'text-slate-400' : 'text-zinc-500'}`}>
-                  {executionStats.timeMs}ms
-                </span>
+                <div className={`hidden sm:flex items-center gap-1.5 text-[11px] font-mono px-2.5 py-1 rounded-lg border ${
+                  isLight
+                    ? 'bg-white border-slate-200 text-slate-700'
+                    : 'bg-white/[0.03] border-white/[0.08] text-zinc-300'
+                }`}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${executionStats.status === 'error' ? 'bg-rose-500' : 'bg-emerald-400'}`} />
+                  <span>{executionStats.timeMs}ms</span>
+                </div>
+              )}
+              {onClearOutput && terminalOutput && (
+                <button
+                  onClick={onClearOutput}
+                  className={`p-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer border ${
+                    isLight
+                      ? 'border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800'
+                      : 'border-white/[0.08] text-zinc-400 hover:border-white/[0.2] hover:text-white'
+                  }`}
+                  title="Clear Terminal Output"
+                >
+                  <RotateCcw size={13} />
+                </button>
               )}
               <button
                 onClick={handleCopyOutput}
-                className={`p-1.5 rounded-md transition-colors cursor-pointer ${
-                  isLight ? 'text-slate-400 hover:text-slate-800 hover:bg-slate-100' : 'text-zinc-500 hover:text-zinc-200 hover:bg-white/[0.06]'
+                className={`p-1.5 rounded-lg transition-colors cursor-pointer border ${
+                  isLight
+                    ? 'border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800'
+                    : 'border-white/[0.08] text-zinc-400 hover:border-white/[0.2] hover:text-white'
                 }`}
                 title="Copy Terminal Output"
               >
-                {copied ? <Check size={13} className="text-blue-400" /> : <Copy size={13} />}
+                {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
               </button>
             </>
           )}
@@ -188,28 +209,40 @@ export const OutputPanel = ({
       </div>
 
       {/* Main Tab Viewport */}
-      <div className="flex-1 overflow-hidden relative flex flex-col">
+      <div className="flex-1 min-h-0 overflow-hidden relative flex flex-col">
         {/* ================= 1. TERMINAL OUTPUT TAB ================= */}
         {activeTab === 'output' && (
-          <div className={`flex-1 p-3 overflow-y-auto font-mono text-xs select-text scrollbar-thin space-y-2 transition-colors ${
+          <div className={`flex-1 p-4 overflow-y-auto font-mono text-xs select-text scrollbar-thin space-y-2 transition-colors ${
             isLight ? 'bg-white text-slate-800' : 'bg-[#0a0d14] text-zinc-200'
           }`}>
             {isRunning ? (
-              <div className={`flex items-center gap-2 ${isLight ? 'text-slate-500' : 'text-zinc-400'}`}>
+              <div className={`flex items-center gap-2.5 p-3 rounded-lg border font-mono ${
+                isLight ? 'bg-blue-50/70 border-blue-200 text-blue-800' : 'bg-blue-500/10 border-blue-500/30 text-blue-300'
+              }`}>
                 <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping" />
-                <span>Compiling and executing {language?.toUpperCase()} program...</span>
+                <span>Compiling and executing runtime...</span>
               </div>
             ) : terminalOutput ? (
-              <div className={`whitespace-pre-wrap leading-relaxed ${isLight ? 'text-slate-900 font-medium' : 'text-zinc-200'}`}>
-                {terminalOutput}
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between text-[11px] text-zinc-500 pb-1 border-b border-white/[0.06]">
+                  <span className="font-sans font-medium text-zinc-400">Execution Output</span>
+                  <span className="text-emerald-400 font-mono">Process completed (exit 0)</span>
+                </div>
+                <div className={`whitespace-pre-wrap leading-relaxed font-mono ${isLight ? 'text-slate-900 font-medium' : 'text-zinc-200'}`}>
+                  {terminalOutput}
+                </div>
               </div>
             ) : (
-              <div className={`h-full flex flex-col items-center justify-center text-xs gap-1.5 ${
+              <div className={`h-full flex flex-col items-center justify-center text-xs gap-2 py-12 ${
                 isLight ? 'text-slate-400' : 'text-zinc-600'
               }`}>
-                <Terminal size={20} className={isLight ? 'text-slate-300' : 'text-zinc-700'} />
-                <p className={isLight ? 'text-slate-600 font-medium' : 'text-zinc-400'}>Program terminal ready</p>
-                <span className={`text-[11px] ${isLight ? 'text-slate-400' : 'text-zinc-600'}`}>Click "Run (⌘↵)" to compile and execute</span>
+                <Terminal size={22} className={isLight ? 'text-slate-300' : 'text-zinc-700'} />
+                <p className={`text-xs ${isLight ? 'text-slate-700 font-semibold' : 'text-zinc-300 font-semibold'}`}>
+                  Terminal Ready
+                </p>
+                <span className={`text-[11px] ${isLight ? 'text-slate-400' : 'text-zinc-500'}`}>
+                  Click Run or press ⌘↵ to execute code
+                </span>
               </div>
             )}
           </div>
@@ -239,3 +272,5 @@ export const OutputPanel = ({
     </div>
   );
 };
+
+export default OutputPanel;

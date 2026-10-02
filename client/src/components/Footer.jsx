@@ -80,30 +80,30 @@ const Footer = ({ setCurrentPage, onOpenAuth }) => {
     {
       title: 'Platform',
       links: [
-        { label: 'Overview', action: () => navigateTo('landing') },
-        { label: 'Skill Assessment', action: () => navigateTo('assessment') },
-        { label: 'Developer Roadmaps', action: () => navigateTo('roadmaps') },
-        { label: 'Online IDE Sandbox', action: () => navigateTo('editor') },
-        { label: 'Typlab Velocity', action: () => navigateTo('typlab') },
+        { label: 'Overview', to: '/', action: () => navigateTo('landing') },
+        { label: 'Skill Assessment', to: '/assessment', action: () => navigateTo('assessment') },
+        { label: 'Developer Roadmaps', to: '/roadmaps', action: () => navigateTo('roadmaps') },
+        { label: 'Online IDE Sandbox', to: '/editor', action: () => navigateTo('editor') },
+        { label: 'Typlab Velocity', to: '/typlab', action: () => navigateTo('typlab') },
       ],
     },
     {
       title: 'Developer Tools',
       links: [
-        { label: 'Skill Calibration Engine', action: () => navigateTo('assessment') },
-        { label: 'Interactive Code Sandbox', action: () => navigateTo('editor') },
-        { label: 'Keystroke Speed Lab', action: () => navigateTo('typlab') },
-        { label: 'Curated Skill Pathways', action: () => navigateTo('roadmaps') },
-        { label: 'Platform FAQs', action: scrollToFaq },
+        { label: 'Skill Calibration Engine', to: '/assessment', action: () => navigateTo('assessment') },
+        { label: 'Interactive Code Sandbox', to: '/editor', action: () => navigateTo('editor') },
+        { label: 'Keystroke Speed Lab', to: '/typlab', action: () => navigateTo('typlab') },
+        { label: 'Curated Skill Pathways', to: '/roadmaps', action: () => navigateTo('roadmaps') },
+        { label: 'Platform FAQs', to: '#faq-section', action: scrollToFaq },
       ],
     },
     {
       title: 'Account',
       links: [
-        { label: 'Sign In', action: () => (onOpenAuth ? onOpenAuth() : navigateTo('signin')) },
-        { label: 'Create Account', action: () => (onOpenAuth ? onOpenAuth() : navigateTo('register')) },
-        { label: 'Skill Benchmarking', action: () => navigateTo('assessment') },
-        { label: 'Code Playground', action: () => navigateTo('editor') },
+        { label: 'Sign In', to: '/signin', action: () => (onOpenAuth ? onOpenAuth() : navigateTo('signin')) },
+        { label: 'Create Account', to: '/signin', action: () => (onOpenAuth ? onOpenAuth() : navigateTo('register')) },
+        { label: 'Skill Benchmarking', to: '/assessment', action: () => navigateTo('assessment') },
+        { label: 'Code Playground', to: '/editor', action: () => navigateTo('editor') },
       ],
     },
     {
@@ -144,6 +144,27 @@ const Footer = ({ setCurrentPage, onOpenAuth }) => {
                             <item.Icon />
                           </span>
                         )}
+                        <AsciiGlitchRipple
+                          as="span"
+                          dur={800}
+                          spread={1.2}
+                          style={styles.linkText}
+                        >
+                          {item.label}
+                        </AsciiGlitchRipple>
+                      </a>
+                    ) : item.to ? (
+                      <a
+                        href={item.to}
+                        onClick={(e) => {
+                          if (item.action) {
+                            e.preventDefault();
+                            item.action();
+                          }
+                        }}
+                        style={styles.linkButton}
+                        className="cp-footer-link"
+                      >
                         <AsciiGlitchRipple
                           as="span"
                           dur={800}

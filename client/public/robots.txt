@@ -1,7 +1,56 @@
 # Robots.txt for Codepolarity
 # https://codepolarity.com
+# Reference standard LLM context: https://codepolarity.com/llms.txt
 
+# Default Rules for All Web Crawlers
 User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+
+# Search Engine Crawlers
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+
+User-agent: Applebot
+Allow: /
+Disallow: /api/
+
+# AI Search & Answer Engine Crawlers (AEO / GEO)
+User-agent: GPTBot
+Allow: /
+Disallow: /api/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /api/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /api/
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /api/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /api/
+
+User-agent: CCBot
+Allow: /
+Disallow: /api/
+
+User-agent: Cohere-AI
 Allow: /
 Disallow: /api/
 

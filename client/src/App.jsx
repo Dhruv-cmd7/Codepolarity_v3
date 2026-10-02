@@ -9,11 +9,101 @@ import Typlab from './pages/Typlab';
 import SignInPage from './pages/SignInPage';
 import { ShieldAlert, X, Sparkles } from 'lucide-react';
 import { FullScreenSignup } from './components/ui/full-screen-signup';
+import { apiUrl } from './config/api';
+
+const pathToPage = (pathname) => {
+  const clean = pathname ? pathname.replace(/\/+$/, '') || '/' : '/';
+  if (clean === '/roadmaps') return 'roadmaps';
+  if (clean === '/assessment') return 'assessment';
+  if (clean === '/editor') return 'editor';
+  if (clean === '/typlab') return 'typlab';
+  if (clean === '/signin' || clean === '/login') return 'signin';
+  if (clean === '/signup' || clean === '/register') return 'register';
+  return 'landing';
+};
+
+const pageToPath = (page) => {
+  switch (page) {
+    case 'roadmaps': return '/roadmaps';
+    case 'assessment': return '/assessment';
+    case 'editor': return '/editor';
+    case 'typlab': return '/typlab';
+    case 'signin':
+    case 'login': return '/signin';
+    case 'signup':
+    case 'register': return '/register';
+    default: return '/';
+  }
+};
+
+const PAGE_METADATA = {
+  landing: {
+    title: 'Codepolarity — Autonomous Developer Career Engine & Skill Benchmarking',
+    description: 'Codepolarity is an integrated software engineering learning platform. Benchmark your skills, navigate interactive roadmaps, drill code velocity in Typlab, and build in a zero-setup browser IDE.',
+    canonical: 'https://codepolarity.com/',
+  },
+  roadmaps: {
+    title: 'Developer Roadmaps & Skill Pathways | Codepolarity',
+    description: 'Master structured software engineering syllabi: Frontend, Backend, System Design, and Algorithms with interactive milestones and reference implementations.',
+    canonical: 'https://codepolarity.com/roadmaps',
+  },
+  assessment: {
+    title: 'Technical Skill Calibration & Benchmark | Codepolarity',
+    description: 'Calibrate your developer tier through rigorous algorithmic, complexity, and system architecture challenges. Benchmark capabilities objectively.',
+    canonical: 'https://codepolarity.com/assessment',
+  },
+  editor: {
+    title: 'Browser Sandboxed Online IDE | Codepolarity',
+    description: 'Zero-configuration cloud code editor with multi-language execution, instant test runners, and syntax intelligence directly in your browser.',
+    canonical: 'https://codepolarity.com/editor',
+  },
+  typlab: {
+    title: 'Typlab — Keystroke Speed & Code Velocity Telemetry | Codepolarity',
+    description: 'Measure coding typing speed (WPM), accuracy, and keystroke ergonomics on real production snippets across React, Python, Rust, Go, and CSS.',
+    canonical: 'https://codepolarity.com/typlab',
+  },
+  signin: {
+    title: 'Sign In / Register | Codepolarity',
+    description: 'Access your Codepolarity profile, track curriculum progress, and manage your verified engineering portfolio.',
+    canonical: 'https://codepolarity.com/signin',
+  },
+  register: {
+    title: 'Create Account | Codepolarity',
+    description: 'Start your software engineering journey on Codepolarity. Free developer roadmaps, in-browser IDE sandbox, and technical skill benchmarking.',
+    canonical: 'https://codepolarity.com/signin',
+  },
+};
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token') || '');
   const [user, setUser] = useState(null);
-  const [currentPage, setCurrentPage] = useState('landing');
+  const [currentPage, setCurrentPageState] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return pathToPage(window.location.pathname);
+    }
+    return 'landing';
+  });
+
+  const setCurrentPage = (page, shouldPush = true) => {
+    setCurrentPageState(page);
+    if (shouldPush && typeof window !== 'undefined') {
+      const targetPath = pageToPath(page);
+      if (window.location.pathname !== targetPath) {
+        window.history.pushState({ page }, '', targetPath);
+      }
+    }
+  };
+
+  // Sync state when browser Back / Forward buttons are clicked
+  useEffect(() => {
+    const handlePopState = () => {
+      const pageFromPath = pathToPage(window.location.pathname);
+      setCurrentPageState(pageFromPath);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState('login'); // 'login' or 'register'
   
@@ -117,19 +207,40 @@ function App() {
     };
   }, [currentPage]);
 
-  // Dynamic Document Title for SEO and Browser UX
+  // Dynamic Document Title and SEO Metadata synchronization
   useEffect(() => {
-    const titles = {
-      landing: 'Codepolarity — The Software Engineering Learning Platform',
-      roadmaps: 'Developer Roadmaps & Skill Pathways | Codepolarity',
-      assessment: 'Technical Skill Calibration & Benchmark | Codepolarity',
-      editor: 'Browser Sandboxed Online IDE | Codepolarity',
-      typlab: 'Typlab — Keystroke Speed & Code Velocity | Codepolarity',
-      signin: 'Sign In / Register | Codepolarity',
-      login: 'Sign In | Codepolarity',
-      register: 'Register | Codepolarity',
-    };
-    document.title = titles[currentPage] || 'Codepolarity — Autonomous Developer Career Engine';
+    const meta = PAGE_METADATA[currentPage] || PAGE_METADATA.landing;
+    document.title = meta.title;
+
+    // Update Meta Description
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', meta.description);
+
+    // Update Canonical URL
+    let linkCanonical = document.querySelector('link[rel="canonical"]');
+    if (linkCanonical) {
+      linkCanonical.setAttribute('href', meta.canonical);
+    }
+
+    // Update Open Graph Tags
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', meta.title);
+
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute('content', meta.description);
+
+    const ogUrl = document.querySelector('meta[property="og:url"]');
+    if (ogUrl) ogUrl.setAttribute('content', meta.canonical);
+
+    // Update Twitter Tags
+    const twTitle = document.querySelector('meta[name="twitter:title"]');
+    if (twTitle) twTitle.setAttribute('content', meta.title);
+
+    const twDesc = document.querySelector('meta[name="twitter:description"]');
+    if (twDesc) twDesc.setAttribute('content', meta.description);
+
+    const twUrl = document.querySelector('meta[name="twitter:url"]');
+    if (twUrl) twUrl.setAttribute('content', meta.canonical);
   }, [currentPage]);
 
   useEffect(() => {
@@ -144,7 +255,7 @@ function App() {
 
   const fetchCurrentUser = async () => {
     try {
-      const res = await fetch('/api/auth/me', {
+      const res = await fetch(apiUrl('/api/auth/me'), {
         headers: {
           'x-auth-token': token
         }
@@ -169,7 +280,7 @@ function App() {
   const handleAuthSubmit = async (e) => {
     e.preventDefault();
     setAuthError('');
-    const url = authMode === 'login' ? '/api/auth/login' : '/api/auth/register';
+    const url = authMode === 'login' ? apiUrl('/api/auth/login') : apiUrl('/api/auth/register');
     const body = authMode === 'login' 
       ? { email, password } 
       : { username, email, password };
@@ -201,7 +312,7 @@ function App() {
   const handleGoogleSuccess = async (credential) => {
     setAuthError('');
     try {
-      const res = await fetch('/api/auth/google', {
+      const res = await fetch(apiUrl('/api/auth/google'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

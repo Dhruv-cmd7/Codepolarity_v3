@@ -189,19 +189,23 @@ const marqueeRow3 = [
 ];
 
 /* ─────────────────────────────────────────────────────
-   Codepolarity FAQ Data
+   Codepolarity FAQ Data (Synchronized with Schema.org FAQPage)
 ───────────────────────────────────────────────────── */
 const codepolarityFaqs = [
   {
     question: "What is Codepolarity?",
-    answer: "Codepolarity is an integrated software engineering learning platform. It unifies modular curriculum roadmaps, cloud execution environments, syntax intelligence, and code typing telemetry into a single high-performance workspace."
+    answer: "Codepolarity is an integrated software engineering learning platform and developer career engine. It unifies modular curriculum roadmaps, cloud execution environments, syntax intelligence, and code typing telemetry into a single high-performance workspace."
   },
   {
-    question: "Are local development environments required?",
+    question: "What makes Codepolarity different from LeetCode or traditional platforms?",
+    answer: "Unlike platforms that focus solely on competitive algorithmic puzzles, Codepolarity provides a holistic engineering journey: end-to-end curriculum roadmaps, real-world sandboxed IDE development, tactile coding velocity drills (Typlab), and diagnostic skill calibration that reflects practical software craftsmanship."
+  },
+  {
+    question: "Are local development environments required to run code?",
     answer: "No local configuration is necessary. Codepolarity delivers isolated in-browser runtimes with real-time compilation, execution, and automated test runners across all major programming languages."
   },
   {
-    question: "How are the interactive roadmaps structured?",
+    question: "How are the interactive developer roadmaps structured?",
     answer: "Every roadmap functions as an end-to-end technical syllabus. Milestones break complex concepts into progressive modules complete with core architectural theory, interactive challenges, and reference implementations."
   },
   {
@@ -209,8 +213,12 @@ const codepolarityFaqs = [
     answer: "Writing code requires distinct tactile ergonomics—navigating brackets, operators, indentation, and language keywords that standard typing tests ignore. Typlab tracks keystroke telemetry on production code snippets to build native fluency."
   },
   {
-    question: "How does the platform measure technical progression?",
-    answer: "Your centralized dashboard records verified curriculum modules, runtime test passes, and keystroke metrics, generating an authentic, quantifiable profile of engineering mastery."
+    question: "How does the technical assessment calibrate developer skill tiers?",
+    answer: "The assessment evaluates algorithmic reasoning, time and space complexity, API design, and system architecture. The engine scores answers to diagnose strengths and knowledge gaps, mapping directly to recommended curriculum tracks."
+  },
+  {
+    question: "Is Codepolarity free to use?",
+    answer: "Yes. Core developer roadmaps, the browser sandbox IDE, Typlab keystroke drills, and initial skill assessments are freely accessible to developers worldwide."
   }
 ];
 
@@ -219,9 +227,8 @@ const codepolarityFaqs = [
 ───────────────────────────────────────────────────── */
 const LandingPage = ({ user, onOpenAuth, setCurrentPage, theme = 'dark', onToggleTheme }) => {
   return (
-    <div
+    <main
       id="main-content"
-      role="region"
       aria-label="Codepolarity Platform Overview"
       style={{ overflowX: 'hidden', background: 'var(--bg-primary)', color: 'var(--text-main)', minHeight: '100vh' }}
     >
@@ -390,7 +397,7 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage, theme = 'dark', onToggl
 
       {/* ─────────────────── FOOTER ──────────────── */}
       <Footer setCurrentPage={setCurrentPage} onOpenAuth={onOpenAuth} />
-    </div>
+    </main>
   );
 };
 

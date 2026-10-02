@@ -12,6 +12,7 @@ import { SettingsModal } from '../components/editor/SettingsModal';
 import { ShortcutsModal } from '../components/editor/ShortcutsModal';
 import { defineCustomMonacoThemes } from '../components/editor/editorThemes';
 import { supportedLanguages } from '../data/languagesCatalog';
+import { apiUrl } from '../config/api';
 
 const CodeEditor = ({ token, user, initialTemplateId, onClearTemplate, setCurrentPage, theme, onToggleTheme }) => {
   const isLight = theme === 'light';
@@ -110,7 +111,7 @@ const CodeEditor = ({ token, user, initialTemplateId, onClearTemplate, setCurren
     const fetchSavedSnippets = async () => {
       if (token) {
         try {
-          const res = await fetch('/api/editor/snippets', {
+          const res = await fetch(apiUrl('/api/editor/snippets'), {
             headers: { 'x-auth-token': token }
           });
           if (res.ok) {
@@ -335,7 +336,7 @@ const CodeEditor = ({ token, user, initialTemplateId, onClearTemplate, setCurren
 
     if (token) {
       try {
-        const res = await fetch('/api/editor/save', {
+        const res = await fetch(apiUrl('/api/editor/save'), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -387,7 +388,7 @@ const CodeEditor = ({ token, user, initialTemplateId, onClearTemplate, setCurren
 
     if (token && !id.startsWith('prog_')) {
       try {
-        const res = await fetch(`/api/editor/snippets/${id}`, {
+        const res = await fetch(apiUrl(`/api/editor/snippets/${id}`), {
           method: 'DELETE',
           headers: { 'x-auth-token': token }
         });
@@ -470,37 +471,40 @@ const CodeEditor = ({ token, user, initialTemplateId, onClearTemplate, setCurren
             }}
           >
             {/* Editor File Tab Header */}
-            <div className={`h-9 border-b px-2 flex items-center justify-between shrink-0 select-none transition-colors ${
-              isLight ? 'bg-slate-50/70 border-slate-200' : 'bg-[#0f131a] border-white/[0.08]'
+            <div className={`h-11 border-b px-3 flex items-center justify-between shrink-0 select-none transition-colors ${
+              isLight ? 'bg-slate-50/90 border-slate-200' : 'bg-[#0f131a] border-white/[0.08]'
             }`}>
-              <div className="flex items-center">
-                <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-t text-xs font-medium border-b-2 transition-colors ${
+              <div className="flex items-center gap-2">
+                <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border font-mono text-xs font-medium tracking-wide transition-colors ${
                   isLight
-                    ? 'bg-white text-slate-800 border-blue-500 shadow-xs'
-                    : 'bg-[#0a0d14] text-zinc-100 border-blue-500'
+                    ? 'bg-white text-slate-800 border-slate-200'
+                    : 'bg-white/[0.04] text-zinc-200 border-white/[0.08]'
                 }`}>
                   <FileCode2 size={13} style={{ color: selectedLang.color || '#3b82f6' }} />
                   <span>{selectedLang.fileName}</span>
-                  {isModified && <span className="w-1.5 h-1.5 rounded-full bg-blue-500 ml-0.5" />}
+                  {isModified && <span className="w-1.5 h-1.5 rounded-full bg-blue-400 ml-0.5 animate-pulse" />}
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 text-xs">
+              <div className="flex items-center gap-3 text-xs">
+                <span className={`text-[11px] font-mono ${isLight ? 'text-slate-500' : 'text-zinc-500'}`}>
+                  Ln {cursorPos.line}, Col {cursorPos.col}
+                </span>
+                <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
+                  isLight ? 'bg-slate-100 border-slate-200 text-slate-600' : 'bg-white/[0.03] border-white/[0.08] text-zinc-400'
+                }`}>
+                  {selectedLang.version}
+                </span>
                 <button
                   onClick={handleResetCode}
-                  className={`flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md transition-colors cursor-pointer ${
-                    isLight ? 'text-slate-500 hover:text-slate-900 hover:bg-slate-200/60' : 'text-zinc-500 hover:text-zinc-200 hover:bg-white/[0.06]'
+                  className={`flex items-center gap-1.5 text-xs font-sans px-2.5 py-1 rounded-md border transition-colors cursor-pointer ${
+                    isLight ? 'border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900' : 'border-white/[0.08] text-zinc-400 hover:border-white/[0.2] hover:text-zinc-200 hover:bg-white/[0.04]'
                   }`}
                   title="Reset to starter program"
                 >
                   <RotateCcw size={11} />
                   <span>Reset</span>
                 </button>
-                <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
-                  isLight ? 'bg-slate-200/60 text-slate-600' : 'bg-white/[0.05] text-zinc-400'
-                }`}>
-                  {selectedLang.version}
-                </span>
               </div>
             </div>
 
@@ -564,7 +568,7 @@ const CodeEditor = ({ token, user, initialTemplateId, onClearTemplate, setCurren
 
           {/* Right Panel: Output, Flowchart, Step Value Trace */}
           {layoutMode !== 'editor-only' && (
-            <div className="flex-1 h-full overflow-hidden">
+            <div className="flex-1 min-h-0 h-full overflow-hidden flex flex-col">
               <OutputPanel
                 activeTab={outputTab}
                 setActiveTab={setOutputTab}
@@ -608,12 +612,13 @@ const CodeEditor = ({ token, user, initialTemplateId, onClearTemplate, setCurren
 
       {/* Floating Toast Notification */}
       {toastMessage && (
-        <div className={`fixed bottom-8 right-6 z-50 px-3.5 py-1.5 rounded-lg shadow-xl text-xs font-medium flex items-center gap-2 animate-fade-in border ${
+        <div className={`fixed bottom-8 right-6 z-50 px-4 py-2 rounded-xl shadow-2xl text-xs flex items-center gap-2.5 animate-fade-in border ${
           isLight
             ? 'bg-white border-slate-200 text-slate-800 shadow-slate-200/50'
-            : 'bg-[#0f131a] border-white/[0.1] text-zinc-200'
+            : 'bg-[#0f131a] border-white/[0.15] text-zinc-100 shadow-black/80'
         }`}>
-          <span>{toastMessage}</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse shrink-0" />
+          <span className="font-sans font-medium">{toastMessage}</span>
         </div>
       )}
     </div>

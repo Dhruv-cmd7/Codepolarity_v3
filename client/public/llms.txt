@@ -1,0 +1,28 @@
+# Codepolarity
+> Autonomous Developer Career Engine & Technical Skill Benchmarking Platform.
+
+Codepolarity is an integrated software engineering learning and career acceleration platform. It unifies structured curriculum roadmaps, cloud browser IDE sandboxes, automated skill assessment benchmarks, keystroke velocity drills (Typlab), and AI agent diagnostics into a zero-configuration developer workspace.
+
+## Core Modules & Capabilities
+
+- [Developer Roadmaps](https://codepolarity.com/roadmaps): Comprehensive syllabi for Frontend, Backend, Full-Stack, System Design, DevOps, and Algorithms with interactive milestones and code references.
+- [Skill Benchmarking & Assessment](https://codepolarity.com/assessment): Diagnostic evaluation engine calibrating developer technical tiers across computer science fundamentals, data structures, and system architecture.
+- [Sandboxed Browser IDE](https://codepolarity.com/editor): Isolated multi-language playground with syntax intelligence, algorithm runners, and instant test suite execution.
+- [Typlab Code Velocity](https://codepolarity.com/typlab): Keystroke telemetry drill environment designed specifically for engineering syntax (brackets, symbols, indentation) to measure WPM and accuracy on real code snippets.
+- [Sign In & Profiles](https://codepolarity.com/signin): User authentication, progress persistence, and technical portfolio verification.
+
+## Canonical URLs
+- Homepage: https://codepolarity.com/
+- Developer Roadmaps: https://codepolarity.com/roadmaps
+- Technical Assessment: https://codepolarity.com/assessment
+- Browser IDE Sandbox: https://codepolarity.com/editor
+- Typlab Keystroke Engine: https://codepolarity.com/typlab
+- Authentication: https://codepolarity.com/signin
+- XML Sitemap: https://codepolarity.com/sitemap.xml
+- Full LLM Knowledge Base: https://codepolarity.com/llms-full.txt
+
+## Key Concepts & Architecture
+- **In-Browser Execution**: Zero-setup cloud runtimes execute JavaScript, TypeScript, Python, and C++ code directly in browser-isolated sandboxes.
+- **Milestone-Based Learning**: Roadmaps are structured as directed graphs of sequential engineering concepts, from foundational syntax to distributed systems.
+- **Tactile Keystroke Telemetry**: Unlike generic typing tutors, Typlab measures typing velocity on real programming constructs (arrow functions, list comprehensions, CSS selectors, SQL queries).
+- **Skill Tier Calibration**: Objective benchmarking based on algorithm comprehension, time/space complexity analysis, and architectural decision-making.

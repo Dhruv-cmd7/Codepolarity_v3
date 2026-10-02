@@ -18,27 +18,27 @@ const Navbar = ({
   const navItems = [
     {
       label: 'Overview',
-      href: '#',
+      href: '/',
       active: currentPage === 'landing',
       onClick: () => setCurrentPage('landing'),
     },
     {
       label: 'Roadmaps',
-      href: '#',
+      href: '/roadmaps',
       active: currentPage === 'roadmaps',
-      onClick: () => (user ? setCurrentPage('roadmaps') : onOpenAuth()),
+      onClick: () => setCurrentPage('roadmaps'),
     },
     {
       label: 'Online IDE',
-      href: '#',
+      href: '/editor',
       active: currentPage === 'editor',
-      onClick: () => (user ? setCurrentPage('editor') : onOpenAuth()),
+      onClick: () => setCurrentPage('editor'),
     },
     {
       label: 'Typlab',
-      href: '#',
+      href: '/typlab',
       active: currentPage === 'typlab',
-      onClick: () => (user ? setCurrentPage('typlab') : onOpenAuth()),
+      onClick: () => setCurrentPage('typlab'),
     },
   ];
 
@@ -47,27 +47,27 @@ const Navbar = ({
     {
       title: 'Platform',
       links: [
-        { label: 'Overview', href: '#', onClick: () => setCurrentPage('landing') },
-        { label: 'Skill Assessment', href: '#', onClick: () => (user ? setCurrentPage('assessment') : onOpenAuth()) },
+        { label: 'Overview', href: '/', onClick: () => setCurrentPage('landing') },
+        { label: 'Skill Assessment', href: '/assessment', onClick: () => setCurrentPage('assessment') },
       ],
     },
     {
       title: 'Developer Tools',
       links: [
-        { label: 'Roadmaps', href: '#', onClick: () => (user ? setCurrentPage('roadmaps') : onOpenAuth()) },
-        { label: 'Online IDE', href: '#', onClick: () => (user ? setCurrentPage('editor') : onOpenAuth()) },
-        { label: 'Typlab Speed', href: '#', onClick: () => (user ? setCurrentPage('typlab') : onOpenAuth()) },
+        { label: 'Roadmaps', href: '/roadmaps', onClick: () => setCurrentPage('roadmaps') },
+        { label: 'Online IDE', href: '/editor', onClick: () => setCurrentPage('editor') },
+        { label: 'Typlab Speed', href: '/typlab', onClick: () => setCurrentPage('typlab') },
       ],
     },
     {
       title: 'Account',
       links: user
         ? [
-            { label: `User: ${user.username}`, href: '#' },
-            { label: 'Sign Out', href: '#', onClick: onLogout },
+            { label: `User: ${user.username}`, href: '/roadmaps' },
+            { label: 'Sign Out', href: '/', onClick: onLogout },
           ]
         : [
-            { label: 'Sign In', href: '#', onClick: () => setCurrentPage('signin') },
+            { label: 'Sign In', href: '/signin', onClick: () => setCurrentPage('signin') },
           ],
     },
     {
@@ -188,7 +188,7 @@ const Navbar = ({
               </button>
             )}
 
-            {user && (
+            {user ? (
               <>
                 <span
                   className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-full"
@@ -228,6 +228,29 @@ const Navbar = ({
                   Sign out
                 </button>
               </>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setCurrentPage('signin')}
+                className="h-8 px-3 rounded-lg border text-xs font-medium tracking-wide transition-all cursor-pointer flex items-center"
+                style={{
+                  background: "var(--nav-bg)",
+                  border: "1px solid var(--nav-border)",
+                  color: "var(--nav-link-color)",
+                  backdropFilter: "blur(16px)",
+                  WebkitBackdropFilter: "blur(16px)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "var(--nav-link-active-color)";
+                  e.currentTarget.style.borderColor = "var(--nav-border-scrolled)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "var(--nav-link-color)";
+                  e.currentTarget.style.borderColor = "var(--nav-border)";
+                }}
+              >
+                <span>Sign In</span>
+              </button>
             )}
           </div>
         )}

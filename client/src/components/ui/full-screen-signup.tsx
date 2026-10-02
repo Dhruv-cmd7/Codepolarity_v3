@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { X, Mail, Lock, User, ArrowRight, Sparkles, Eye, EyeOff } from "lucide-react";
 import logoMark from "../../assets/logo.svg";
+import { apiUrl } from "../../config/api";
 
 // Official Google Multi-Color G Icon
 const GoogleIcon = () => (
@@ -163,7 +164,7 @@ export const FullScreenSignup: React.FC<FullScreenSignupProps> = ({
         name: userVal || 'GitHub Developer'
       };
 
-      const res = await fetch('/api/auth/github', {
+      const res = await fetch(apiUrl('/api/auth/github'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ githubUser: demoGithubUser })

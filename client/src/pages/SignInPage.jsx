@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import logoMark from '../assets/logo.svg';
 import logoText from '../assets/logo_text.svg';
+import { apiUrl } from '../config/api';
 
 // Official Google Multi-Color G Icon
 const GoogleIcon = () => (
@@ -181,7 +182,7 @@ export default function SignInPage({
     setIsLoading(true);
     setErrorMsg('');
     try {
-      const res = await fetch('/api/auth/google', {
+      const res = await fetch(apiUrl('/api/auth/google'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ credential }),
@@ -238,7 +239,7 @@ export default function SignInPage({
         name: username || 'GitHub Developer'
       };
 
-      const res = await fetch('/api/auth/github', {
+      const res = await fetch(apiUrl('/api/auth/github'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ githubUser: demoGithubUser })
@@ -302,7 +303,7 @@ export default function SignInPage({
     setErrorMsg('');
     setSuccessMsg('');
 
-    const url = mode === 'login' ? '/api/auth/login' : '/api/auth/register';
+    const url = mode === 'login' ? apiUrl('/api/auth/login') : apiUrl('/api/auth/register');
     const body = mode === 'login' 
       ? { email, password } 
       : { username, email, password };
@@ -349,9 +350,7 @@ export default function SignInPage({
             aria-label="Return to platform overview"
           >
             <ArrowLeft size={15} />
-            <span className="brutalist-bracket">[</span>
-            <span>BACK</span>
-            <span className="brutalist-bracket">]</span>
+            <span>Back</span>
           </button>
         </div>
 
