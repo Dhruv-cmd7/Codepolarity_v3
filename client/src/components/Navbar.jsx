@@ -228,7 +228,7 @@ const Navbar = ({
                   Sign out
                 </button>
               </>
-            ) : (
+            ) : currentPage !== 'landing' ? (
               <button
                 type="button"
                 onClick={() => setCurrentPage('signin')}
@@ -251,7 +251,7 @@ const Navbar = ({
               >
                 <span>Sign In</span>
               </button>
-            )}
+            ) : null}
           </div>
         )}
       </header>

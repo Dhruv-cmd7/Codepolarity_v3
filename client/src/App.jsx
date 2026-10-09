@@ -405,7 +405,7 @@ function App() {
         );
       case 'typlab':
         return (
-          <Typlab />
+          <Typlab setCurrentPage={setCurrentPage} />
         );
       default:
         return (

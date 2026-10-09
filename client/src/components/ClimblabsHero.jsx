@@ -163,9 +163,9 @@ export default function ClimblabsHero({ user, onOpenAuth, setCurrentPage, theme 
             type="button"
             onClick={handlePrimaryCta}
             className="climblabs-cta-top"
-            aria-label={user ? 'Go to curriculum roadmaps' : 'Get started with Codepolarity'}
+            aria-label={user ? 'Go to curriculum roadmaps' : 'Sign in to Codepolarity'}
           >
-            {user ? 'RESUME ROADMAPS' : 'GET STARTED'} <span className="climblabs-arrow">↗</span>
+            {user ? 'RESUME ROADMAPS' : 'SIGN IN'} <span className="climblabs-arrow">↗</span>
           </button>
         </div>
       </header>

@@ -374,9 +374,9 @@ const LandingPage = ({ user, onOpenAuth, setCurrentPage, theme = 'dark', onToggl
                         id="cta-btn-start"
                         onClick={onOpenAuth}
                         className="hero-btn-primary"
-                        aria-label="Get started for free with Codepolarity"
+                        aria-label="Sign in to Codepolarity"
                       >
-                        Start Learning Free →
+                        Sign In →
                       </button>
                       <button
                         id="cta-btn-playground"
